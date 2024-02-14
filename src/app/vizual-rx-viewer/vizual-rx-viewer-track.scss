@@ -1,0 +1,28 @@
+@use "@angular/material" as mat;
+@import "../../theme";
+
+:host {
+  display: flex;
+}
+
+.track-label {
+  color: mat.get-theme-color($theme, primary, default-contrast);
+  padding: 0.5em;
+  background-color: mat.get-theme-color($theme, primary, 700);
+  border: 2px solid mat.get-theme-color($theme, primary, 900);
+  border-top: none;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  width: 150px;
+  font-weight: 500;
+}
+
+svg {
+  background-color: mat.get-theme-color($theme, primary, 50);
+  border-bottom: 2px solid mat.get-theme-color($theme, primary, 200);
+  border-right: 2px solid mat.get-theme-color($theme, primary, 200);
+  flex-grow: 1;
+  height: 80px;
+}
+

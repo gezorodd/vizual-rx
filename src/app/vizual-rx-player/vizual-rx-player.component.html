@@ -1,0 +1,17 @@
+<mat-toolbar>
+  <mat-slider min="0" max="2" step="0.1" [showTickMarks]="true">
+    <input matSliderThumb [(ngModel)]="engine.timeFactor">
+  </mat-slider>
+  <button mat-mini-fab color="primary" (click)="engine.replay()">
+    <mat-icon>refresh</mat-icon>
+  </button>
+  <button mat-mini-fab color="primary" (click)="engine.play()" [disabled]="engine.playing$ | async">
+    <mat-icon>play_arrow</mat-icon>
+  </button>
+  <button mat-mini-fab color="primary" (click)="engine.pause()" [disabled]="!(engine.playing$ | async)">
+    <mat-icon>pause</mat-icon>
+  </button>
+  <button mat-mini-fab color="primary" (click)="engine.stop()" [disabled]="engine.stopped$ | async">
+    <mat-icon>stop</mat-icon>
+  </button>
+</mat-toolbar>

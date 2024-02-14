@@ -1,0 +1,9 @@
+<mat-form-field class="code-samples">
+  <mat-label>Code Sample</mat-label>
+  <mat-select [(ngModel)]="code">
+    @for (codeSample of codeSamples; track codeSample.label) {
+      <mat-option [value]="codeSample.code">{{ codeSample.label }}</mat-option>
+    }
+  </mat-select>
+</mat-form-field>
+<ngx-monaco-editor [options]="options" [ngModel]="code" (ngModelChange)="codeChange.next($event)"></ngx-monaco-editor>
