@@ -1,6 +1,6 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 
-export class ObservableCompletedGraphics extends DynamicObjectGraphics {
+export class ObserverCompleteGraphics extends DynamicObjectGraphics {
 
   constructor(time: number) {
     super(time, -1);

@@ -17,5 +17,5 @@ $theme: mat.define-light-theme(
 
 html {
   --vrx-time-track-color: #{mat.get-theme-color($theme, accent, text)};
-  --vrx-observable-track-color: #{mat.get-theme-color($theme, primary, text)};
+  --vrx-observer-track-color: #{mat.get-theme-color($theme, primary, text)};
 }

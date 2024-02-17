@@ -19,6 +19,6 @@ export class AppComponent {
   readonly engine: VizualRxEngine;
 
   constructor() {
-    this.engine = new VizualRxEngine(codeSamples[3].code);
+    this.engine = new VizualRxEngine(codeSamples[0].code);
   }
 }

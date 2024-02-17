@@ -1,25 +1,25 @@
 import {VizualRxInterpreter} from "./vizual-rx-interpreter";
 import {
   BehaviorSubject,
-  catchError,
   delay,
   filter,
-  forkJoin,
+  interval,
   map,
   mergeMap,
   Observable,
-  of,
   pairwise,
+  Subscription,
   takeUntil,
   tap
 } from "rxjs";
-import {VizualRxObservable} from "./vizual-rx-observable";
 import {VizualRxTimeFactoryHistory} from "./vizual-rx-time-factory-history";
 import {VizualRxTime} from "./vizual-rx-time";
+import {VizualRxObserver} from "./vizual-rx-observer";
 
-export class VizualRxEngine {
+export class VizualRxEngine implements VizualRxEngineApi {
   code: string;
-  observables: VizualRxObservable[];
+  observers: VizualRxObserver[];
+  subscriptions: Subscription[];
   timeFactorHistory: VizualRxTimeFactoryHistory[];
 
   private readonly interpreter: VizualRxInterpreter;
@@ -32,9 +32,9 @@ export class VizualRxEngine {
   readonly playing$: Observable<boolean>;
 
   constructor(code: string) {
-    this.interpreter = new VizualRxInterpreter();
     this.code = code;
-    this.observables = [];
+    this.observers = [];
+    this.subscriptions = [];
     this.state$ = new BehaviorSubject<PlayerState>(PlayerState.STOPPED);
     this.timeFactor$ = new BehaviorSubject<number>(1);
 
@@ -44,8 +44,22 @@ export class VizualRxEngine {
     this.starting$ = this.getStarting();
     this.timeFactorHistory = [];
 
-    this.stopEngineWhenAllObservablesAreCompletedOrErrored()
+    this.interpreter = new VizualRxInterpreter();
+    this.interpreter.observerAdded$
+      .subscribe(observer => this.observers.push(observer));
+    this.interpreter.subscriptionCreated$
+      .subscribe(subscription => this.subscriptions.push(subscription));
+
+    this.stopEngineWhenAllSubscriptionsAreClosed()
       .subscribe();
+  }
+
+  addObserver(vizualRxObserver: VizualRxObserver): void {
+    this.observers.push(vizualRxObserver);
+  }
+
+  addSubscription(subscription: Subscription): void {
+    this.subscriptions.push(subscription);
   }
 
   get playing(): boolean {
@@ -60,7 +74,9 @@ export class VizualRxEngine {
 
     VizualRxTime.timeFactor = this.timeFactor$.value;
     if (state === PlayerState.STOPPED) {
-      this.observables = this.interpreter.createObservables(this.code);
+      this.observers = [];
+      this.subscriptions = [];
+      this.interpreter.runCode(this.code);
       this.timeFactorHistory = [];
     }
     this.state$.next(PlayerState.PLAYING);
@@ -80,6 +96,9 @@ export class VizualRxEngine {
     if (this.state$.value === PlayerState.STOPPED) {
       return;
     }
+    this.subscriptions
+      .filter(subscription => !subscription.closed)
+      .forEach(subscription => subscription.unsubscribe());
     this.state$.next(PlayerState.STOPPED);
   }
 
@@ -100,23 +119,16 @@ export class VizualRxEngine {
     this.addTimeFactorHistory();
   }
 
-  private stopEngineWhenAllObservablesAreCompletedOrErrored() {
+  private stopEngineWhenAllSubscriptionsAreClosed() {
     return this.starting$
       .pipe(
         mergeMap(() => {
-          const completedObservables = this.observables
-            .map(obs => {
-              return obs.completed$
-                .pipe(
-                  catchError(() => of(undefined)),
-                  takeUntil(this.stopping$)
-                );
-            });
-
-          return forkJoin(completedObservables)
+          return interval(200)
             .pipe(
-              delay(200),
-              tap(() => this.stop())
+              filter(() => this.subscriptions.every(subscription => subscription.closed)),
+              delay(100),
+              tap(() => this.stop()),
+              takeUntil(this.stopping$)
             );
         })
       );
@@ -173,4 +185,10 @@ export enum PlayerState {
   STOPPED,
   PAUSED,
   PLAYING
+}
+
+export interface VizualRxEngineApi {
+  addObserver(observer: VizualRxObserver): void;
+
+  addSubscription(subscription: Subscription): void;
 }

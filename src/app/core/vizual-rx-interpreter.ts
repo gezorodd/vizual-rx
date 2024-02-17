@@ -1,24 +1,39 @@
 import * as rxjs from "rxjs";
-import {Observable} from "rxjs";
+import {Observable, Observer, Subject, Subscription} from "rxjs";
 import * as ts from "typescript";
 import {ModuleKind} from "typescript";
-import {VizualRxObservable} from "./vizual-rx-observable";
-import {vizualRxProxies} from "./vizual-rx-proxies";
+import {VizualRxObserver} from "./vizual-rx-observer";
+import {VizualRxProxies} from "./vizual-rx-proxies";
 
 export class VizualRxInterpreter {
+  private readonly _observerAdded$ = new Subject<VizualRxObserver>();
+  private vizualRxProxies: VizualRxProxies;
 
-  createObservables(code: string): VizualRxObservable[] {
-    const observables: VizualRxObservable[] = [];
-    const executionScope = this.createExecutionScope(observables);
-    const executionFunction = this.createExecutionFunction(code);
-    executionFunction(executionScope);
-    return observables;
+  constructor() {
+    this.vizualRxProxies = new VizualRxProxies();
   }
 
-  private createExecutionScope(observables: VizualRxObservable[]): any {
+  runCode(code: string): void {
+    const executionScope = this.createExecutionScope();
+    const executionFunction = this.createExecutionFunction(code);
+    executionFunction(executionScope);
+  }
+
+  get observerAdded$(): Observable<VizualRxObserver> {
+    return this._observerAdded$.asObservable();
+  }
+
+  get subscriptionCreated$(): Observable<Subscription> {
+    return this.vizualRxProxies.subscriptionCreated$;
+  }
+
+  private createExecutionScope(): any {
+    const self = this;
     const vizualRxApi: VizualRxApi = {
-      trackObservable(label: string, observable: Observable<any>) {
-        observables.push(new VizualRxObservable(label, observable));
+      observe(name?: string): Observer<any> {
+        const observer = new VizualRxObserver(name ?? '');
+        self._observerAdded$.next(observer);
+        return observer;
       }
     };
     return {
@@ -26,7 +41,7 @@ export class VizualRxInterpreter {
         rxjs,
         'vizual-rx': vizualRxApi
       },
-      vizualRxProxies: vizualRxProxies
+      vizualRxProxies: this.vizualRxProxies.rxjsProxies
     };
   }
 
@@ -68,5 +83,5 @@ export class VizualRxInterpreter {
 }
 
 interface VizualRxApi {
-  trackObservable(label: string, observable: Observable<any>): void;
+  observe(name?: string): Observer<any>;
 }

@@ -1,8 +1,8 @@
 import {TrackGraphics} from "../track-graphics";
 import {VizualRxEngine} from "../../core/vizual-rx-engine";
-import {map, mergeMap, mergeWith, of, takeUntil, tap} from "rxjs";
+import {interval, map, mergeMap, mergeWith, of, takeUntil, tap} from "rxjs";
 import {TimeTrackTickGraphics} from "./time-track-tick-graphics";
-import {vizualRxProxies} from "../../core/vizual-rx-proxies";
+import {vizualRxScheduler} from "../../core/vizual-rx-scheduler";
 
 export class TimeTrackGraphics extends TrackGraphics {
 
@@ -38,7 +38,7 @@ export class TimeTrackGraphics extends TrackGraphics {
             .pipe(
               tap(() => this.clearDynamicObjects()),
               mergeWith(
-                vizualRxProxies.interval(1000)
+                interval(1000, vizualRxScheduler)
                   .pipe(
                     map(value => value + 1),
                     takeUntil(this.engine.stopping$)

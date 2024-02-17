@@ -3,7 +3,7 @@
 html, body { height: 100%; }
 body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
-@keyframes observable-value-popping {
+@keyframes observer-value-popping {
   0% {
     transform: scale(0);
   }
@@ -47,11 +47,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     }
   }
 
-  &.observable-track {
+  &.observer-track {
     transform: translate(0, 40px);
 
     line, text {
-      stroke: var(--vrx-observable-track-color);
+      stroke: var(--vrx-observer-track-color);
 
       &.center-line {
         stroke-opacity: 0.2;
@@ -63,8 +63,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
       }
     }
 
-    .observable-value {
-      animation-name: observable-value-popping;
+    .observer-value {
+      animation-name: observer-value-popping;
       animation-duration: 0.7s;
     }
 
@@ -81,7 +81,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
     circle {
       fill: white;
       stroke-width: 2px;
-      stroke: var(--vrx-observable-track-color);
+      stroke: var(--vrx-observer-track-color);
     }
   }
 }

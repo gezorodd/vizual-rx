@@ -1,6 +1,6 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 
-export class ObservableValueGraphics extends DynamicObjectGraphics {
+export class ObserverNextGraphics extends DynamicObjectGraphics {
   private readonly value: string;
 
   constructor(time: number, value: string) {
@@ -10,7 +10,7 @@ export class ObservableValueGraphics extends DynamicObjectGraphics {
 
   protected override init(groupContainer: SVGGElement): void {
     const container = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-    container.classList.add('observable-value');
+    container.classList.add('observer-value');
     groupContainer.appendChild(container);
 
     const circle = document.createElementNS('http://www.w3.org/2000/svg', 'circle');

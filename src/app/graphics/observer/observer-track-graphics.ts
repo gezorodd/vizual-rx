@@ -1,17 +1,17 @@
 import {TrackGraphics} from "../track-graphics";
 import {VizualRxEngine} from "../../core/vizual-rx-engine";
-import {ObservableValueGraphics} from "./observable-value-graphics";
+import {ObserverNextGraphics} from "./observer-next-graphics";
 import {catchError, EMPTY, merge, takeUntil, tap} from "rxjs";
-import {VizualRxObservable} from "../../core/vizual-rx-observable";
-import {ObservableCompletedGraphics} from "./observable-completed-graphics";
-import {ObservableErroredGraphics} from "./observable-errored-graphics";
+import {ObserverCompleteGraphics} from "./observer-complete-graphics";
+import {ObserverErrorGraphics} from "./observer-error-graphics";
+import {VizualRxObserver} from "../../core/vizual-rx-observer";
 
-export class ObservableTrackGraphics extends TrackGraphics {
-  private readonly observable: VizualRxObservable;
+export class ObserverTrackGraphics extends TrackGraphics {
+  private readonly observer: VizualRxObserver;
 
-  constructor(engine: VizualRxEngine, observable: VizualRxObservable, svg: SVGSVGElement) {
-    super(engine, svg, 'observable-track');
-    this.observable = observable;
+  constructor(engine: VizualRxEngine, observer: VizualRxObserver, svg: SVGSVGElement) {
+    super(engine, svg, 'observer-track');
+    this.observer = observer;
   }
 
   override init() {
@@ -56,35 +56,35 @@ export class ObservableTrackGraphics extends TrackGraphics {
   }
 
   private createValueGraphicsWhenEmitted() {
-    return this.observable.observable$
+    return this.observer.next$
       .pipe(
         catchError(() => EMPTY),
         tap(value => {
           const time = new Date().getTime();
-          const valueGraphics = new ObservableValueGraphics(time, value);
+          const valueGraphics = new ObserverNextGraphics(time, value);
           this.addDynamicObject(valueGraphics);
         })
       );
   }
 
   private createCompletedGraphicsWhenCompleted() {
-    return this.observable.completed$
+    return this.observer.complete$
       .pipe(
         catchError(() => EMPTY),
         tap(() => {
           const time = new Date().getTime();
-          const completedGraphics = new ObservableCompletedGraphics(time);
+          const completedGraphics = new ObserverCompleteGraphics(time);
           this.addDynamicObject(completedGraphics);
         })
       )
   }
 
   private createErroredGraphicsWhenErrored() {
-    return this.observable.errored$
+    return this.observer.error$
       .pipe(
         tap(() => {
           const time = new Date().getTime();
-          const erroredGraphics = new ObservableErroredGraphics(time);
+          const erroredGraphics = new ObserverErrorGraphics(time);
           this.addDynamicObject(erroredGraphics);
         })
       )

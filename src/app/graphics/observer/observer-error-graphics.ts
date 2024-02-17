@@ -1,6 +1,6 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 
-export class ObservableErroredGraphics extends DynamicObjectGraphics {
+export class ObserverErrorGraphics extends DynamicObjectGraphics {
 
   constructor(time: number) {
     super(time, -1);
