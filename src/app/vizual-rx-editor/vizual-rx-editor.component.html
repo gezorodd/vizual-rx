@@ -6,4 +6,4 @@
     }
   </mat-select>
 </mat-form-field>
-<ngx-monaco-editor [options]="options" [ngModel]="code" (ngModelChange)="codeChange.next($event)"></ngx-monaco-editor>
+<ngx-monaco-editor [options]="options" (onInit)="init($event)"></ngx-monaco-editor>
