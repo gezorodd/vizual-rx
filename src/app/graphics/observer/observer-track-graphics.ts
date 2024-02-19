@@ -60,8 +60,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
       .pipe(
         catchError(() => EMPTY),
         tap(value => {
-          const time = new Date().getTime();
-          const valueGraphics = new ObserverNextGraphics(time, value);
+          const valueGraphics = new ObserverNextGraphics(value);
           this.addDynamicObject(valueGraphics);
         })
       );
@@ -72,8 +71,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
       .pipe(
         catchError(() => EMPTY),
         tap(() => {
-          const time = new Date().getTime();
-          const completedGraphics = new ObserverCompleteGraphics(time);
+          const completedGraphics = new ObserverCompleteGraphics();
           this.addDynamicObject(completedGraphics);
         })
       )
@@ -83,8 +81,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
     return this.observer.error$
       .pipe(
         tap(() => {
-          const time = new Date().getTime();
-          const erroredGraphics = new ObserverErrorGraphics(time);
+          const erroredGraphics = new ObserverErrorGraphics();
           this.addDynamicObject(erroredGraphics);
         })
       )

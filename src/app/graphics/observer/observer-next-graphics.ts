@@ -3,8 +3,8 @@ import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 export class ObserverNextGraphics extends DynamicObjectGraphics {
   private readonly value: string;
 
-  constructor(time: number, value: string) {
-    super(time);
+  constructor(value: string) {
+    super();
     this.value = value;
   }
 

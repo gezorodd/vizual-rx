@@ -2,8 +2,8 @@ import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 
 export class ObserverErrorGraphics extends DynamicObjectGraphics {
 
-  constructor(time: number) {
-    super(time, -1);
+  constructor() {
+    super(-1);
   }
 
   protected override init(groupContainer: SVGGElement): void {

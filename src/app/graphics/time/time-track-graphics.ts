@@ -45,7 +45,7 @@ export class TimeTrackGraphics extends TrackGraphics {
                   )
               ),
               tap(value => {
-                this.addDynamicObject(new TimeTrackTickGraphics(new Date().getTime(), value));
+                this.addDynamicObject(new TimeTrackTickGraphics(value));
               })
             );
         }),

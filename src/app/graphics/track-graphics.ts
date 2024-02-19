@@ -97,7 +97,7 @@ export class TrackGraphics {
   }
 
   private update(): void {
-    this.dynamicObjects.forEach(dynamicObject => dynamicObject.update(this.engine.timeFactorHistory));
+    this.dynamicObjects.forEach(dynamicObject => dynamicObject.update());
   }
 }
 

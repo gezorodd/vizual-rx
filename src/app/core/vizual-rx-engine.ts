@@ -12,7 +12,6 @@ import {
   takeUntil,
   tap
 } from "rxjs";
-import {VizualRxTimeFactoryHistory} from "./vizual-rx-time-factory-history";
 import {VizualRxTime} from "./vizual-rx-time";
 import {VizualRxObserver} from "./vizual-rx-observer";
 
@@ -20,7 +19,6 @@ export class VizualRxEngine implements VizualRxEngineApi {
   code: string;
   observers: VizualRxObserver[];
   subscriptions: Subscription[];
-  timeFactorHistory: VizualRxTimeFactoryHistory[];
 
   private readonly interpreter: VizualRxInterpreter;
   private readonly state$: BehaviorSubject<PlayerState>;
@@ -42,7 +40,6 @@ export class VizualRxEngine implements VizualRxEngineApi {
     this.playing$ = this.getPlaying();
     this.stopping$ = this.getStopping();
     this.starting$ = this.getStarting();
-    this.timeFactorHistory = [];
 
     this.interpreter = new VizualRxInterpreter();
     this.interpreter.observerAdded$
@@ -77,10 +74,8 @@ export class VizualRxEngine implements VizualRxEngineApi {
       this.observers = [];
       this.subscriptions = [];
       this.interpreter.runCode(this.code);
-      this.timeFactorHistory = [];
     }
     this.state$.next(PlayerState.PLAYING);
-    this.addTimeFactorHistory();
   }
 
   pause(): void {
@@ -89,7 +84,6 @@ export class VizualRxEngine implements VizualRxEngineApi {
     }
     VizualRxTime.timeFactor = 0;
     this.state$.next(PlayerState.PAUSED);
-    this.addTimeFactorHistory();
   }
 
   stop(): void {
@@ -116,7 +110,6 @@ export class VizualRxEngine implements VizualRxEngineApi {
     if (this.playing) {
       VizualRxTime.timeFactor = factor;
     }
-    this.addTimeFactorHistory();
   }
 
   private stopEngineWhenAllSubscriptionsAreClosed() {
@@ -132,16 +125,6 @@ export class VizualRxEngine implements VizualRxEngineApi {
             );
         })
       );
-  }
-
-  private addTimeFactorHistory() {
-    if (this.timeFactorHistory.length > 0) {
-      const lastHistory = this.timeFactorHistory[this.timeFactorHistory.length - 1];
-      if (lastHistory.timeFactor === VizualRxTime.timeFactor) {
-        return;
-      }
-    }
-    this.timeFactorHistory.push(new VizualRxTimeFactoryHistory());
   }
 
   private getStopped() {

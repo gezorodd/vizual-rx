@@ -3,8 +3,8 @@ import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 export class TimeTrackTickGraphics extends DynamicObjectGraphics {
   sequence: number
 
-  constructor(time: number, sequence: number) {
-    super(time);
+  constructor(sequence: number) {
+    super();
     this.sequence = sequence;
   }
 

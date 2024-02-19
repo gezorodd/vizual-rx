@@ -38,8 +38,8 @@ export class VizualRxTime {
 
   private virtualNow(): number {
     const currentTime = new Date().getTime();
-    const diff = this.previousTime - currentTime;
-    const virtualDiff = this.timeFactor * diff;
+    const diff = currentTime - this.previousTime;
+    const virtualDiff = this._timeFactor$.value * diff;
     return this.previousVirtualTime + virtualDiff;
   }
 }
