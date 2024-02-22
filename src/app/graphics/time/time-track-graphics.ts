@@ -12,22 +12,8 @@ export class TimeTrackGraphics extends TrackGraphics {
 
   override init() {
     super.init();
-    this.createTimeLine();
     this.createTicksEverySecondAfterEngineStart()
       .subscribe();
-  }
-
-  private createTimeLine(): void {
-    const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
-    line.classList.add('arrow-line');
-    line.setAttribute('x2', `${this.svg.clientWidth - 3}`);
-    this.trackContainer.appendChild(line);
-
-    const arrow = document.createElementNS('http://www.w3.org/2000/svg', 'path');
-    arrow.classList.add('arrow');
-    arrow.setAttribute('d', 'M0,0 L-20,10 L-10,0 L-20,-10');
-    arrow.style.transform = `translate(${this.svg.clientWidth}px, 0)`;
-    this.trackContainer.appendChild(arrow);
   }
 
   private createTicksEverySecondAfterEngineStart() {
@@ -38,14 +24,14 @@ export class TimeTrackGraphics extends TrackGraphics {
             .pipe(
               tap(() => this.clearDynamicObjects()),
               mergeWith(
-                interval(1000, vizualRxScheduler)
+                interval(100, vizualRxScheduler)
                   .pipe(
                     map(value => value + 1),
                     takeUntil(this.engine.stopping$)
                   )
               ),
               tap(value => {
-                this.addDynamicObject(new TimeTrackTickGraphics(value));
+                this.addDynamicObject(new TimeTrackTickGraphics(value / 10));
               })
             );
         }),

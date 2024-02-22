@@ -1,0 +1,61 @@
+@use "@angular/material" as mat;
+@import "../../theme";
+
+:host {
+  height: 100%;
+  background-color: mat.get-theme-color($theme, background, app-bar);
+}
+
+.main-container {
+  display: grid;
+  grid-template-columns: 150px 1fr;
+  row-gap: 0.5em;
+  overflow: auto;
+  padding: 0 1em 1em;
+}
+
+.slider-container {
+  grid-column-start: 1;
+  grid-column-end: 3;
+  margin-left: auto;
+  display: flex;
+  align-items: center;
+}
+
+.button-container {
+  display: flex;
+  justify-content: space-evenly;
+}
+
+.time-track {
+  height: 30px;
+  background-image: linear-gradient(mat.get-theme-color($theme, primary, default), mat.get-theme-color($theme, primary, darker));
+  border: 1px solid mat.get-theme-color($theme, primary, darker);
+  border-radius: 5px;
+  position: sticky;
+  top: 0;
+  width: 100%;
+  margin: auto;
+}
+
+.observer-label {
+  background-image: linear-gradient(mat.get-theme-color($theme, primary, default), mat.get-theme-color($theme, primary, darker));
+  border-top-right-radius: 20px;
+  border: 1px solid mat.get-theme-color($theme, primary, darker);
+  box-sizing: border-box;
+  height: 80px;
+
+  span {
+    padding: 0.8em;
+    display: block;
+    color: mat.get-theme-color($theme, primary, default-contrast);
+  }
+}
+
+.observer-track {
+  background-image: linear-gradient(mat.get-theme-color($theme, background, app-bar), mat.get-theme-color($theme, primary, 50));
+  border-bottom: 2px solid mat.get-theme-color($theme, primary, default);
+  box-sizing: border-box;
+  height: 80px;
+  width: 100%;
+}

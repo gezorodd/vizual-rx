@@ -60,6 +60,12 @@ export class TrackGraphics {
     const sceneContainer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     sceneContainer.classList.add('scene-container');
     this.trackContainer.appendChild(sceneContainer);
+
+    const startLine = document.createElementNS('http://www.w3.org/2000/svg', 'line');
+    startLine.setAttribute('y1', '-50');
+    startLine.setAttribute('y2', '50');
+    startLine.classList.add('start-line')
+    sceneContainer.appendChild(startLine);
     return sceneContainer;
   }
 

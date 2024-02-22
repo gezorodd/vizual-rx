@@ -116,10 +116,9 @@ export class VizualRxEngine implements VizualRxEngineApi {
     return this.starting$
       .pipe(
         mergeMap(() => {
-          return interval(200)
+          return interval(15)
             .pipe(
               filter(() => this.subscriptions.every(subscription => subscription.closed)),
-              delay(100),
               tap(() => this.stop()),
               takeUntil(this.stopping$)
             );

@@ -1,17 +1,36 @@
-<mat-toolbar>
-  <mat-slider min="0" max="2" step="0.1" [showTickMarks]="true">
-    <input matSliderThumb [(ngModel)]="engine.timeFactor">
-  </mat-slider>
-  <button mat-mini-fab color="primary" (click)="engine.replay()">
-    <mat-icon>refresh</mat-icon>
-  </button>
-  <button mat-mini-fab color="primary" (click)="engine.play()" [disabled]="engine.playing$ | async">
-    <mat-icon>play_arrow</mat-icon>
-  </button>
-  <button mat-mini-fab color="primary" (click)="engine.pause()" [disabled]="!(engine.playing$ | async)">
-    <mat-icon>pause</mat-icon>
-  </button>
-  <button mat-mini-fab color="primary" (click)="engine.stop()" [disabled]="engine.stopped$ | async">
-    <mat-icon>stop</mat-icon>
-  </button>
-</mat-toolbar>
+<div class="main-container">
+  <div class="slider-container">
+    <label>Time Speed</label>
+    <mat-slider min="0" max="2" step="0.1" [showTickMarks]="true">
+      <input matSliderThumb [(ngModel)]="engine.timeFactor">
+    </mat-slider>
+    <label>Time Scale</label>
+    <mat-slider min="0.5" max="2" step="0.1" [showTickMarks]="true">
+      <input matSliderThumb [(ngModel)]="timeScale">
+    </mat-slider>
+    <mat-divider [vertical]="true"></mat-divider>
+  </div>
+  <div class="button-container">
+    <button mat-mini-fab color="primary" (click)="engine.replay()">
+      <mat-icon>refresh</mat-icon>
+    </button>
+    <button mat-mini-fab color="primary" *ngIf="engine.playing$ | async" (click)="engine.pause()">
+      <mat-icon>pause</mat-icon>
+    </button>
+    <button mat-mini-fab color="primary" *ngIf="!(engine.playing$ | async)" (click)="engine.replay()">
+      <mat-icon>play_arrow</mat-icon>
+    </button>
+    <button mat-mini-fab color="primary" (click)="engine.stop()">
+      <mat-icon>stop</mat-icon>
+    </button>
+  </div>
+  <svg #timeTrack class="time-track">
+  </svg>
+  <ng-container *ngFor="let observer of observers">
+    <div class="observer-label">
+      <span>{{ observer.label }}</span>
+    </div>
+    <svg #observerTrack class="observer-track" [id]="observer.id">
+    </svg>
+  </ng-container>
+</div>

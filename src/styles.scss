@@ -24,37 +24,52 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   }
 }
 
+@keyframes observable-error-popping {
+  0% {
+    transform: scale(2);
+    rotate: -10deg;
+  }
+  100% {
+    transform: scale(1);
+    rotate: 0deg;
+  }
+}
+
 .track-container {
   stroke-linecap: round;
 
   .scene-container {
     transform: translate(25px, 0);
-  }
 
-  line {
-    stroke-width: 2px;
+    .start-line {
+      stroke-dasharray: 2 3;
+    }
   }
 
   &.time-track {
-    transform: translate(0, 25px);
+    transform: translate(0, 30px);
 
-    line, text {
+    line {
       stroke: var(--vrx-time-track-color);
     }
 
-    .arrow {
+    text {
       fill: var(--vrx-time-track-color);
+    }
+
+    .second-thick {
+      stroke-width: 2px;
     }
   }
 
   &.observer-track {
     transform: translate(0, 40px);
 
-    line, text {
+    line {
       stroke: var(--vrx-observer-track-color);
 
       &.center-line {
-        stroke-opacity: 0.2;
+        stroke-opacity: 0.5;
         stroke-dasharray: 5 5;
       }
 
@@ -63,19 +78,29 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
       }
     }
 
+    text {
+      fill: var(--vrx-observer-track-color);
+    }
+
     .observer-value {
       animation-name: observer-value-popping;
       animation-duration: 0.7s;
+
+      text {
+        font-weight: 500;
+      }
     }
 
     .completed-line {
       animation-name: observable-completed-popping;
-      animation-duration: 0.2s;
-      animation-timing-function: linear;
+      animation-duration: 0.15s;
+      animation-timing-function: ease-in;
     }
 
     .error-icon {
-      fill: red;
+      animation-name: observable-error-popping;
+      animation-duration: 0.15s;
+      animation-timing-function: ease-in;
     }
 
     circle {
