@@ -107,10 +107,10 @@ export class VizualRxPlayer implements OnInit, AfterViewInit, OnDestroy {
   }
 
   get timeScale(): number {
-    return DynamicObjectGraphics.timeScale;
+    return DynamicObjectGraphics.timeScale$.value;
   }
 
   set timeScale(value: number) {
-    DynamicObjectGraphics.timeScale = value;
+    DynamicObjectGraphics.timeScale$.next(value);
   }
 }

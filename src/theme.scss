@@ -10,7 +10,7 @@ $theme: mat.define-light-theme(
       accent: $accent,
     ),
       typography: mat.define-typography-config(),
-      density: 0,)
+      density: 0)
 );
 
 @include mat.all-component-themes($theme);
@@ -18,4 +18,12 @@ $theme: mat.define-light-theme(
 html {
   --vrx-time-track-color: #{mat.get-theme-color($theme, primary, default-contrast)};
   --vrx-observer-track-color: #{mat.get-theme-color($theme, primary, text)};
+  --vrx-observer-value-red-color: #{mat.get-color-from-palette(mat.define-palette(mat.$red-palette))};
+  --vrx-observer-value-green-color: #{mat.get-color-from-palette(mat.define-palette(mat.$green-palette))};
+  --vrx-observer-value-blue-color: #{mat.get-color-from-palette(mat.define-palette(mat.$blue-palette, 900))};
+  --vrx-observer-value-orange-color: #{mat.get-color-from-palette(mat.define-palette(mat.$orange-palette))};
+  --vrx-observer-value-yellow-color: #{mat.get-color-from-palette(mat.define-palette(mat.$yellow-palette))};
+  --vrx-observer-value-purple-color: #{mat.get-color-from-palette(mat.define-palette(mat.$purple-palette))};
+  --vrx-observer-value-cyan-color: #{mat.get-color-from-palette(mat.define-palette(mat.$cyan-palette))};
+  --vrx-observer-value-pink-color: #{mat.get-color-from-palette(mat.define-palette(mat.$pink-palette, 200))};
 }

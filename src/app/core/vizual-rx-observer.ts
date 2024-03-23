@@ -10,6 +10,7 @@ export class VizualRxObserver implements Observer<any>, SubscriptionLike {
   private readonly _complete$: ReplaySubject<void>;
   subscription?: Subscription;
   closed: boolean;
+  paused: boolean;
 
   constructor(name: string) {
     this.id = 'observer_' + VizualRxObserver.idSeq++;
@@ -18,20 +19,27 @@ export class VizualRxObserver implements Observer<any>, SubscriptionLike {
     this._error$ = new ReplaySubject();
     this._complete$ = new ReplaySubject();
     this.closed = false;
+    this.paused = false;
   }
 
   next(value: any): void {
-    this._next$.next(value);
+    if (!this.paused) {
+      this._next$.next(value);
+    }
   }
 
   error(err: any): void {
-    this._error$.next(err);
-    this.closed = true;
+    if (!this.paused) {
+      this._error$.next(err);
+      this.closed = true;
+    }
   }
 
   complete(): void {
-    this._complete$.next();
-    this.closed = true;
+    if (!this.paused) {
+      this._complete$.next();
+      this.closed = true;
+    }
   }
 
   unsubscribe(): void {

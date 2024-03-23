@@ -1,7 +1,6 @@
 import {VizualRxInterpreter} from "./vizual-rx-interpreter";
 import {
   BehaviorSubject,
-  delay,
   filter,
   interval,
   map,
@@ -10,7 +9,7 @@ import {
   pairwise,
   Subscription,
   takeUntil,
-  tap
+  tap,
 } from "rxjs";
 import {VizualRxTime} from "./vizual-rx-time";
 import {VizualRxObserver} from "./vizual-rx-observer";
@@ -75,6 +74,7 @@ export class VizualRxEngine implements VizualRxEngineApi {
       this.subscriptions = [];
       this.interpreter.runCode(this.code);
     }
+    this.observers.forEach(observer => observer.paused = false);
     this.state$.next(PlayerState.PLAYING);
   }
 
@@ -83,6 +83,7 @@ export class VizualRxEngine implements VizualRxEngineApi {
       return;
     }
     VizualRxTime.timeFactor = 0;
+    this.observers.forEach(observer => observer.paused = true);
     this.state$.next(PlayerState.PAUSED);
   }
 
@@ -93,6 +94,7 @@ export class VizualRxEngine implements VizualRxEngineApi {
     this.subscriptions
       .filter(subscription => !subscription.closed)
       .forEach(subscription => subscription.unsubscribe());
+    VizualRxTime.timeFactor = 0;
     this.state$.next(PlayerState.STOPPED);
   }
 

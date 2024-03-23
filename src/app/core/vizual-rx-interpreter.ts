@@ -1,16 +1,20 @@
 import * as rxjs from "rxjs";
-import {Observable, Observer, Subject, Subscription} from "rxjs";
+import * as rxjsAjax from "rxjs/ajax";
+import {Observable, Subject, Subscription} from "rxjs";
 import * as ts from "typescript";
 import {ModuleKind} from "typescript";
 import {VizualRxObserver} from "./vizual-rx-observer";
 import {VizualRxProxies} from "./vizual-rx-proxies";
+import {VizualRxApi} from "./vizual-rx-api";
 
 export class VizualRxInterpreter {
   private readonly _observerAdded$ = new Subject<VizualRxObserver>();
-  private vizualRxProxies: VizualRxProxies;
+  private readonly vizualRxProxies: VizualRxProxies;
+  private readonly vizualRxApi: VizualRxApi;
 
   constructor() {
     this.vizualRxProxies = new VizualRxProxies();
+    this.vizualRxApi = new VizualRxApi(this._observerAdded$);
   }
 
   runCode(code: string): void {
@@ -28,20 +32,14 @@ export class VizualRxInterpreter {
   }
 
   private createExecutionScope(): any {
-    const self = this;
-    const vizualRxApi: VizualRxApi = {
-      observe(name?: string): Observer<any> {
-        const observer = new VizualRxObserver(name ?? '');
-        self._observerAdded$.next(observer);
-        return observer;
-      }
-    };
     return {
       modules: {
         rxjs,
-        'vizual-rx': vizualRxApi
+        'rxjs/ajax': rxjsAjax,
+        'vizual-rx': this.vizualRxApi.getExports()
       },
-      vizualRxProxies: this.vizualRxProxies.rxjsProxies
+      vizualRxProxies: this.vizualRxProxies.rxjsProxies,
+      vizualRxAjaxProxies: this.vizualRxProxies.rxjsAjaxProxies,
     };
   }
 
@@ -66,6 +64,16 @@ export class VizualRxInterpreter {
                 }
               }
             });
+          case 'rxjs/ajax':
+            return new Proxy(scope.modules['rxjs/ajax'], {
+              get(target, name) {
+                if (name in scope.vizualRxAjaxProxies) {
+                  return scope.vizualRxAjaxProxies[name];
+                } else {
+                  return target[name];
+                }
+              }
+            });
           default:
             if (moduleName in scope.modules) {
               return scope.modules[moduleName];
@@ -80,8 +88,4 @@ export class VizualRxInterpreter {
     ${transpiledCode}`;
     return Function(fullCode);
   }
-}
-
-interface VizualRxApi {
-  observe(name?: string): Observer<any>;
 }

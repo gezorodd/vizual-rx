@@ -17,7 +17,7 @@
     <button mat-mini-fab color="primary" *ngIf="engine.playing$ | async" (click)="engine.pause()">
       <mat-icon>pause</mat-icon>
     </button>
-    <button mat-mini-fab color="primary" *ngIf="!(engine.playing$ | async)" (click)="engine.replay()">
+    <button mat-mini-fab color="primary" *ngIf="!(engine.playing$ | async)" (click)="engine.play()">
       <mat-icon>play_arrow</mat-icon>
     </button>
     <button mat-mini-fab color="primary" (click)="engine.stop()">

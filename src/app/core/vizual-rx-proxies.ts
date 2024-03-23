@@ -1,8 +1,15 @@
 import {
   auditTime,
+  bindCallback,
   bufferTime,
   debounceTime,
+  defer,
   delay,
+  empty,
+  from,
+  fromEvent,
+  fromEventPattern,
+  generate,
   interval,
   Observable,
   observeOn,
@@ -20,10 +27,12 @@ import {
   timer
 } from "rxjs";
 import {vizualRxScheduler} from "./vizual-rx-scheduler";
+import {ajax} from "rxjs/internal/ajax/ajax";
 
 export class VizualRxProxies {
   private readonly _subscriptionCreated$ = new Subject<Subscription>();
   readonly rxjsProxies: { [key: string]: any };
+  readonly rxjsAjaxProxies: { [key: string]: any };
 
   constructor() {
     const o = this.watchObservableFactory.bind(this);
@@ -35,7 +44,7 @@ export class VizualRxProxies {
       debounceTime: s(debounceTime),
       bufferTime: s(bufferTime),
       auditTime: s(auditTime),
-      timer: s(timer),
+      timer: o(s(timer)),
       sampleTime: s(sampleTime),
       timeInterval: s(timeInterval),
       throttleTime: s(throttleTime, 1),
@@ -43,7 +52,17 @@ export class VizualRxProxies {
       subscribeOn: s(subscribeOn, 1),
       timeoutWith: s(timeoutWith),
       shareReplay: s(shareReplay),
-      timeout: s(timeout)
+      timeout: s(timeout),
+      bindCallback: this.watchBindCallback(bindCallback),
+      from: o(from),
+      fromEvent: o(fromEvent),
+      fromEventPattern: o(fromEventPattern),
+      generate: o(generate),
+      defer: o(defer),
+      empty: o(s(empty)),
+    };
+    this.rxjsAjaxProxies = {
+      ajax: o(ajax)
     }
   }
 
@@ -111,6 +130,19 @@ export class VizualRxProxies {
       apply(target: T, thisArg: ThisParameterType<T>, argArray: Parameters<T>): any {
         const observable = target.apply(thisArg, argArray);
         return self.watchObservable(observable);
+      }
+    });
+  }
+
+  private watchBindCallback(func: typeof bindCallback): typeof bindCallback {
+    const self = this;
+    return new Proxy(func, {
+      apply(target: typeof bindCallback, thisArg: ThisParameterType<typeof bindCallback>, args: Parameters<typeof bindCallback>) {
+        return new Proxy(target.apply(thisArg, args), {
+          apply(target: any, thisArg: any, argArray: any[]): any {
+            return self.watchObservable(target.apply(thisArg, argArray));
+          }
+        });
       }
     });
   }

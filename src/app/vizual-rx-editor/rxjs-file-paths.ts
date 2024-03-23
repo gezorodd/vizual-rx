@@ -1,5 +1,6 @@
 export const rxjsFilePaths: string[] = [
   'index.d.ts',
+  'ajax/index.d.ts',
   'internal/observable/bindCallback.d.ts',
   'internal/observable/bindCallbackInternals.d.ts',
   'internal/observable/bindNodeCallback.d.ts',

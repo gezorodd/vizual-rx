@@ -1,8 +1,9 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
+import tippy from "tippy.js";
 
 export class ObserverErrorGraphics extends DynamicObjectGraphics {
 
-  constructor() {
+  constructor(private err: any) {
     super(-1);
   }
 
@@ -16,5 +17,14 @@ export class ObserverErrorGraphics extends DynamicObjectGraphics {
     image.setAttribute('href', 'assets/dangerous_black_24dp.svg');
     image.setAttribute('filter', 'url(#error-color)')
     groupContainer.appendChild(image);
+
+    if (this.err) {
+      tippy(groupContainer, {
+        content: this.err.toString(),
+        placement: 'bottom',
+        animation: 'scale',
+        inertia: true
+      });
+    }
   }
 }

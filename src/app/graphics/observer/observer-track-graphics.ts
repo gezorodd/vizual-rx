@@ -1,6 +1,6 @@
 import {TrackGraphics} from "../track-graphics";
 import {VizualRxEngine} from "../../core/vizual-rx-engine";
-import {ObserverNextGraphics} from "./observer-next-graphics";
+import {ObserverValueGraphics} from "./observer-value-graphics";
 import {catchError, EMPTY, merge, takeUntil, tap} from "rxjs";
 import {ObserverCompleteGraphics} from "./observer-complete-graphics";
 import {ObserverErrorGraphics} from "./observer-error-graphics";
@@ -60,7 +60,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
       .pipe(
         catchError(() => EMPTY),
         tap(value => {
-          const valueGraphics = new ObserverNextGraphics(value);
+          const valueGraphics = new ObserverValueGraphics(value);
           this.addDynamicObject(valueGraphics);
         })
       );
@@ -80,8 +80,8 @@ export class ObserverTrackGraphics extends TrackGraphics {
   private createErroredGraphicsWhenErrored() {
     return this.observer.error$
       .pipe(
-        tap(() => {
-          const erroredGraphics = new ObserverErrorGraphics();
+        tap(err => {
+          const erroredGraphics = new ObserverErrorGraphics(err);
           this.addDynamicObject(erroredGraphics);
         })
       )

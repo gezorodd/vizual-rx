@@ -1,7 +1,13 @@
 /* You can add global styles to this file, and also import other style files */
 
-html, body { height: 100%; }
-body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
+html, body {
+  height: 100%;
+}
+
+body {
+  margin: 0;
+  font-family: Roboto, "Helvetica Neue", sans-serif;
+}
 
 @keyframes observer-value-popping {
   0% {
@@ -17,7 +23,11 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @keyframes observable-completed-popping {
   0% {
-    transform: scale(3);
+    opacity: 0;
+    transform: scaleY(2) scaleX(6)
+  }
+  50% {
+    opacity: 1;
   }
   100% {
     transform: scale(1);
@@ -26,12 +36,14 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
 @keyframes observable-error-popping {
   0% {
-    transform: scale(2);
-    rotate: -10deg;
+    opacity: 0;
+    transform: scale(3);
+  }
+  50% {
+    opacity: 1;
   }
   100% {
     transform: scale(1);
-    rotate: 0deg;
   }
 }
 
@@ -39,7 +51,7 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
   stroke-linecap: round;
 
   .scene-container {
-    transform: translate(25px, 0);
+    transform: translate(50px, 0);
 
     .start-line {
       stroke-dasharray: 2 3;
@@ -89,6 +101,50 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
       text {
         font-weight: 500;
       }
+
+      & > *:not(text) {
+        fill: white;
+        stroke-width: 2px;
+        stroke: var(--vrx-observer-track-color);
+      }
+
+      & > .color-red {
+        fill: var(--vrx-observer-value-red-color);
+      }
+
+      & > .color-green {
+        fill: var(--vrx-observer-value-green-color);
+      }
+
+      & > .color-blue {
+        fill: var(--vrx-observer-value-blue-color);
+      }
+
+      & > .color-orange {
+        fill: var(--vrx-observer-value-orange-color);
+      }
+
+      & > .color-yellow {
+        fill: var(--vrx-observer-value-yellow-color);
+      }
+
+      & > .color-purple {
+        fill: var(--vrx-observer-value-purple-color);
+      }
+
+      & > .color-cyan {
+        fill: var(--vrx-observer-value-cyan-color);
+      }
+
+      & > .color-pink {
+        fill: var(--vrx-observer-value-pink-color);
+      }
+
+      & > .array-symbol {
+        stroke: black;
+        stroke-width: 3px;
+        fill: none;
+      }
     }
 
     .completed-line {
@@ -99,14 +155,8 @@ body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; }
 
     .error-icon {
       animation-name: observable-error-popping;
-      animation-duration: 0.15s;
+      animation-duration: 0.2s;
       animation-timing-function: ease-in;
-    }
-
-    circle {
-      fill: white;
-      stroke-width: 2px;
-      stroke: var(--vrx-observer-track-color);
     }
   }
 }

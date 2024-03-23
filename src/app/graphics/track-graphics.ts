@@ -1,4 +1,4 @@
-import {filter, interval, Observable, Subject, takeUntil, tap} from "rxjs";
+import {filter, interval, merge, Observable, Subject, takeUntil, tap} from "rxjs";
 import {DynamicObjectGraphics} from "./dynamic-object-graphics";
 import {VizualRxEngine} from "../core/vizual-rx-engine";
 
@@ -25,7 +25,7 @@ export class TrackGraphics {
     this.trackContainer = this.createTrackContainer();
     this.sceneContainer = this.createSceneContainer();
 
-    this.updateAtInterval()
+    this.scheduleUpdate()
       .subscribe();
   }
 
@@ -93,13 +93,15 @@ export class TrackGraphics {
     return sceneLayer;
   }
 
-  private updateAtInterval(): Observable<number> {
-    return interval(15)
-      .pipe(
-        filter(() => this.engine.playing),
-        tap(() => this.update()),
-        takeUntil(this.destroy$)
-      );
+  private scheduleUpdate(): Observable<number> {
+    return merge(
+      interval(15)
+        .pipe(filter(() => this.engine.playing)),
+      DynamicObjectGraphics.timeScale$
+    ).pipe(
+      tap(() => this.update()),
+      takeUntil(this.destroy$)
+    );
   }
 
   private update(): void {
