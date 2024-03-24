@@ -1,4 +1,11 @@
-<app-vizual-rx-editor [(code)]="engine.code"></app-vizual-rx-editor>
-<div class="visualizer-container">
-  <app-vizual-rx-player [engine]="engine"></app-vizual-rx-player>
+<mat-toolbar class="navbar" color="primary">
+  <button mat-icon-button (click)="menuVisible = !menuVisible">
+    <mat-icon>menu</mat-icon>
+  </button>
+  <span>VizualRx</span>
+</mat-toolbar>
+<div class="main">
+  <app-vizual-rx-side-menu [hidden]="!menuVisible"></app-vizual-rx-side-menu>
+  <router-outlet></router-outlet>
 </div>
+

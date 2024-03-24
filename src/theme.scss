@@ -2,7 +2,7 @@
 
 @include mat.core();
 
-$primary: mat.define-palette(mat.$indigo-palette);
+$primary: mat.define-palette(mat.$teal-palette);
 $accent: mat.define-palette(mat.$deep-purple-palette);
 $theme: mat.define-light-theme(
     (color: (
@@ -15,15 +15,20 @@ $theme: mat.define-light-theme(
 
 @include mat.all-component-themes($theme);
 
-html {
-  --vrx-time-track-color: #{mat.get-theme-color($theme, primary, default-contrast)};
-  --vrx-observer-track-color: #{mat.get-theme-color($theme, primary, text)};
-  --vrx-observer-value-red-color: #{mat.get-color-from-palette(mat.define-palette(mat.$red-palette))};
-  --vrx-observer-value-green-color: #{mat.get-color-from-palette(mat.define-palette(mat.$green-palette))};
-  --vrx-observer-value-blue-color: #{mat.get-color-from-palette(mat.define-palette(mat.$blue-palette, 900))};
-  --vrx-observer-value-orange-color: #{mat.get-color-from-palette(mat.define-palette(mat.$orange-palette))};
-  --vrx-observer-value-yellow-color: #{mat.get-color-from-palette(mat.define-palette(mat.$yellow-palette))};
-  --vrx-observer-value-purple-color: #{mat.get-color-from-palette(mat.define-palette(mat.$purple-palette))};
-  --vrx-observer-value-cyan-color: #{mat.get-color-from-palette(mat.define-palette(mat.$cyan-palette))};
-  --vrx-observer-value-pink-color: #{mat.get-color-from-palette(mat.define-palette(mat.$pink-palette, 200))};
-}
+$player-component-background: linear-gradient(#e4e5ea, #dfe1e7);
+$player-component-background-active: linear-gradient(#dbdde1, #cbcfd3);
+$player-component-border: 1px solid #a9a9a9;
+$player-component-border-radius: 10px;
+$player-component-color: #45454b;
+$player-observer-track-color: #6a6a79;
+$player-observer-track-background: #f5f5f5;
+$player-time-track-tick-color: #8f8f99;
+
+$player-observer-value-color-red: #ff8178;
+$player-observer-value-color-blue: #6797e5;
+$player-observer-value-color-green: #7dd180;
+$player-observer-value-color-orange: #ffae51;
+$player-observer-value-color-yellow: #fff376;
+$player-observer-value-color-purple: #b493ef;
+$player-observer-value-color-cyan: #97ecf8;
+$player-observer-value-color-pink: #ffb9cf;

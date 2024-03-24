@@ -2,7 +2,6 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
-  Input,
   OnDestroy,
   OnInit,
   QueryList,
@@ -21,6 +20,7 @@ import {FormsModule} from "@angular/forms";
 import {MatSlider, MatSliderThumb} from "@angular/material/slider";
 import {MatDivider} from "@angular/material/divider";
 import {DynamicObjectGraphics} from "../graphics/dynamic-object-graphics";
+import {AppService} from "../app.service";
 
 @Component({
   selector: 'app-vizual-rx-player',
@@ -43,7 +43,7 @@ import {DynamicObjectGraphics} from "../graphics/dynamic-object-graphics";
 })
 export class VizualRxPlayer implements OnInit, AfterViewInit, OnDestroy {
 
-  @Input({required: true}) engine!: VizualRxEngine;
+  engine: VizualRxEngine;
 
   @ViewChild('timeTrack') timeTrack!: ElementRef<SVGSVGElement>;
   @ViewChildren('observerTrack') observerTracks!: QueryList<ElementRef<SVGSVGElement>>;
@@ -54,7 +54,8 @@ export class VizualRxPlayer implements OnInit, AfterViewInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>();
 
-  constructor() {
+  constructor(appService: AppService) {
+    this.engine = appService.engine;
     this.observers = [];
     this.observerTrackGraphics = new Map();
   }

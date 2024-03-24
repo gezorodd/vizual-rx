@@ -1,4 +1,4 @@
-/* You can add global styles to this file, and also import other style files */
+@import "theme";
 
 html, body {
   height: 100%;
@@ -61,12 +61,16 @@ body {
   &.time-track {
     transform: translate(0, 30px);
 
+    .scene-container {
+      transform: translate(180px, 0);
+    }
+
     line {
-      stroke: var(--vrx-time-track-color);
+      stroke: $player-time-track-tick-color;
     }
 
     text {
-      fill: var(--vrx-time-track-color);
+      fill: $player-component-color;
     }
 
     .second-thick {
@@ -78,7 +82,7 @@ body {
     transform: translate(0, 40px);
 
     line {
-      stroke: var(--vrx-observer-track-color);
+      stroke: $player-observer-track-color;
 
       &.center-line {
         stroke-opacity: 0.5;
@@ -91,7 +95,7 @@ body {
     }
 
     text {
-      fill: var(--vrx-observer-track-color);
+      fill: $player-observer-track-color;
     }
 
     .observer-value {
@@ -105,43 +109,43 @@ body {
       & > *:not(text) {
         fill: white;
         stroke-width: 2px;
-        stroke: var(--vrx-observer-track-color);
+        stroke: $player-observer-track-color;
       }
 
       & > .color-red {
-        fill: var(--vrx-observer-value-red-color);
+        fill: $player-observer-value-color-red;
       }
 
       & > .color-green {
-        fill: var(--vrx-observer-value-green-color);
+        fill: $player-observer-value-color-green;
       }
 
       & > .color-blue {
-        fill: var(--vrx-observer-value-blue-color);
+        fill: $player-observer-value-color-blue;
       }
 
       & > .color-orange {
-        fill: var(--vrx-observer-value-orange-color);
+        fill: $player-observer-value-color-orange;
       }
 
       & > .color-yellow {
-        fill: var(--vrx-observer-value-yellow-color);
+        fill: $player-observer-value-color-yellow;
       }
 
       & > .color-purple {
-        fill: var(--vrx-observer-value-purple-color);
+        fill: $player-observer-value-color-purple;
       }
 
       & > .color-cyan {
-        fill: var(--vrx-observer-value-cyan-color);
+        fill:  $player-observer-value-color-cyan;
       }
 
       & > .color-pink {
-        fill: var(--vrx-observer-value-pink-color);
+        fill:  $player-observer-value-color-pink;
       }
 
       & > .array-symbol {
-        stroke: black;
+        stroke: $player-observer-track-color;
         stroke-width: 3px;
         fill: none;
       }

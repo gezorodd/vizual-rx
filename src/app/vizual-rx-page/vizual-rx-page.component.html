@@ -1,0 +1,13 @@
+<div class="left-panel">
+  <app-vizual-rx-controller class="controller"></app-vizual-rx-controller>
+  <div class="content">
+    <h1>{{ title }}</h1>
+    <ng-container *ngIf="detailComponent">
+      <ng-container *ngComponentOutlet="detailComponent" />
+    </ng-container>
+  </div>
+  <app-vizual-rx-editor class="editor" [(code)]="engine.code"></app-vizual-rx-editor>
+</div>
+<div class="right-panel">
+  <app-vizual-rx-player></app-vizual-rx-player>
+</div>
