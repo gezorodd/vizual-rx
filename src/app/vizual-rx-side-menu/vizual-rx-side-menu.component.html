@@ -4,17 +4,17 @@
     <input #searchInput type="text" matInput (input)="applyFilter(searchInput.value)">
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
-  <mat-selection-list class="menu-list" [multiple]="false" [hideSingleSelectionIndicator]="true"
+  <mat-selection-list class="section-list" [multiple]="false" [hideSingleSelectionIndicator]="true"
                       (selectionChange)="navigateTo($event)">
-    <ng-container *ngFor="let menu of menus">
-      <ng-container *ngTemplateOutlet="menuTemplate; context: {$implicit: menu}"></ng-container>
+    <ng-container *ngFor="let section of sections">
+      <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: section}"></ng-container>
     </ng-container>
-    <ng-template #menuTemplate let-menu>
-      <div [class]="'menu-' + menu.level">{{ menu.label }}</div>
-      <ng-container *ngFor="let subMenu of menu.subMenus">
-        <ng-container *ngTemplateOutlet="menuTemplate; context: {$implicit: subMenu}"></ng-container>
+    <ng-template #sectionTemplate let-section>
+      <div [class]="'section-' + section.level">{{ section.label }}</div>
+      <ng-container *ngFor="let subSection of section.sections">
+        <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: subSection}"></ng-container>
       </ng-container>
-      <ng-container *ngFor="let page of menu.pages">
+      <ng-container *ngFor="let page of section.pages">
         <mat-list-option [value]="page.routeUrl" [selected]="isPageSelected(page) | async">{{ page.title }}
         </mat-list-option>
       </ng-container>

@@ -1,9 +1,9 @@
 import {CombineAllDetailsComponent} from "./combine-all-details/combine-all-details.component";
-import {combinationSection, Page} from "../page";
+import {Page} from "../page.model";
+
 export const combineAllPage: Page = {
   title: 'combineAll',
   routeUrl: 'combine-all',
-  section: combinationSection,
   detailsComponent: CombineAllDetailsComponent,
   sampleCode: `import {combineAll, timer, map, take, tap} from "rxjs";
 import {createValue, observe, colorAt, shapeAt} from "vizual-rx";

@@ -7,7 +7,7 @@ import {ActivatedRoute} from "@angular/router";
 import {map, Subject, takeUntil, timer} from "rxjs";
 import {VizualRxControllerComponent} from "../vizual-rx-controller/vizual-rx-controller.component";
 import {NgComponentOutlet, NgIf} from "@angular/common";
-import {Page} from "../pages/page";
+import {Page} from "../pages/page.model";
 
 @Component({
   selector: 'app-vizual-rx-page',

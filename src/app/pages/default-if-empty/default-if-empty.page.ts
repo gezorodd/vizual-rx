@@ -1,10 +1,8 @@
-import {conditionalSection} from "../page";
 import {DefaultIfEmptyDetailsComponent} from "./default-if-empty-details/default-if-empty-details.component";
 
 export const defaultIfEmptyPage = {
   title: 'defaultIfEmpty',
   routeUrl: 'default-if-empty',
-  section: conditionalSection,
   detailsComponent: DefaultIfEmptyDetailsComponent,
   sampleCode: `import {defaultIfEmpty, of, tap} from "rxjs";
 import {createValue, observe} from "vizual-rx";
