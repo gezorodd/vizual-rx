@@ -5,9 +5,9 @@ import {VizualRxEngine} from "../core/vizual-rx-engine";
 import {AppService} from "../app.service";
 import {ActivatedRoute} from "@angular/router";
 import {map, Subject, takeUntil, timer} from "rxjs";
-import {VizualRxPage} from "./vizual-rx-page.model";
 import {VizualRxControllerComponent} from "../vizual-rx-controller/vizual-rx-controller.component";
 import {NgComponentOutlet, NgIf} from "@angular/common";
+import {Page} from "../pages/page";
 
 @Component({
   selector: 'app-vizual-rx-page',
@@ -36,7 +36,7 @@ export class VizualRxPageComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.route.data
-      .pipe(map(data => data as VizualRxPage))
+      .pipe(map(data => data as Page))
       .subscribe(data => {
         this.engine.code = data.sampleCode ?? '';
         this.title = data.title;

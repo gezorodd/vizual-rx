@@ -1,18 +1,24 @@
 <div class="main-container">
   <mat-form-field class="search-input">
     <mat-label>Filter</mat-label>
-    <input type="text" matInput>
+    <input #searchInput type="text" matInput (input)="applyFilter(searchInput.value)">
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
   <mat-selection-list class="menu-list" [multiple]="false" [hideSingleSelectionIndicator]="true"
                       (selectionChange)="navigateTo($event)">
-    <div class="menu">RxJS Operators</div>
-    <div class="sub-menu">Combination</div>
-    <mat-list-option value="/combine-all" [selected]="currentUrl === '/combine-all'">combineAll</mat-list-option>
-    <mat-list-option value="/combine-latest" [selected]="currentUrl === '/combine-latest'">combineLatest
-    </mat-list-option>
-    <div class="sub-menu">Conditional</div>
-    <mat-list-option>defaultIfEmpty</mat-list-option>
-    <mat-list-option>iif</mat-list-option>
+    <ng-container *ngFor="let menu of menus">
+      <ng-container *ngTemplateOutlet="menuTemplate; context: {$implicit: menu}"></ng-container>
+    </ng-container>
+    <ng-template #menuTemplate let-menu>
+      <div [class]="'menu-' + menu.level">{{ menu.label }}</div>
+      <ng-container *ngFor="let subMenu of menu.subMenus">
+        <ng-container *ngTemplateOutlet="menuTemplate; context: {$implicit: subMenu}"></ng-container>
+      </ng-container>
+      <ng-container *ngFor="let page of menu.pages">
+        <mat-list-option [value]="page.routeUrl" [selected]="isPageSelected(page) | async">{{ page.title }}
+        </mat-list-option>
+      </ng-container>
+    </ng-template>
   </mat-selection-list>
 </div>
+
