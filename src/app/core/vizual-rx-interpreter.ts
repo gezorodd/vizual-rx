@@ -1,6 +1,6 @@
 import * as rxjs from "rxjs";
-import * as rxjsAjax from "rxjs/ajax";
 import {Observable, Subject, Subscription} from "rxjs";
+import * as rxjsAjax from "rxjs/ajax";
 import * as ts from "typescript";
 import {ModuleKind} from "typescript";
 import {VizualRxObserver} from "./vizual-rx-observer";
@@ -18,9 +18,16 @@ export class VizualRxInterpreter {
   }
 
   runCode(code: string): void {
-    const executionScope = this.createExecutionScope();
-    const executionFunction = this.createExecutionFunction(code);
-    executionFunction(executionScope);
+    const output = ts.transpileModule(code, {
+      compilerOptions: {
+        module: ModuleKind.CommonJS,
+        sourceMap: true
+      }
+    });
+
+    const transpiledCode = output.outputText;
+    const executionFunction = Function(`const exports = {}; const require = arguments[0]; ${transpiledCode}`);
+    executionFunction(this.require.bind(this));
   }
 
   get observerAdded$(): Observable<VizualRxObserver> {
@@ -31,61 +38,37 @@ export class VizualRxInterpreter {
     return this.vizualRxProxies.subscriptionCreated$;
   }
 
-  private createExecutionScope(): any {
-    return {
-      modules: {
-        rxjs,
-        'rxjs/ajax': rxjsAjax,
-        'vizual-rx': this.vizualRxApi.getExports()
-      },
-      vizualRxProxies: this.vizualRxProxies.rxjsProxies,
-      vizualRxAjaxProxies: this.vizualRxProxies.rxjsAjaxProxies,
-    };
-  }
+  private require(moduleName: string): any {
+    const rxjsProxies = this.vizualRxProxies.rxjsProxies;
+    const rxjsAjaxProxies = this.vizualRxProxies.rxjsAjaxProxies;
 
-  private createExecutionFunction(code: string): Function {
-    const transpiledCode = ts.transpile(code, {
-      module: ModuleKind.CommonJS
-    });
-
-    const fullCode = `
-    const require = (function() {
-      const scope = arguments[0];
-
-      return function(moduleName) {
-        switch(moduleName) {
-          case 'rxjs':
-            return new Proxy(scope.modules.rxjs, {
-              get(target, name) {
-                if (name in scope.vizualRxProxies) {
-                  return scope.vizualRxProxies[name];
-                } else {
-                  return target[name];
-                }
-              }
-            });
-          case 'rxjs/ajax':
-            return new Proxy(scope.modules['rxjs/ajax'], {
-              get(target, name) {
-                if (name in scope.vizualRxAjaxProxies) {
-                  return scope.vizualRxAjaxProxies[name];
-                } else {
-                  return target[name];
-                }
-              }
-            });
-          default:
-            if (moduleName in scope.modules) {
-              return scope.modules[moduleName];
+    switch (moduleName) {
+      case 'rxjs':
+        return new Proxy(rxjs as any, {
+          get(target, name) {
+            if (name in rxjsProxies) {
+              return rxjsProxies[name as string];
             } else {
-              throw 'Unknown module: ' + moduleName;
+              return target[name as string];
             }
+          }
+        });
+      case 'rxjs/ajax':
+        return new Proxy(rxjsAjax as any, {
+          get(target, name) {
+            if (name in rxjsAjaxProxies) {
+              return rxjsAjaxProxies[name as string];
+            } else {
+              return target[name];
+            }
+          }
+        });
+      default:
+        if (moduleName === 'vizual-rx') {
+          return this.vizualRxApi.getExports();
+        } else {
+          throw 'Unknown module: ' + moduleName;
         }
-      }
-    })(arguments[0]);
-
-    const exports = arguments = {};
-    ${transpiledCode}`;
-    return Function(fullCode);
+    }
   }
 }

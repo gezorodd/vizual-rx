@@ -51,6 +51,14 @@ export class VizualRxEngine {
       .subscribe();
   }
 
+  addObserver(vizualRxObserver: VizualRxObserver): void {
+    this.observers.push(vizualRxObserver);
+  }
+
+  addSubscription(subscription: Subscription): void {
+    this.subscriptions.push(subscription);
+  }
+
   get playing(): boolean {
     return this.state$.value === PlayerState.PLAYING;
   }
