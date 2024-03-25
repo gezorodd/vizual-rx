@@ -8,11 +8,11 @@ import {filter, map, noop, Observable, shareReplay} from "rxjs";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgForOf, NgTemplateOutlet} from "@angular/common";
 import {Page} from "../pages/page.model";
-import {ISection, Section} from "./vizual-rx-side-menu.model";
-import {allSectionData} from "./vizual-rx-side-menu.data";
+import {ISection, Section} from "./vizual-rx-sidenav.model";
+import {allSectionData} from "./vizual-rx-sidenav.data";
 
 @Component({
-  selector: 'app-vizual-rx-side-menu',
+  selector: 'app-vizual-rx-sidenav',
   standalone: true,
   imports: [
     MatListOption,
@@ -28,10 +28,10 @@ import {allSectionData} from "./vizual-rx-side-menu.data";
     NgTemplateOutlet,
     NgForOf
   ],
-  templateUrl: './vizual-rx-side-menu.component.html',
-  styleUrl: './vizual-rx-side-menu.component.scss'
+  templateUrl: './vizual-rx-sidenav.component.html',
+  styleUrl: './vizual-rx-sidenav.component.scss'
 })
-export class VizualRxSideMenuComponent {
+export class VizualRxSidenavComponent {
 
   sections: Section[] = [];
   private readonly currentUrl$: Observable<string>;

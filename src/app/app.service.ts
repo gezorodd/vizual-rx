@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {VizualRxEngine} from "./core/vizual-rx-engine";
-import {codeSamples} from "./vizual-rx-editor/code-samples";
+import {BehaviorSubject, Subject} from "rxjs";
 
 @Injectable({
   providedIn: 'root'
@@ -8,8 +8,12 @@ import {codeSamples} from "./vizual-rx-editor/code-samples";
 export class AppService {
 
   readonly engine: VizualRxEngine;
+  readonly sidenavOpenedState$: BehaviorSubject<boolean>;
+  readonly sidenavOpenedChanged$: Subject<void>;
 
   constructor() {
-    this.engine = new VizualRxEngine(codeSamples[0].code);
+    this.engine = new VizualRxEngine();
+    this.sidenavOpenedState$ = new BehaviorSubject<boolean>(true);
+    this.sidenavOpenedChanged$ = new Subject<void>();
   }
 }

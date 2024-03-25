@@ -28,8 +28,8 @@ export class VizualRxEngine implements VizualRxEngineApi {
   readonly stopped$: Observable<boolean>;
   readonly playing$: Observable<boolean>;
 
-  constructor(code: string) {
-    this.code = code;
+  constructor() {
+    this.code = '';
     this.observers = [];
     this.subscriptions = [];
     this.state$ = new BehaviorSubject<PlayerState>(PlayerState.STOPPED);

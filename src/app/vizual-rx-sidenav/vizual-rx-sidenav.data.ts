@@ -1,4 +1,4 @@
-import {ISection} from "./vizual-rx-side-menu.model";
+import {ISection} from "./vizual-rx-sidenav.model";
 import {combineAllPage} from "../pages/combine-all/combine-all.page";
 import {combineLatestPage} from "../pages/combine-latest/combine-latest.page";
 import {defaultIfEmptyPage} from "../pages/default-if-empty/default-if-empty.page";

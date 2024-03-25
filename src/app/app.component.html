@@ -1,11 +1,15 @@
 <mat-toolbar class="navbar" color="primary">
-  <button mat-icon-button (click)="menuVisible = !menuVisible">
+  <button mat-icon-button (click)="toggleSidenav()">
     <mat-icon>menu</mat-icon>
   </button>
   <span>VizualRx</span>
 </mat-toolbar>
-<div class="main">
-  <app-vizual-rx-side-menu [hidden]="!menuVisible"></app-vizual-rx-side-menu>
+
+<mat-drawer-container class="main">
+  <mat-drawer class="sidenav" mode="side" [opened]="sidenavOpenedState$ | async" (opened)="sidenavOpenedChanged()"
+              (closed)="sidenavOpenedChanged()">
+    <app-vizual-rx-sidenav></app-vizual-rx-sidenav>
+  </mat-drawer>
   <router-outlet></router-outlet>
-</div>
+</mat-drawer-container>
 

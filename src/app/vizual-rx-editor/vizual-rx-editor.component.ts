@@ -5,9 +5,27 @@ import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import * as monaco from "monaco-editor";
 import {VizualRxEditorService} from "./vizual-rx-editor.service";
-import {Subject, takeUntil} from "rxjs";
+import {
+  distinctUntilChanged,
+  expand,
+  filter,
+  first,
+  identity,
+  interval,
+  map,
+  mergeMap,
+  Observable,
+  of,
+  race,
+  skip,
+  Subject,
+  takeUntil,
+  tap
+} from "rxjs";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
+import {AppService} from "../app.service";
+import {not} from "rxjs/internal/util/not";
 
 @Component({
   selector: 'app-vizual-rx-editor',
@@ -32,7 +50,9 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
   private editor?: monaco.editor.IStandaloneCodeEditor;
   private destroy$ = new Subject<void>();
 
-  constructor(private vizualRxEditorService: VizualRxEditorService) {
+  constructor(private vizualRxEditorService: VizualRxEditorService, private appService: AppService) {
+    this.updateEditorLayoutDuringSidenavChange()
+      .subscribe();
   }
 
   ngOnInit(): void {
@@ -70,5 +90,38 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
       this.codeChange.next(value);
     });
     this.vizualRxEditorService.notifyMonacoReady();
+  }
+
+  private updateEditorLayoutDuringSidenavChange(): Observable<any> {
+    const sidenavIsChanging$ = of(1)
+      .pipe(
+        expand(counter => {
+          return race(
+            this.appService.sidenavOpenedState$.pipe(skip(1), map(() => counter + 1)),
+            this.appService.sidenavOpenedChanged$.pipe(map(() => counter - 1))
+          ).pipe(first());
+        }),
+        map(counter => counter > 0),
+        distinctUntilChanged()
+      );
+    const sidenavStartChanging$ = sidenavIsChanging$
+      .pipe(
+        filter(identity)
+      );
+    const sidenavStopChanging$ = sidenavIsChanging$
+      .pipe(
+        filter(not(identity, this))
+      );
+    const intervalDuringSidenavChange$ = sidenavStartChanging$
+      .pipe(
+        mergeMap(() =>
+          interval(5).pipe(takeUntil(sidenavStopChanging$))
+        )
+      );
+    return intervalDuringSidenavChange$
+      .pipe(
+        takeUntil(this.destroy$),
+        tap(() => this.editor?.layout())
+      );
   }
 }
