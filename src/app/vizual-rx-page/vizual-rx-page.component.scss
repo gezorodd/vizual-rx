@@ -43,6 +43,20 @@
   overflow: auto;
 }
 
+.error-panel {
+  margin: 1em;
+  padding: 1em;
+  background: #ffe7e7;
+  border: 1px solid #a10000;
+  border-radius: 10px;
+  color: #a10000;
+
+  pre {
+    overflow: auto;
+    margin: 0;
+  }
+}
+
 ::ng-deep {
   html {
     overflow: hidden;

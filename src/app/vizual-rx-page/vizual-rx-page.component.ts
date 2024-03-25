@@ -11,6 +11,7 @@ import {Page} from "../pages/page.model";
 import {MatIcon} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
 import {MatAnchor} from "@angular/material/button";
+import {MatCard, MatCardContent, MatCardHeader, MatCardModule} from "@angular/material/card";
 
 @Component({
   selector: 'app-vizual-rx-page',

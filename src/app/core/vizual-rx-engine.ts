@@ -14,10 +14,11 @@ import {
 import {VizualRxTime} from "./vizual-rx-time";
 import {VizualRxObserver} from "./vizual-rx-observer";
 
-export class VizualRxEngine implements VizualRxEngineApi {
+export class VizualRxEngine {
   code: string;
   observers: VizualRxObserver[];
   subscriptions: Subscription[];
+  error?: Error;
 
   private readonly interpreter: VizualRxInterpreter;
   private readonly state$: BehaviorSubject<PlayerState>;
@@ -50,14 +51,6 @@ export class VizualRxEngine implements VizualRxEngineApi {
       .subscribe();
   }
 
-  addObserver(vizualRxObserver: VizualRxObserver): void {
-    this.observers.push(vizualRxObserver);
-  }
-
-  addSubscription(subscription: Subscription): void {
-    this.subscriptions.push(subscription);
-  }
-
   get playing(): boolean {
     return this.state$.value === PlayerState.PLAYING;
   }
@@ -72,7 +65,7 @@ export class VizualRxEngine implements VizualRxEngineApi {
     if (state === PlayerState.STOPPED) {
       this.observers = [];
       this.subscriptions = [];
-      this.interpreter.runCode(this.code);
+      this.runCode();
     }
     this.observers.forEach(observer => observer.paused = false);
     this.state$.next(PlayerState.PLAYING);
@@ -111,6 +104,18 @@ export class VizualRxEngine implements VizualRxEngineApi {
     this.timeFactor$.next(factor);
     if (this.playing) {
       VizualRxTime.timeFactor = factor;
+    }
+  }
+
+  private runCode(): void {
+    this.error = undefined;
+    try {
+      this.interpreter.runCode(this.code);
+    } catch (e) {
+      if (e instanceof Error) {
+        this.error = e;
+      }
+      throw e;
     }
   }
 
@@ -169,10 +174,4 @@ export enum PlayerState {
   STOPPED,
   PAUSED,
   PLAYING
-}
-
-export interface VizualRxEngineApi {
-  addObserver(observer: VizualRxObserver): void;
-
-  addSubscription(subscription: Subscription): void;
 }
