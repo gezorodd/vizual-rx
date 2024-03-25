@@ -1,10 +1,15 @@
 <div class="left-panel">
   <app-vizual-rx-controller class="controller"></app-vizual-rx-controller>
   <div class="content">
-    <h1>{{ title }}</h1>
-    <ng-container *ngIf="detailComponent">
-      <ng-container *ngComponentOutlet="detailComponent" />
-    </ng-container>
+    <h1 class="content-header">
+        <span>
+          {{ page.title }}
+        </span>
+      <a mat-button *ngIf="page.documentationUrl" [attr.href]="page.documentationUrl" target="_blank" matTooltip="Official Documentation">
+        <mat-icon [fontSet]="'material-symbols-rounded'">book_5</mat-icon>
+      </a>
+    </h1>
+    <ng-container *ngComponentOutlet="page.detailsComponent"/>
   </div>
   <app-vizual-rx-editor class="editor" [(code)]="engine.code"></app-vizual-rx-editor>
 </div>

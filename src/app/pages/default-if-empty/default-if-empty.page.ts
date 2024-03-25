@@ -1,9 +1,11 @@
 import {DefaultIfEmptyDetailsComponent} from "./default-if-empty-details/default-if-empty-details.component";
+import {Page} from "../page.model";
 
-export const defaultIfEmptyPage = {
+export const defaultIfEmptyPage: Page = {
   title: 'defaultIfEmpty',
   routeUrl: 'default-if-empty',
   detailsComponent: DefaultIfEmptyDetailsComponent,
+  documentationUrl: 'https://rxjs.dev/api/operators/defaultIfEmpty',
   sampleCode: `import {defaultIfEmpty, of, tap} from "rxjs";
 import {createValue, observe} from "vizual-rx";
 

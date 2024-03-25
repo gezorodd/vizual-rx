@@ -24,6 +24,20 @@
   }
 }
 
+.content-header {
+  display: flex;
+  align-items: center;
+
+  a {
+    min-width: inherit;
+    margin-left: 0.5em;
+
+    & > mat-icon {
+      margin: 0;
+    }
+  }
+}
+
 .right-panel {
   flex: 600px 3 0;
   overflow: auto;

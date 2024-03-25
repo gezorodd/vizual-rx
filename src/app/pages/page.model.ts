@@ -5,4 +5,6 @@ export interface Page {
   routeUrl: string;
   detailsComponent: Type<any>;
   sampleCode: string;
+  documentationUrl?: string;
+  deprecated?: boolean
 }

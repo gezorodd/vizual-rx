@@ -1,9 +1,11 @@
 import {CombineLatestDetailsComponent} from "./combine-latest-details/combine-latest-details.component";
+import {Page} from "../page.model";
 
-export const combineLatestPage = {
+export const combineLatestPage: Page = {
   title: 'combineLatest',
   routeUrl: 'combine-latest',
   detailsComponent: CombineLatestDetailsComponent,
+  documentationUrl: 'https://rxjs.dev/api/operators/combineLatest',
   sampleCode: `import {combineLatest, timer, map, take, tap} from "rxjs";
 import {createValue, observe, shapeAt} from "vizual-rx";
 

@@ -15,7 +15,8 @@
         <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: subSection}"></ng-container>
       </ng-container>
       <ng-container *ngFor="let page of section.pages">
-        <mat-list-option [value]="page.routeUrl" [selected]="isPageSelected(page) | async">{{ page.title }}
+        <mat-list-option [value]="page.routeUrl" [selected]="isPageSelected(page) | async"
+                         [class.deprecated]="page.deprecated">{{ page.title }}
         </mat-list-option>
       </ng-container>
     </ng-template>

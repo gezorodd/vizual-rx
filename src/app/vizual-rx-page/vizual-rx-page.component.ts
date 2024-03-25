@@ -1,4 +1,4 @@
-import {Component, OnDestroy, OnInit, Type} from '@angular/core';
+import {Component, OnDestroy, OnInit} from '@angular/core';
 import {VizualRxEditorComponent} from "../vizual-rx-editor/vizual-rx-editor.component";
 import {VizualRxPlayer} from "../vizual-rx-player/vizual-rx-player.component";
 import {VizualRxEngine} from "../core/vizual-rx-engine";
@@ -8,6 +8,9 @@ import {map, Subject, takeUntil, timer} from "rxjs";
 import {VizualRxControllerComponent} from "../vizual-rx-controller/vizual-rx-controller.component";
 import {NgComponentOutlet, NgIf} from "@angular/common";
 import {Page} from "../pages/page.model";
+import {MatIcon} from "@angular/material/icon";
+import {MatTooltip} from "@angular/material/tooltip";
+import {MatAnchor} from "@angular/material/button";
 
 @Component({
   selector: 'app-vizual-rx-page',
@@ -17,7 +20,10 @@ import {Page} from "../pages/page.model";
     VizualRxPlayer,
     VizualRxControllerComponent,
     NgComponentOutlet,
-    NgIf
+    NgIf,
+    MatIcon,
+    MatTooltip,
+    MatAnchor
   ],
   templateUrl: './vizual-rx-page.component.html',
   styleUrl: './vizual-rx-page.component.scss'
@@ -25,8 +31,7 @@ import {Page} from "../pages/page.model";
 export class VizualRxPageComponent implements OnInit, OnDestroy {
 
   readonly engine: VizualRxEngine;
-  title?: string;
-  detailComponent?: Type<any>;
+  page!: Page;
 
   private readonly destroy$ = new Subject<void>();
 
@@ -37,10 +42,9 @@ export class VizualRxPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.data
       .pipe(map(data => data as Page))
-      .subscribe(data => {
-        this.engine.code = data.sampleCode ?? '';
-        this.title = data.title;
-        this.detailComponent = data.detailsComponent;
+      .subscribe(page => {
+        this.engine.code = page.sampleCode ?? '';
+        this.page = page;
         timer(500)
           .pipe(takeUntil(this.destroy$))
           .subscribe(() => this.engine.play());

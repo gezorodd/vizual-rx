@@ -5,6 +5,8 @@ export const combineAllPage: Page = {
   title: 'combineAll',
   routeUrl: 'combine-all',
   detailsComponent: CombineAllDetailsComponent,
+  documentationUrl: 'https://rxjs.dev/api/operators/combineAll',
+  deprecated: true,
   sampleCode: `import {combineAll, timer, map, take, tap} from "rxjs";
 import {createValue, observe, colorAt, shapeAt} from "vizual-rx";
 
