@@ -3,6 +3,7 @@ import {Observable, Subject, Subscription} from "rxjs";
 import * as rxjsAjax from "rxjs/ajax";
 import * as ts from "typescript";
 import {ModuleKind} from "typescript";
+import {SourceMapConsumer} from "source-map-js";
 import {VizualRxObserver} from "./vizual-rx-observer";
 import {VizualRxProxies} from "./vizual-rx-proxies";
 import {VizualRxApi} from "./vizual-rx-api";
@@ -17,17 +18,19 @@ export class VizualRxInterpreter {
     this.vizualRxApi = new VizualRxApi(this._observerAdded$);
   }
 
-  runCode(code: string): void {
+  run(code: string): void {
     const output = ts.transpileModule(code, {
       compilerOptions: {
         module: ModuleKind.CommonJS,
         sourceMap: true
       }
     });
-
     const transpiledCode = output.outputText;
-    const executionFunction = Function(`const exports = {}; const require = arguments[0]; ${transpiledCode}`);
-    executionFunction(this.require.bind(this));
+    const sourceMapText = output.sourceMapText;
+    const sourceMapConsumer = new SourceMapConsumer(JSON.parse(sourceMapText!));
+
+    const func = this.createExecutionFunction(transpiledCode);
+    this.executeFunction(func, sourceMapConsumer);
   }
 
   get observerAdded$(): Observable<VizualRxObserver> {
@@ -36,6 +39,23 @@ export class VizualRxInterpreter {
 
   get subscriptionCreated$(): Observable<Subscription> {
     return this.vizualRxProxies.subscriptionCreated$;
+  }
+
+  private createExecutionFunction(transpiledCode: string): Function {
+    try {
+      const fullCode = `const exports = {}; const require = arguments[0]; ${transpiledCode}`;
+      return Function(fullCode);
+    } catch (e) {
+      throw new CompilationError(e);
+    }
+  }
+
+  private executeFunction(func: Function, sourceMapConsumer: SourceMapConsumer): void {
+    try {
+      func(this.require.bind(this));
+    } catch (e) {
+      throw new ExecutionError(e, sourceMapConsumer);
+    }
   }
 
   private require(moduleName: string): any {
@@ -48,8 +68,10 @@ export class VizualRxInterpreter {
           get(target, name) {
             if (name in rxjsProxies) {
               return rxjsProxies[name as string];
+            } else if (name in target) {
+              return target[name];
             } else {
-              return target[name as string];
+              throw new ModuleImportError(moduleName, name as string);
             }
           }
         });
@@ -58,8 +80,10 @@ export class VizualRxInterpreter {
           get(target, name) {
             if (name in rxjsAjaxProxies) {
               return rxjsAjaxProxies[name as string];
-            } else {
+            } else if (name in target) {
               return target[name];
+            } else {
+              throw new ModuleImportError(moduleName, name as string);
             }
           }
         });
@@ -67,8 +91,62 @@ export class VizualRxInterpreter {
         if (moduleName === 'vizual-rx') {
           return this.vizualRxApi.getExports();
         } else {
-          throw 'Unknown module: ' + moduleName;
+          throw new ModuleImportError(moduleName);
         }
+    }
+  }
+}
+
+export class InterpreterError extends Error {
+
+}
+
+export class CompilationError extends InterpreterError {
+  constructor(cause: any) {
+    super();
+    this.cause = cause;
+    this.name = cause.name ?? 'CompilationError';
+    this.message = cause.message ?? 'An error occurred while compiling the code';
+    this.stack = undefined;
+  }
+}
+
+export class ExecutionError extends InterpreterError {
+
+  constructor(cause: any, sourceMapConsumer: SourceMapConsumer) {
+    super();
+    this.cause = cause;
+    this.name = cause.name ?? 'ExecutionError';
+    this.message = cause.message ?? 'An error occurred while executing the code';
+    this.stack = cause.stack ? ExecutionError.mapStack(cause.stack, sourceMapConsumer!) : undefined;
+  }
+
+  private static mapStack(stack: string, sourceMapConsumer: SourceMapConsumer): string {
+    return stack.split('\n')
+      .map(line => {
+        const match = line.match(/^\s*at (\S+) .*<anonymous>:(\d+):(\d+)\)$/);
+        if (match && match.length == 4) {
+          const functionName = match[1];
+          const line = parseInt(match[2]) - 2;
+          const column = parseInt(match[3]);
+          const mappedPosition = sourceMapConsumer.originalPositionFor({line, column});
+          return `  at ${functionName} (${mappedPosition.line}:${mappedPosition.column})`;
+        }
+        return undefined;
+      })
+      .filter(line => !!line)
+      .join('\n');
+  }
+}
+
+export class ModuleImportError extends InterpreterError {
+  constructor(moduleName: string, exportName?: string) {
+    super();
+    this.name = 'ModuleImportError';
+    if (exportName) {
+      this.message = `Could not find export ${exportName} in module ${moduleName}`;
+    } else {
+      this.message = `Could not find module with name ${moduleName}`;
     }
   }
 }

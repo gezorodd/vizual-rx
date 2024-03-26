@@ -19,7 +19,8 @@
     <app-vizual-rx-player></app-vizual-rx-player>
   </div>
   <div *ngIf="engine.error as err" class="error-panel">
-    <h2>Execution error</h2>
+    <h2>{{ err.name }}</h2>
     <span>{{ err.name }}: {{ err.message }}</span>
+    <pre *ngIf="err.stack">{{ err.stack }}</pre>
   </div>
 </div>

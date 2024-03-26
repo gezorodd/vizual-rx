@@ -1,4 +1,4 @@
-import {VizualRxInterpreter} from "./vizual-rx-interpreter";
+import {InterpreterError, VizualRxInterpreter} from "./vizual-rx-interpreter";
 import {
   BehaviorSubject,
   filter,
@@ -18,7 +18,7 @@ export class VizualRxEngine {
   code: string;
   observers: VizualRxObserver[];
   subscriptions: Subscription[];
-  error?: Error;
+  error?: InterpreterError;
 
   private readonly interpreter: VizualRxInterpreter;
   private readonly state$: BehaviorSubject<PlayerState>;
@@ -118,9 +118,9 @@ export class VizualRxEngine {
   private runCode(): void {
     this.error = undefined;
     try {
-      this.interpreter.runCode(this.code);
+      this.interpreter.run(this.code);
     } catch (e) {
-      if (e instanceof Error) {
+      if (e instanceof InterpreterError) {
         this.error = e;
       }
       throw e;
