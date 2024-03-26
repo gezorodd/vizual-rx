@@ -13,12 +13,19 @@ export class VizualRxInterpreter {
   private readonly vizualRxProxies: VizualRxProxies;
   private readonly vizualRxApi: VizualRxApi;
 
+  private compilationResult?: CompilationResult;
+
   constructor() {
     this.vizualRxProxies = new VizualRxProxies();
     this.vizualRxApi = new VizualRxApi(this._observerAdded$);
   }
 
-  run(code: string): void {
+  compile(code: string): CompilationResult {
+    if (this.compilationResult?.originalCode === code) {
+      return this.compilationResult;
+    }
+    this.compilationResult = undefined;
+    console.log('compiling');
     const output = ts.transpileModule(code, {
       compilerOptions: {
         module: ModuleKind.CommonJS,
@@ -28,9 +35,23 @@ export class VizualRxInterpreter {
     const transpiledCode = output.outputText;
     const sourceMapText = output.sourceMapText;
     const sourceMapConsumer = new SourceMapConsumer(JSON.parse(sourceMapText!));
+    const executionFunction = this.createExecutionFunction(transpiledCode);
 
-    const func = this.createExecutionFunction(transpiledCode);
-    this.executeFunction(func, sourceMapConsumer);
+    this.compilationResult = {
+      originalCode: code,
+      sourceMapConsumer,
+      executionFunction
+    };
+    return this.compilationResult;
+  }
+
+  run(code: string): void {
+    const compilationResult = this.compile(code);
+    try {
+      compilationResult.executionFunction(this.require.bind(this));
+    } catch (e) {
+      throw new ExecutionError(e, compilationResult.sourceMapConsumer);
+    }
   }
 
   get observerAdded$(): Observable<VizualRxObserver> {
@@ -47,14 +68,6 @@ export class VizualRxInterpreter {
       return Function(fullCode);
     } catch (e) {
       throw new CompilationError(e);
-    }
-  }
-
-  private executeFunction(func: Function, sourceMapConsumer: SourceMapConsumer): void {
-    try {
-      func(this.require.bind(this));
-    } catch (e) {
-      throw new ExecutionError(e, sourceMapConsumer);
     }
   }
 
@@ -149,4 +162,10 @@ export class ModuleImportError extends InterpreterError {
       this.message = `Could not find module with name ${moduleName}`;
     }
   }
+}
+
+interface CompilationResult {
+  originalCode: string;
+  executionFunction: Function;
+  sourceMapConsumer: SourceMapConsumer;
 }

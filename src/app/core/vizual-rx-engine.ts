@@ -55,6 +55,11 @@ export class VizualRxEngine {
     return this.state$.value === PlayerState.PLAYING;
   }
 
+  prepare(code: string): void {
+    this.code = code;
+    this.interpreter.compile(code);
+  }
+
   play(): void {
     const state = this.state$.value;
     if (state === PlayerState.PLAYING) {

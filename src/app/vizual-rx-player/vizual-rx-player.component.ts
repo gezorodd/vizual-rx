@@ -8,7 +8,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import {Subject, takeUntil} from "rxjs";
+import {merge, of, Subject, takeUntil} from "rxjs";
 import {VizualRxEngine} from "../core/vizual-rx-engine";
 import {AsyncPipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {VizualRxObserver} from "../core/vizual-rx-observer";
@@ -70,7 +70,8 @@ export class VizualRxPlayer implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     this.timeTrackGraphics = new TimeTrackGraphics(this.engine, this.timeTrack.nativeElement);
     this.timeTrackGraphics.init();
-    this.observerTracks.changes
+
+    merge(of(undefined), this.observerTracks.changes)
       .pipe(
         takeUntil(this.destroy$)
       )

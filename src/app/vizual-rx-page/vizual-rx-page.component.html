@@ -15,10 +15,7 @@
   <app-vizual-rx-editor class="editor" [(code)]="engine.code" (codeChange)="onCodeChange($event)"></app-vizual-rx-editor>
 </div>
 <div class="right-panel">
-  <div *ngIf="loading" class="spinner-container">
-    <mat-spinner></mat-spinner>
-  </div>
-  <div [hidden]="loading || engine.error">
+  <div [hidden]="engine.error">
     <app-vizual-rx-player></app-vizual-rx-player>
   </div>
   <div *ngIf="engine.error as err" class="error-panel">
