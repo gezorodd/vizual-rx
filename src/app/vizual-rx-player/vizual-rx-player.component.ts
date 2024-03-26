@@ -19,7 +19,6 @@ import {MatButton, MatMiniFabButton} from "@angular/material/button";
 import {FormsModule} from "@angular/forms";
 import {MatSlider, MatSliderThumb} from "@angular/material/slider";
 import {MatDivider} from "@angular/material/divider";
-import {DynamicObjectGraphics} from "../graphics/dynamic-object-graphics";
 import {AppService} from "../app.service";
 
 @Component({
@@ -105,13 +104,5 @@ export class VizualRxPlayer implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
     this.timeTrackGraphics.destroy();
-  }
-
-  get timeScale(): number {
-    return DynamicObjectGraphics.timeScale$.value;
-  }
-
-  set timeScale(value: number) {
-    DynamicObjectGraphics.timeScale$.next(value);
   }
 }
