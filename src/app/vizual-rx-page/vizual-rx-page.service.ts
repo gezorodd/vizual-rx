@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {BehaviorSubject} from "rxjs";
-import {playgroundPage} from "../pages/playground/playground.page";
+import {playgroundPage} from "./vizual-rx/playground/playground.page";
 
 @Injectable({
   providedIn: 'root'

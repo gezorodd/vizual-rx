@@ -1,10 +1,10 @@
 import {ResolveFn} from '@angular/router';
-import {Page} from "../pages/page.model";
+import {Page} from "./vizual-rx-page.model";
 import {map, timer} from "rxjs";
 import {inject} from "@angular/core";
 import {AppService} from "../app.service";
-import {playgroundPage} from "../pages/playground/playground.page";
 import {VizualRxPageService} from "./vizual-rx-page.service";
+import {playgroundPage} from "./vizual-rx/playground/playground.page";
 
 export const vizualRxPageResolver: ResolveFn<boolean> = (route, state) => {
   const page = route.data as Page;

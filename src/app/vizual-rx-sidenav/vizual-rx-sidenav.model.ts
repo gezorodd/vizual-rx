@@ -1,4 +1,4 @@
-import {Page} from "../pages/page.model";
+import {Page} from "../vizual-rx-page/vizual-rx-page.model";
 
 export class Section {
   readonly label: string;

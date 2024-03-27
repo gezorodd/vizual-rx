@@ -7,7 +7,7 @@ import {NavigationEnd, Router} from "@angular/router";
 import {filter, map, noop, Observable, shareReplay} from "rxjs";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgForOf, NgTemplateOutlet} from "@angular/common";
-import {Page} from "../pages/page.model";
+import {Page} from "../vizual-rx-page/vizual-rx-page.model";
 import {ISection, Section} from "./vizual-rx-sidenav.model";
 import {allSectionData} from "./vizual-rx-sidenav.data";
 

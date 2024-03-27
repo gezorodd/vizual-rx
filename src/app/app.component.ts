@@ -1,8 +1,8 @@
 import {Component} from '@angular/core';
 import {NavigationEnd, NavigationSkipped, NavigationStart, Router, RouterOutlet} from '@angular/router';
 import {FormsModule} from "@angular/forms";
-import {VizualRxPlayer} from "./vizual-rx-player/vizual-rx-player.component";
-import {VizualRxEditorComponent} from "./vizual-rx-editor/vizual-rx-editor.component";
+import {VizualRxPlayer} from "./vizual-rx-page/vizual-rx-player/vizual-rx-player.component";
+import {VizualRxEditorComponent} from "./vizual-rx-page/vizual-rx-editor/vizual-rx-editor.component";
 import {VizualRxSidenavComponent} from "./vizual-rx-sidenav/vizual-rx-sidenav.component";
 import {MatToolbar} from "@angular/material/toolbar";
 import {MatIcon} from "@angular/material/icon";

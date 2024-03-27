@@ -1,19 +1,19 @@
 import {AfterViewInit, Component, OnDestroy, OnInit} from '@angular/core';
-import {VizualRxEditorComponent} from "../vizual-rx-editor/vizual-rx-editor.component";
-import {VizualRxPlayer} from "../vizual-rx-player/vizual-rx-player.component";
+import {VizualRxEditorComponent} from "./vizual-rx-editor/vizual-rx-editor.component";
+import {VizualRxPlayer} from "./vizual-rx-player/vizual-rx-player.component";
 import {VizualRxEngine} from "../core/vizual-rx-engine";
 import {AppService} from "../app.service";
 import {ActivatedRoute} from "@angular/router";
 import {map, Subject, takeUntil, timer} from "rxjs";
-import {VizualRxControllerComponent} from "../vizual-rx-controller/vizual-rx-controller.component";
+import {VizualRxControllerComponent} from "./vizual-rx-controller/vizual-rx-controller.component";
 import {NgComponentOutlet, NgIf} from "@angular/common";
-import {Page} from "../pages/page.model";
+import {Page} from "./vizual-rx-page.model";
 import {MatIcon} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
 import {MatAnchor} from "@angular/material/button";
 import {VizualRxPageService} from "./vizual-rx-page.service";
-import {playgroundPage} from "../pages/playground/playground.page";
 import {AlertMessageComponent} from "../ui/alert-message/alert-message.component";
+import {playgroundPage} from "./vizual-rx/playground/playground.page";
 
 @Component({
   selector: 'app-vizual-rx-page',
