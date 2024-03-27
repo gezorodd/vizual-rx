@@ -3,7 +3,7 @@ import {FromDetailsComponent} from "./from-details/from-details.component";
 
 export const fromPage: Page = {
   title: 'from',
-  routeUrl: 'from',
+  routeUrl: 'operators/from',
   detailsComponent: FromDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/from',
   sampleCode: `import {from, zip, map, interval} from "rxjs";

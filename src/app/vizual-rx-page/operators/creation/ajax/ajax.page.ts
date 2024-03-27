@@ -3,7 +3,7 @@ import {AjaxDetailsComponent} from "./ajax-details/ajax-details.component";
 
 export const ajaxPage: Page = {
   title: 'ajax',
-  routeUrl: 'ajax',
+  routeUrl: 'operators/ajax',
   detailsComponent: AjaxDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/ajax/ajax',
   sampleCode: `import {ajax} from "rxjs/ajax";

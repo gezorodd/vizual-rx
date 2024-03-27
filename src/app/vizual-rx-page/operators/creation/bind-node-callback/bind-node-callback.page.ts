@@ -3,7 +3,7 @@ import {BindNodeCallbackDetailsComponent} from "./bind-node-callback-details/bin
 
 export const bindNodeCallbackPage: Page = {
   title: 'bindNodeCallback',
-  routeUrl: 'bind-node-callback',
+  routeUrl: 'operators/bind-node-callback',
   detailsComponent: BindNodeCallbackDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/bindNodeCallback',
   sampleCode: `TODO`

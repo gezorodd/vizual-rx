@@ -3,7 +3,7 @@ import {OfDetailsComponent} from "./of-details/of-details.component";
 
 export const ofPage: Page = {
   title: 'of',
-  routeUrl: 'of',
+  routeUrl: 'operators/of',
   detailsComponent: OfDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/of',
   sampleCode: `import {of, zip, map, interval} from "rxjs";

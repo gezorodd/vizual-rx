@@ -3,7 +3,7 @@ import {FromEventDetailsComponent} from "./from-event-details/from-event-details
 
 export const fromEventPage: Page = {
   title: 'fromEvent',
-  routeUrl: 'from-event',
+  routeUrl: 'operators/from-event',
   detailsComponent: FromEventDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/fromEvent',
   sampleCode: `import {fromEvent, mapTo} from 'rxjs';

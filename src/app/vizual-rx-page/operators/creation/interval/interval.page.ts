@@ -3,7 +3,7 @@ import {IntervalDetailsComponent} from "./interval-details/interval-details.comp
 
 export const intervalPage: Page = {
   title: 'interval',
-  routeUrl: 'interval',
+  routeUrl: 'operators/interval',
   detailsComponent: IntervalDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/interval',
   sampleCode: `import {interval, take} from "rxjs";

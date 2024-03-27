@@ -3,7 +3,7 @@ import {IifDetailsComponent} from "./iif-details/iif-details.component";
 
 export const iifPage: Page = {
   title: 'iif',
-  routeUrl: 'iif',
+  routeUrl: 'operators/iif',
   detailsComponent: IifDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/iif',
   sampleCode: `import {interval, take, tap, of, mergeMap, iif} from "rxjs";

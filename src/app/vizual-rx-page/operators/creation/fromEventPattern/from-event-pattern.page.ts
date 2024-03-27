@@ -3,7 +3,7 @@ import {FromEventPatternDetailsComponent} from "./from-event-pattern-details/fro
 
 export const fromEventPatternPage: Page = {
   title: 'fromEventPattern',
-  routeUrl: 'from-event-pattern',
+  routeUrl: 'operators/from-event-pattern',
   detailsComponent: FromEventPatternDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/fromEventPattern',
   sampleCode: `TODO`

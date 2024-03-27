@@ -3,7 +3,7 @@ import {Page} from "../../../vizual-rx-page.model";
 
 export const defaultIfEmptyPage: Page = {
   title: 'defaultIfEmpty',
-  routeUrl: 'default-if-empty',
+  routeUrl: 'operators/default-if-empty',
   detailsComponent: DefaultIfEmptyDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/defaultIfEmpty',
   sampleCode: `import {defaultIfEmpty, of, tap} from "rxjs";

@@ -3,7 +3,7 @@ import {TimerDetailsComponent} from "./timer-details/timer-details.component";
 
 export const timerPage: Page = {
   title: 'timer',
-  routeUrl: 'timer',
+  routeUrl: 'operators/timer',
   detailsComponent: TimerDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/timer',
   sampleCode: `import {timer, mapTo, take} from "rxjs";

@@ -3,7 +3,7 @@ import {GenerateDetailsComponent} from "./generate-details/generate-details.comp
 
 export const generatePage: Page = {
   title: 'generate',
-  routeUrl: 'generate',
+  routeUrl: 'operators/generate',
   detailsComponent: GenerateDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/generate',
   sampleCode: `import {generate, zip, map, interval} from "rxjs";

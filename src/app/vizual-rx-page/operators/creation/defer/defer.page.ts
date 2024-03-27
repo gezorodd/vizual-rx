@@ -3,7 +3,7 @@ import {DeferDetailsComponent} from "./defer-details/defer-details.component";
 
 export const deferPage: Page = {
   title: 'defer',
-  routeUrl: 'defer',
+  routeUrl: 'operators/defer',
   detailsComponent: DeferDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/defer',
   sampleCode: `import { interval, take, defer, of, mergeMap } from 'rxjs';

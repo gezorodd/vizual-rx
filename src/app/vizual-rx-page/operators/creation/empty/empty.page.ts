@@ -3,7 +3,7 @@ import {EmptyDetailsComponent} from "./empty-details/empty-details.component";
 
 export const emptyPage: Page = {
   title: 'empty',
-  routeUrl: 'empty',
+  routeUrl: 'operators/empty',
   detailsComponent: EmptyDetailsComponent,
   deprecated: true,
   documentationUrl: 'https://rxjs.dev/api/index/function/empty',

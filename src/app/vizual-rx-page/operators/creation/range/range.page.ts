@@ -3,7 +3,7 @@ import {RangeDetailsComponent} from "./range-details/range-details.component";
 
 export const rangePage: Page = {
   title: 'range',
-  routeUrl: 'range',
+  routeUrl: 'operators/range',
   detailsComponent: RangeDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/range',
   sampleCode: `import {range, zip, map, interval} from "rxjs";

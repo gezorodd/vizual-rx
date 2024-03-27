@@ -3,7 +3,7 @@ import {Page} from "../../../vizual-rx-page.model";
 
 export const combineAllPage: Page = {
   title: 'combineAll',
-  routeUrl: 'combine-all',
+  routeUrl: 'operators/combine-all',
   detailsComponent: CombineAllDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/combineAll',
   deprecated: true,
