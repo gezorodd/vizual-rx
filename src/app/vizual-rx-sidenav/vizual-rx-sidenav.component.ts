@@ -6,10 +6,12 @@ import {MatInput} from "@angular/material/input";
 import {NavigationEnd, Router} from "@angular/router";
 import {filter, map, noop, Observable, shareReplay} from "rxjs";
 import {FormsModule} from "@angular/forms";
-import {AsyncPipe, NgForOf, NgTemplateOutlet} from "@angular/common";
+import {AsyncPipe, NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
 import {Page} from "../vizual-rx-page/vizual-rx-page.model";
 import {ISection, Section} from "./vizual-rx-sidenav.model";
 import {allSectionData} from "./vizual-rx-sidenav.data";
+import {MatAnchor, MatButton} from "@angular/material/button";
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-vizual-rx-sidenav',
@@ -26,7 +28,12 @@ import {allSectionData} from "./vizual-rx-sidenav.data";
     FormsModule,
     AsyncPipe,
     NgTemplateOutlet,
-    NgForOf
+    NgForOf,
+    MatAnchor,
+    MatTooltip,
+    NgIf,
+    MatButton,
+    NgClass
   ],
   templateUrl: './vizual-rx-sidenav.component.html',
   styleUrl: './vizual-rx-sidenav.component.scss'
@@ -65,6 +72,16 @@ export class VizualRxSidenavComponent {
     if (route) {
       this.router.navigate([route])
         .then(_ => noop());
+    }
+  }
+
+  getSectionHeight(section: Section, childrenHeight: number): string {
+    if (section.expanding || section.collapsing) {
+      return `${childrenHeight}px`;
+    } else if (section.collapsed) {
+      return '0';
+    } else {
+      return 'auto';
     }
   }
 

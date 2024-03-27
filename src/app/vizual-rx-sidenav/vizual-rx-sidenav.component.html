@@ -10,15 +10,28 @@
       <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: section}"></ng-container>
     </ng-container>
     <ng-template #sectionTemplate let-section>
-      <div [class]="'section-' + section.level">{{ section.label }}</div>
-      <ng-container *ngFor="let subSection of section.sections">
-        <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: subSection}"></ng-container>
-      </ng-container>
-      <ng-container *ngFor="let page of section.pages">
-        <mat-list-option [value]="page.routeUrl" [selected]="isPageSelected(page) | async"
-                         [class.deprecated]="page.deprecated">{{ page.title }}
-        </mat-list-option>
-      </ng-container>
+      <div [class]="'section section-' + section.level"
+           [ngClass]="{'collapsing': section.collapsing, 'expanding': section.expanding, 'collapsed': section.collapsed}">
+        <div class="section-label">
+          <button mat-button (click)="section.toggleCollapse(200)">
+            <mat-icon [fontSet]="'material-symbols-rounded'">chevron_right</mat-icon>
+          </button>
+          <span>{{ section.label }}</span>
+        </div>
+        <div class="section-children-container"
+             [style.height]="getSectionHeight(section, sectionChildren.clientHeight)">
+          <div #sectionChildren class="section-children">
+            <ng-container *ngFor="let subSection of section.sections">
+              <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: subSection}"></ng-container>
+            </ng-container>
+            <ng-container *ngFor="let page of section.pages">
+              <mat-list-option [value]="page.routeUrl" [selected]="isPageSelected(page) | async"
+                               [class.deprecated]="page.deprecated">{{ page.title }}
+              </mat-list-option>
+            </ng-container>
+          </div>
+        </div>
+      </div>
     </ng-template>
   </mat-selection-list>
 </div>

@@ -17,17 +17,73 @@
   overflow: auto;
   padding: 1em;
 
+  .section-label {
+    display: flex;
+    gap: 0.4em;
+    justify-content: start;
+    align-items: center;
+
+    button {
+      min-width: inherit;
+      padding: 0;
+      width: 32px;
+      height: 32px;
+      border-radius: 16px;
+
+      .mat-icon {
+        transition: all 0.2s ease;
+        font-size: 24px;
+        margin: 0;
+        height: 1em;
+        width: 1em;
+      }
+    }
+  }
+
+  .section {
+    margin-top: 0.4em;
+    margin-bottom: 0.4em;
+
+    &.collapsed {
+      .section-children-container {
+        opacity: 0;
+      }
+      & > .section-label > button > .mat-icon {
+        transform: rotate(90deg);
+      }
+
+      &.expanding {
+        .section-children-container {
+          opacity: 1;
+        }
+        & > .section-label > button > .mat-icon {
+          transform: inherit;
+        }
+      }
+    }
+  }
+
   .section-0 {
-    padding: 0.8em 0;
     font-weight: 400;
     font-size: 1.2em;
     white-space: nowrap;
   }
 
   .section-1 {
-    padding: 0.5em 0 0.5em 0.5em;
     font-weight: 500;
     white-space: nowrap;
+    padding-left: 0.5em;
+  }
+
+  .section-children-container {
+    transition: all 0.2s ease;
+    overflow: hidden;
+    opacity: 1;
+  }
+
+  mat-list-option {
+    height: 42px;
+    padding-left: 2.8em;
   }
 }
 
