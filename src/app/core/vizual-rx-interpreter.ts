@@ -110,13 +110,17 @@ export class VizualRxInterpreter {
   }
 }
 
-export class InterpreterError extends Error {
-
+export abstract class InterpreterError extends Error {
+  label: string;
+  protected constructor(label: string) {
+    super();
+    this.label = label;
+  }
 }
 
 export class CompilationError extends InterpreterError {
   constructor(cause: any) {
-    super();
+    super('Compilation Error');
     this.cause = cause;
     this.name = cause.name ?? 'CompilationError';
     this.message = cause.message ?? 'An error occurred while compiling the code';
@@ -127,7 +131,7 @@ export class CompilationError extends InterpreterError {
 export class ExecutionError extends InterpreterError {
 
   constructor(cause: any, sourceMapConsumer: SourceMapConsumer) {
-    super();
+    super('Execution Error');
     this.cause = cause;
     this.name = cause.name ?? 'ExecutionError';
     this.message = cause.message ?? 'An error occurred while executing the code';
@@ -154,7 +158,7 @@ export class ExecutionError extends InterpreterError {
 
 export class ModuleImportError extends InterpreterError {
   constructor(moduleName: string, exportName?: string) {
-    super();
+    super('Module Import Error');
     this.name = 'ModuleImportError';
     if (exportName) {
       this.message = `Could not find export ${exportName} in module ${moduleName}`;

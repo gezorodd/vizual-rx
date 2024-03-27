@@ -13,6 +13,7 @@ import {MatTooltip} from "@angular/material/tooltip";
 import {MatAnchor} from "@angular/material/button";
 import {VizualRxPageService} from "./vizual-rx-page.service";
 import {playgroundPage} from "../pages/playground/playground.page";
+import {AlertMessageComponent} from "../ui/alert-message/alert-message.component";
 
 @Component({
   selector: 'app-vizual-rx-page',
@@ -25,7 +26,8 @@ import {playgroundPage} from "../pages/playground/playground.page";
     NgIf,
     MatIcon,
     MatTooltip,
-    MatAnchor
+    MatAnchor,
+    AlertMessageComponent
   ],
   templateUrl: './vizual-rx-page.component.html',
   styleUrl: './vizual-rx-page.component.scss'
@@ -36,9 +38,11 @@ export class VizualRxPageComponent implements OnInit, AfterViewInit, OnDestroy {
   page!: Page;
 
   private readonly destroy$ = new Subject<void>();
+  private _code: string;
 
   constructor(vizualRxPageService: AppService, private route: ActivatedRoute, private rxPageService: VizualRxPageService) {
     this.engine = vizualRxPageService.engine;
+    this._code = '';
   }
 
   ngOnInit(): void {
@@ -49,12 +53,22 @@ export class VizualRxPageComponent implements OnInit, AfterViewInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(page => this.page = page);
+    this._code = this.engine.code;
   }
 
   ngAfterViewInit(): void {
     timer(0)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => this.engine.play());
+  }
+
+  get code(): string {
+    return this._code;
+  }
+
+  set code(value: string) {
+    this.engine.code = value;
+    this._code = value;
   }
 
   ngOnDestroy(): void {

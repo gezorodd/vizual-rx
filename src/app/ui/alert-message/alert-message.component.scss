@@ -1,0 +1,33 @@
+@use "@angular/material" as mat;
+@import "../../../theme";
+
+:host {
+  padding: 0.5em;
+  margin-bottom: 1em;
+  border-radius: 5px;
+  display: block;
+
+  &.type-success {
+    background-color: mat.get-color-from-palette(mat.$green-palette, 50);
+    color: mat.get-color-from-palette(mat.$green-palette, 900);
+    border-left: 5px solid mat.get-color-from-palette(mat.$green-palette, 700);
+  }
+
+  &.type-info {
+    background-color: mat.get-color-from-palette(mat.$blue-palette, 50);
+    color: mat.get-color-from-palette(mat.$blue-palette, 900);
+    border-left: 5px solid mat.get-color-from-palette(mat.$blue-palette, 700);
+  }
+
+  &.type-warning {
+    background-color: mat.get-color-from-palette(mat.$orange-palette, 50);
+    color: mat.get-color-from-palette(mat.$orange-palette, 900);
+    border-left: 5px solid mat.get-color-from-palette(mat.$orange-palette, 700);
+  }
+
+  &.type-danger {
+    background-color: mat.get-color-from-palette(mat.$red-palette, 50);
+    color: mat.get-color-from-palette(mat.$red-palette, 900);
+    border-left: 5px solid mat.get-color-from-palette(mat.$red-palette, 700);
+  }
+}
