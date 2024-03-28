@@ -21,13 +21,13 @@
 
   &.type-warning {
     background-color: mat.get-color-from-palette(mat.$orange-palette, 50);
-    color: mat.get-color-from-palette(mat.$orange-palette, 900);
+    color: darken(mat.get-color-from-palette(mat.$orange-palette, 900), 5%);
     border-left: 5px solid mat.get-color-from-palette(mat.$orange-palette, 700);
   }
 
   &.type-danger {
     background-color: mat.get-color-from-palette(mat.$red-palette, 50);
-    color: mat.get-color-from-palette(mat.$red-palette, 900);
+    color: darken(mat.get-color-from-palette(mat.$red-palette, 900), 5%);
     border-left: 5px solid mat.get-color-from-palette(mat.$red-palette, 700);
   }
 }

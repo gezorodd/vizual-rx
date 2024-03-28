@@ -18,6 +18,12 @@ import {playgroundPage} from "../vizual-rx-page/vizual-rx/playground/playground.
 import {combineAllPage} from "../vizual-rx-page/operators/join/combine-all/combine-all.page";
 import {combineLatestPage} from "../vizual-rx-page/operators/join-creation/combine-latest/combine-latest.page";
 import {defaultIfEmptyPage} from "../vizual-rx-page/operators/conditional/default-if-empty/default-if-empty.page";
+import {concatPage} from "../vizual-rx-page/operators/join-creation/concat/concat.page";
+import {forkJoinPage} from "../vizual-rx-page/operators/join-creation/forkJoin/fork-join.page";
+import {mergePage} from "../vizual-rx-page/operators/join-creation/merge/merge.page";
+import {partitionPage} from "../vizual-rx-page/operators/join-creation/partition/partition.page";
+import {racePage} from "../vizual-rx-page/operators/join-creation/race/race.page";
+import {zipPage} from "../vizual-rx-page/operators/join-creation/zip/zip.page";
 
 export const allSectionData: ISection[] = [
   {
@@ -49,15 +55,21 @@ export const allSectionData: ISection[] = [
         ]
       },
       {
-        label: 'Join',
+        label: 'Join Creation',
         pages: [
-          combineAllPage
+          combineLatestPage,
+          concatPage,
+          forkJoinPage,
+          mergePage,
+          partitionPage,
+          racePage,
+          zipPage
         ]
       },
       {
-        label: 'Join Creation',
+        label: 'Join',
         pages: [
-          combineLatestPage
+          combineAllPage
         ]
       },
       {

@@ -17,8 +17,15 @@ import {combineAllPage} from "./operators/join/combine-all/combine-all.page";
 import {combineLatestPage} from "./operators/join-creation/combine-latest/combine-latest.page";
 import {defaultIfEmptyPage} from "./operators/conditional/default-if-empty/default-if-empty.page";
 import {playgroundPage} from "./vizual-rx/playground/playground.page";
+import {concatPage} from "./operators/join-creation/concat/concat.page";
+import {forkJoinPage} from "./operators/join-creation/forkJoin/fork-join.page";
+import {mergePage} from "./operators/join-creation/merge/merge.page";
+import {partitionPage} from "./operators/join-creation/partition/partition.page";
+import {racePage} from "./operators/join-creation/race/race.page";
+import {zipPage} from "./operators/join-creation/zip/zip.page";
 
 export const pages = [
+  // Creation
   ajaxPage,
   bindCallbackPage,
   bindNodeCallbackPage,
@@ -34,9 +41,16 @@ export const pages = [
   throwErrorPage,
   timerPage,
   iifPage,
+  // Join Creation
+  combineLatestPage,
+  concatPage,
+  forkJoinPage,
+  mergePage,
+  partitionPage,
+  racePage,
+  zipPage,
 
   combineAllPage,
-  combineLatestPage,
   defaultIfEmptyPage,
   playgroundPage
 ];
