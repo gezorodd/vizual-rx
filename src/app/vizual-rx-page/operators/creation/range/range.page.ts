@@ -6,14 +6,12 @@ export const rangePage: Page = {
   routeUrl: 'operators/range',
   detailsComponent: RangeDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/range',
-  sampleCode: `import {range, zip, map, interval} from "rxjs";
+  sampleCode: `import {range, delayWhen, timer} from "rxjs";
 import {observe} from "vizual-rx";
 
-const source$ = range(5, 4);
-
-const example$ = zip(interval(500), source$)
+const example$ = range(5, 4)
     .pipe(
-        map(([_, value]) => value)
+        delayWhen((_, i) => timer(i * 500))
     );
 example$
     .subscribe(observe('example'));`

@@ -3,7 +3,7 @@ import {PartitionDetailsComponent} from "./partition-details/partition-details.c
 
 export const partitionPage: Page = {
   title: 'partition',
-  routeUrl: 'operators/partition',
+  routeUrl: 'functions/partition',
   detailsComponent: PartitionDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/partition',
   sampleCode: `import {partition, timer, take, tap} from "rxjs";

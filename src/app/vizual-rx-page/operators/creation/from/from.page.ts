@@ -6,18 +6,16 @@ export const fromPage: Page = {
   routeUrl: 'operators/from',
   detailsComponent: FromDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/from',
-  sampleCode: `import {from, zip, map, interval} from "rxjs";
+  sampleCode: `import {from, delayWhen, timer} from "rxjs";
 import {observe, createValue} from "vizual-rx";
 
-const source1$ = from([
+const example1$ = from([
     createValue('red', 'circle'),
     createValue('blue', 'circle'),
     createValue('green', 'circle')
-]);
-const example1$ = zip(interval(500), source1$)
-    .pipe(
-        map(([_, value]) => value)
-    );
+]).pipe(
+    delayWhen((_, i) => timer(i * 500))
+);
 example1$
     .subscribe(observe('from array'));
 
@@ -27,9 +25,9 @@ const example2$ = from(
 example2$
     .subscribe(observe('from Promise'));
 
-const example3$ = zip(interval(500), from('Hello'))
+const example3$ = from('Hello')
     .pipe(
-        map(([_, value]) => value)
+        delayWhen((_, i) => timer(i * 500))
     );
 example3$
     .subscribe(observe('from string'));`

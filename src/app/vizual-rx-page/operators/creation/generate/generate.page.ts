@@ -6,7 +6,7 @@ export const generatePage: Page = {
   routeUrl: 'operators/generate',
   detailsComponent: GenerateDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/generate',
-  sampleCode: `import {generate, zip, map, interval} from "rxjs";
+  sampleCode: `import {generate, delayWhen, timer} from "rxjs";
 import {observe} from "vizual-rx";
 
 const source$ = generate(
@@ -21,9 +21,9 @@ const source$ = generate(
     }
 );
 
-const example$ = zip(interval(500), source$)
+const example$ = source$
     .pipe(
-        map(([_, value]) => value)
+        delayWhen((_, i) => timer(i * 500))
     );
 example$
     .subscribe(observe('example'));`

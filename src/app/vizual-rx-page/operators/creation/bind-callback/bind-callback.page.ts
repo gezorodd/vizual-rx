@@ -3,7 +3,7 @@ import {BindCallbackDetailsComponent} from "./bind-callback-details/bind-callbac
 
 export const bindCallbackPage: Page = {
   title: 'bindCallback',
-  routeUrl: 'operators/bind-callback',
+  routeUrl: 'function/bind-callback',
   detailsComponent: BindCallbackDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/function/bindCallback',
   sampleCode: `import { bindCallback } from 'rxjs';

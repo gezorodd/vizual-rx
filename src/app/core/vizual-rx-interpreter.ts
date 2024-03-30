@@ -1,6 +1,7 @@
 import * as rxjs from "rxjs";
 import {Observable, Subject, Subscription} from "rxjs";
 import * as rxjsAjax from "rxjs/ajax";
+import * as rxjsOperators from "rxjs/operators";
 import * as ts from "typescript";
 import {ModuleKind} from "typescript";
 import {SourceMapConsumer} from "source-map-js";
@@ -25,7 +26,6 @@ export class VizualRxInterpreter {
       return this.compilationResult;
     }
     this.compilationResult = undefined;
-    console.log('compiling');
     const output = ts.transpileModule(code, {
       compilerOptions: {
         module: ModuleKind.CommonJS,
@@ -77,41 +77,36 @@ export class VizualRxInterpreter {
 
     switch (moduleName) {
       case 'rxjs':
-        return new Proxy(rxjs as any, {
-          get(target, name) {
-            if (name in rxjsProxies) {
-              return rxjsProxies[name as string];
-            } else if (name in target) {
-              return target[name];
-            } else {
-              throw new ModuleImportError(moduleName, name as string);
-            }
-          }
-        });
+        return this.getModuleProxy(moduleName, rxjs as any, rxjsProxies);
       case 'rxjs/ajax':
-        return new Proxy(rxjsAjax as any, {
-          get(target, name) {
-            if (name in rxjsAjaxProxies) {
-              return rxjsAjaxProxies[name as string];
-            } else if (name in target) {
-              return target[name];
-            } else {
-              throw new ModuleImportError(moduleName, name as string);
-            }
-          }
-        });
+        return this.getModuleProxy(moduleName, rxjsAjax as any, rxjsAjaxProxies);
+      case 'rxjs/operators':
+        return this.getModuleProxy(moduleName, rxjsOperators as any, {});
+      case 'vizual-rx':
+        return this.vizualRxApi.getExports();
       default:
-        if (moduleName === 'vizual-rx') {
-          return this.vizualRxApi.getExports();
-        } else {
-          throw new ModuleImportError(moduleName);
-        }
+        throw new ModuleImportError(moduleName);
     }
+  }
+
+  private getModuleProxy(moduleName: string, originalModule: any, proxiedMembers: any) {
+    return new Proxy(originalModule, {
+      get(target, name) {
+        if (name in proxiedMembers) {
+          return proxiedMembers[name as string];
+        } else if (name in target) {
+          return target[name];
+        } else {
+          throw new ModuleImportError(moduleName, name as string);
+        }
+      }
+    });
   }
 }
 
 export abstract class InterpreterError extends Error {
   label: string;
+
   protected constructor(label: string) {
     super();
     this.label = label;

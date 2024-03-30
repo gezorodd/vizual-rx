@@ -6,19 +6,16 @@ export const ofPage: Page = {
   routeUrl: 'operators/of',
   detailsComponent: OfDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/of',
-  sampleCode: `import {of, zip, map, interval} from "rxjs";
+  sampleCode: `import {of, delayWhen, timer} from "rxjs";
 import {observe, createValue} from "vizual-rx";
 
-const source$ = of(
+const example$ = of(
     createValue('red', 'circle'),
     createValue('blue', 'circle'),
     createValue('green', 'circle')
+).pipe(
+    delayWhen((_, i) => timer(i * 500))
 );
-
-const example$ = zip(interval(500), source$)
-    .pipe(
-        map(([_, value]) => value)
-    );
 example$
     .subscribe(observe('example'));`
 };

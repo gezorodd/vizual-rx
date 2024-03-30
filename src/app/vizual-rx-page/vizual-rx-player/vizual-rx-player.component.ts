@@ -105,5 +105,8 @@ export class VizualRxPlayer implements OnInit, AfterViewInit, OnDestroy {
     this.destroy$.next();
     this.destroy$.complete();
     this.timeTrackGraphics.destroy();
+    for (const graphic of this.observerTrackGraphics.values()) {
+      graphic.destroy();
+    }
   }
 }
