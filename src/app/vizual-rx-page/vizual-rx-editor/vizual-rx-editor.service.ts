@@ -1,6 +1,6 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {combineLatest, concat, map, merge, Observable, Subject, tap} from "rxjs";
+import {combineLatest, forkJoin, map, merge, Observable, shareReplay, Subject, tap} from "rxjs";
 import * as monaco from "monaco-editor";
 import {rxjsFilePaths} from "./rxjs-file-paths";
 
@@ -9,14 +9,26 @@ import {rxjsFilePaths} from "./rxjs-file-paths";
 })
 export class VizualRxEditorService {
 
-  private monacoReady$: Subject<void>;
+  private readonly monacoReady$: Subject<void>;
+  private readonly assetContentMap: Map<string, Observable<string>>;
 
   constructor(private http: HttpClient) {
     this.monacoReady$ = new Subject<void>();
+    this.assetContentMap = new Map();
+  }
+
+  getOrDownloadSourceAssets(): Observable<any> {
+    const allAssetPaths = [
+      'assets/vizual-rx.d.ts',
+      ...rxjsFilePaths
+        .map(rxjsFileRelativePath => `assets/rxjs/dist/types/${rxjsFileRelativePath}`)
+    ];
+    return forkJoin(allAssetPaths.map(assetPath => this.getAssetContent(assetPath)));
   }
 
   notifyMonacoReady(): void {
     this.monacoReady$.next();
+    this.monacoReady$.complete();
   }
 
   configureMonaco(): Observable<void> {
@@ -47,11 +59,12 @@ export class VizualRxEditorService {
   private initMonacoDiagnosticsOptions() {
     this.typescriptConfig.setDiagnosticsOptions({
       noSemanticValidation: false,
-      noSyntaxValidation: false
+      noSyntaxValidation: false,
+      diagnosticCodesToIgnore: [2322, 2362, 2345, 2339, 2365, 6387]
     });
   }
 
-  private addExtraLibs(): Observable<void> {
+  private addExtraLibs(): Observable<any> {
     const addRxjsFiles = rxjsFilePaths
       .map(rxjsFileRelativePath => {
         const assetPath = `assets/rxjs/dist/types/${rxjsFileRelativePath}`;
@@ -64,7 +77,7 @@ export class VizualRxEditorService {
     );
 
     const addAllFiles = [addVizualRxFile, ...addRxjsFiles];
-    return this.parallelConcat(addAllFiles, 10);
+    return merge(...addAllFiles);
   }
 
   private addExtraLib(assetPath: string, filePath: string): Observable<void> {
@@ -80,21 +93,14 @@ export class VizualRxEditorService {
   }
 
   private getAssetContent(assetPath: string): Observable<string> {
-    return this.http.get<string>(assetPath, {responseType: 'text' as 'json'});
-  }
-
-  private parallelConcat(input: Observable<void>[], size: number): Observable<void> {
-    const groupedInput: Observable<void>[][] = [[]];
-    input.forEach(input => {
-      const array = groupedInput[groupedInput.length - 1];
-      array.push(input);
-      if (array.length >= size) {
-        groupedInput.push([]);
-      }
-    });
-    return concat(...groupedInput.map(array => merge(...array)))
-      .pipe(
-        map(() => undefined)
-      );
+    let assetContent$ = this.assetContentMap.get(assetPath);
+    if (!assetContent$) {
+      assetContent$ = this.http.get<string>(assetPath, {responseType: 'text' as 'json'})
+        .pipe(
+          shareReplay(1),
+        );
+      this.assetContentMap.set(assetPath, assetContent$);
+    }
+    return assetContent$;
   }
 }
