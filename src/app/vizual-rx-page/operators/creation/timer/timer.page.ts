@@ -6,6 +6,7 @@ export const timerPage: Page = {
   routeUrl: 'operators/timer',
   detailsComponent: TimerDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/timer',
+  starred: true,
   sampleCode: `import {timer, mapTo, take} from "rxjs";
 import {observe, createValue} from "vizual-rx";
 

@@ -29,6 +29,14 @@
   align-items: center;
   gap: 0.2em;
 
+  .spacer {
+    flex-grow: 1;
+  }
+
+  .star-icon {
+    font-size: 28px;
+  }
+
   a {
     min-width: inherit;
     padding: 0.2em;

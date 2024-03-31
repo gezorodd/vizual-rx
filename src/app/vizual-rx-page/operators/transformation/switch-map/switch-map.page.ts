@@ -6,6 +6,7 @@ export const switchMapPage: Page = {
   routeUrl: 'operators/switch-map',
   detailsComponent: SwtchMapDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/switchMap',
+  starred: true,
   sampleCode: `import {switchMap, timer, tap, map, take} from "rxjs";
 import {observe, createValue, shapeAt, colorAt} from "vizual-rx";
 

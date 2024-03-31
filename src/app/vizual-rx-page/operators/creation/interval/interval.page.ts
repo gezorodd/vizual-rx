@@ -6,6 +6,7 @@ export const intervalPage: Page = {
   routeUrl: 'operators/interval',
   detailsComponent: IntervalDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/interval',
+  starred: true,
   sampleCode: `import {interval, take} from "rxjs";
 import {observe} from "vizual-rx";
 

@@ -6,6 +6,7 @@ export const mapPage: Page = {
   routeUrl: 'operators/map',
   detailsComponent: MapDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/map',
+  starred: true,
   sampleCode: `import {map, timer, tap, take} from "rxjs";
 import {observe} from "vizual-rx";
 

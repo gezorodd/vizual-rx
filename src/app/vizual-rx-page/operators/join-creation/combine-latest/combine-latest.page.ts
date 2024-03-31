@@ -6,6 +6,7 @@ export const combineLatestPage: Page = {
   routeUrl: 'operators/combine-latest',
   detailsComponent: CombineLatestDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/combineLatest',
+  starred: true,
   sampleCode: `import {combineLatest, timer, map, take, tap} from "rxjs";
 import {createValue, observe, shapeAt} from "vizual-rx";
 

@@ -6,6 +6,7 @@ export const ofPage: Page = {
   routeUrl: 'operators/of',
   detailsComponent: OfDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/of',
+  starred: true,
   sampleCode: `import {of, delayWhen, timer} from "rxjs";
 import {observe, createValue} from "vizual-rx";
 

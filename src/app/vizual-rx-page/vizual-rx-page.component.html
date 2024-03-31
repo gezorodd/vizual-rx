@@ -2,14 +2,16 @@
   <app-vizual-rx-controller class="controller"></app-vizual-rx-controller>
   <div class="content">
     <h1 class="content-header">
-        <span>
-          {{ page.title }}
-        </span>
-      <span *ngIf="page.deprecated" class="deprecated-tag">Deprecated</span>
+      <span>
+        {{ page.title }}
+      </span>
       <a mat-button *ngIf="page.documentationUrl" [attr.href]="page.documentationUrl" target="_blank"
          matTooltip="Official Documentation">
-        <mat-icon [fontSet]="'material-symbols-rounded'">book_2</mat-icon>
+        <mat-icon [fontSet]="'material-symbols-rounded'">developer_guide</mat-icon>
       </a>
+      <div class="spacer"></div>
+      <span *ngIf="page.deprecated" class="deprecated-tag">Deprecated</span>
+      <mat-icon *ngIf="page.starred" [fontSet]="'material-symbols-rounded'" class="star-icon">star</mat-icon>
     </h1>
     <ng-container *ngComponentOutlet="page.detailsComponent"/>
   </div>

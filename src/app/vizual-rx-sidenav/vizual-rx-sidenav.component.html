@@ -25,8 +25,11 @@
               <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: subSection}"></ng-container>
             </ng-container>
             <ng-container *ngFor="let page of section.pages">
-              <mat-list-option [value]="page.routeUrl" [selected]="isPageSelected(page) | async"
-                               [class.deprecated]="page.deprecated">{{ page.title }}
+              <mat-list-option [value]="page.routeUrl" [selected]="isPageSelected(page) | async">
+                <div class="page-option">
+                  <span [class.deprecated]="page.deprecated">{{ page.title }}</span>
+                  <mat-icon *ngIf="page.starred" [fontSet]="'material-symbols-rounded'" class="star-icon">star</mat-icon>
+                </div>
               </mat-list-option>
             </ng-container>
           </div>

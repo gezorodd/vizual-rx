@@ -6,6 +6,7 @@ export const mergeMapPage: Page = {
   routeUrl: 'operators/merge-map',
   detailsComponent: MergeMapDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/mergeMap',
+  starred: true,
   sampleCode: `import {mergeMap, timer, tap, map, take} from "rxjs";
 import {observe, createValue, shapeAt, colorAt} from "vizual-rx";
 

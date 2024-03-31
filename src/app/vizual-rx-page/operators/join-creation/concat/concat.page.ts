@@ -6,6 +6,7 @@ export const concatPage: Page = {
   routeUrl: 'operators/concat',
   detailsComponent: ConcatDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/concat',
+  starred: true,
   sampleCode: `import {concat, interval, map, take, tap} from "rxjs";
 import {createValue, observe} from "vizual-rx";
 

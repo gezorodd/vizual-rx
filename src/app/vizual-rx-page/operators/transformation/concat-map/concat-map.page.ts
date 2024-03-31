@@ -6,6 +6,7 @@ export const concatMapPage: Page = {
   routeUrl: 'operators/concat-map',
   detailsComponent: ConcatMapDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/concatMap',
+  starred: true,
   sampleCode: `import {timer, map, take, tap, concatMap} from "rxjs";
 import {createValue, observe, shapeAt} from "vizual-rx";
 

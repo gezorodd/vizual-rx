@@ -6,5 +6,6 @@ export interface Page {
   detailsComponent: Type<any>;
   sampleCode: string;
   documentationUrl?: string;
-  deprecated?: boolean
+  deprecated?: boolean;
+  starred?: boolean;
 }

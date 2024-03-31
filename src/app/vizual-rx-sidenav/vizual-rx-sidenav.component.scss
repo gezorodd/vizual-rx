@@ -84,6 +84,17 @@
   mat-list-option {
     height: 42px;
     padding-left: 2.8em;
+
+    ::ng-deep &:not(.mdc-list-item--selected) .star-icon {
+      color: #595959;
+    }
+  }
+
+  .page-option {
+    display: flex;
+    gap: 1em;
+    justify-content: space-between;
+    align-items: center;
   }
 }
 

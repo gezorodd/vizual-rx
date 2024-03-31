@@ -6,6 +6,7 @@ export const fromPage: Page = {
   routeUrl: 'operators/from',
   detailsComponent: FromDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/from',
+  starred: true,
   sampleCode: `import {from, delayWhen, timer} from "rxjs";
 import {observe, createValue} from "vizual-rx";
 
