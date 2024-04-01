@@ -52,6 +52,33 @@ import {windowCountPage} from "./operators/transformation/window-count/window-co
 import {windowTimePage} from "./operators/transformation/window-time/window-time.page";
 import {windowTogglePage} from "./operators/transformation/window-toggle/window-toggle.page";
 import {windowWhenPage} from "./operators/transformation/window-when/window-when.page";
+import {auditPage} from "./operators/filtering/audit/audit.page";
+import {auditTimePage} from "./operators/filtering/audit-time/audit-time.page";
+import {debouncePage} from "./operators/filtering/debounce/debounce.page";
+import {debounceTimePage} from "./operators/filtering/debounce-time/debounce-time.page";
+import {distinctPage} from "./operators/filtering/distinct/distinct.page";
+import {distinctUntilChangedPage} from "./operators/filtering/distinct-until-changed/distinct-until-changed.page";
+import {
+  distinctUntilKeyChangedPage
+} from "./operators/filtering/distinct-until-key-changed/distinct-until-key-changed.page";
+import {elementAtPage} from "./operators/filtering/element-at/element-at.page";
+import {filterPage} from "./operators/filtering/filter/filter.page";
+import {firstPage} from "./operators/filtering/first/first.page";
+import {ignoreElementsPage} from "./operators/filtering/ignore-elements/ignore-elements.page";
+import {lastPage} from "./operators/filtering/last/last.page";
+import {samplePage} from "./operators/filtering/sample/sample.page";
+import {sampleTimePage} from "./operators/filtering/sample-time/sample-time.page";
+import {singlePage} from "./operators/filtering/single/single.page";
+import {skipPage} from "./operators/filtering/skip/skip.page";
+import {skipLastPage} from "./operators/filtering/skip-last/skip-last.page";
+import {skipUntilPage} from "./operators/filtering/skip-until/skip-until.page";
+import {skipWhilePage} from "./operators/filtering/skip-while/skip-while.page";
+import {takePage} from "./operators/filtering/take/take.page";
+import {takeLastPage} from "./operators/filtering/take-last/take-last.page";
+import {takeUntilPage} from "./operators/filtering/take-until/take-until.page";
+import {takeWhilePage} from "./operators/filtering/take-while/take-while.page";
+import {throttlePage} from "./operators/filtering/throttle/throttle.page";
+import {throttleTimePage} from "./operators/filtering/throttle-time/throttle-time.page";
 
 export const pages = [
   // Creation Operators
@@ -107,6 +134,32 @@ export const pages = [
   windowTimePage,
   windowTogglePage,
   windowWhenPage,
+  // Filtering operators
+  auditPage,
+  auditTimePage,
+  debouncePage,
+  debounceTimePage,
+  distinctPage,
+  distinctUntilChangedPage,
+  distinctUntilKeyChangedPage,
+  elementAtPage,
+  filterPage,
+  firstPage,
+  ignoreElementsPage,
+  lastPage,
+  samplePage,
+  sampleTimePage,
+  singlePage,
+  skipPage,
+  skipLastPage,
+  skipUntilPage,
+  skipWhilePage,
+  takePage,
+  takeLastPage,
+  takeUntilPage,
+  takeWhilePage,
+  throttlePage,
+  throttleTimePage,
 
   // Join Operators
   exhaustAllPage,

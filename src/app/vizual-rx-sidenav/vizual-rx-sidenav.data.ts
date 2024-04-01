@@ -55,6 +55,35 @@ import {windowCountPage} from "../vizual-rx-page/operators/transformation/window
 import {windowTimePage} from "../vizual-rx-page/operators/transformation/window-time/window-time.page";
 import {windowTogglePage} from "../vizual-rx-page/operators/transformation/window-toggle/window-toggle.page";
 import {windowWhenPage} from "../vizual-rx-page/operators/transformation/window-when/window-when.page";
+import {auditPage} from "../vizual-rx-page/operators/filtering/audit/audit.page";
+import {auditTimePage} from "../vizual-rx-page/operators/filtering/audit-time/audit-time.page";
+import {debouncePage} from "../vizual-rx-page/operators/filtering/debounce/debounce.page";
+import {debounceTimePage} from "../vizual-rx-page/operators/filtering/debounce-time/debounce-time.page";
+import {distinctPage} from "../vizual-rx-page/operators/filtering/distinct/distinct.page";
+import {
+  distinctUntilChangedPage
+} from "../vizual-rx-page/operators/filtering/distinct-until-changed/distinct-until-changed.page";
+import {
+  distinctUntilKeyChangedPage
+} from "../vizual-rx-page/operators/filtering/distinct-until-key-changed/distinct-until-key-changed.page";
+import {elementAtPage} from "../vizual-rx-page/operators/filtering/element-at/element-at.page";
+import {filterPage} from "../vizual-rx-page/operators/filtering/filter/filter.page";
+import {firstPage} from "../vizual-rx-page/operators/filtering/first/first.page";
+import {ignoreElementsPage} from "../vizual-rx-page/operators/filtering/ignore-elements/ignore-elements.page";
+import {lastPage} from "../vizual-rx-page/operators/filtering/last/last.page";
+import {samplePage} from "../vizual-rx-page/operators/filtering/sample/sample.page";
+import {sampleTimePage} from "../vizual-rx-page/operators/filtering/sample-time/sample-time.page";
+import {singlePage} from "../vizual-rx-page/operators/filtering/single/single.page";
+import {skipPage} from "../vizual-rx-page/operators/filtering/skip/skip.page";
+import {skipLastPage} from "../vizual-rx-page/operators/filtering/skip-last/skip-last.page";
+import {skipUntilPage} from "../vizual-rx-page/operators/filtering/skip-until/skip-until.page";
+import {skipWhilePage} from "../vizual-rx-page/operators/filtering/skip-while/skip-while.page";
+import {takePage} from "../vizual-rx-page/operators/filtering/take/take.page";
+import {takeLastPage} from "../vizual-rx-page/operators/filtering/take-last/take-last.page";
+import {takeUntilPage} from "../vizual-rx-page/operators/filtering/take-until/take-until.page";
+import {takeWhilePage} from "../vizual-rx-page/operators/filtering/take-while/take-while.page";
+import {throttlePage} from "../vizual-rx-page/operators/filtering/throttle/throttle.page";
+import {throttleTimePage} from "../vizual-rx-page/operators/filtering/throttle-time/throttle-time.page";
 
 export const allSectionData: ISection[] = [
   {
@@ -128,6 +157,36 @@ export const allSectionData: ISection[] = [
           windowTimePage,
           windowTogglePage,
           windowWhenPage
+        ]
+      },
+      {
+        label: 'Filtering',
+        pages: [
+          auditPage,
+          auditTimePage,
+          debouncePage,
+          debounceTimePage,
+          distinctPage,
+          distinctUntilChangedPage,
+          distinctUntilKeyChangedPage,
+          elementAtPage,
+          filterPage,
+          firstPage,
+          ignoreElementsPage,
+          lastPage,
+          samplePage,
+          sampleTimePage,
+          singlePage,
+          skipPage,
+          skipLastPage,
+          skipUntilPage,
+          skipWhilePage,
+          takePage,
+          takeLastPage,
+          takeUntilPage,
+          takeWhilePage,
+          throttlePage,
+          throttleTimePage
         ]
       },
       {
