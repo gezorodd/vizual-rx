@@ -10,6 +10,22 @@
   }
 }
 
+.navbar {
+  display: flex;
+  gap: 10px;
+
+  .github-link {
+    margin-left: auto;
+
+    img {
+      width: 32px;
+      vertical-align: middle;
+    }
+  }
+}
+
+
+
 .sidenav {
   box-shadow: 0 0 10px 0 #bdbdbd;
 }

@@ -13,7 +13,7 @@
       <div [class]="'section section-' + section.level"
            [ngClass]="{'collapsing': section.collapsing, 'expanding': section.expanding, 'collapsed': section.collapsed}">
         <div class="section-label">
-          <button mat-button (click)="section.toggleCollapse(200)">
+          <button mat-button (click)="toggleSectionCollapsed(section)">
             <mat-icon [fontSet]="'material-symbols-rounded'">chevron_right</mat-icon>
           </button>
           <span>{{ section.label }}</span>

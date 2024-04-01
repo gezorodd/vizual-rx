@@ -1,10 +1,10 @@
-import {Component} from '@angular/core';
+import {Component, EventEmitter, OnDestroy, Output} from '@angular/core';
 import {MatListItem, MatListOption, MatSelectionList, MatSelectionListChange} from "@angular/material/list";
 import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {NavigationEnd, Router} from "@angular/router";
-import {filter, map, noop, Observable, shareReplay} from "rxjs";
+import {filter, map, noop, Observable, shareReplay, Subject, takeUntil} from "rxjs";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
 import {Page} from "../vizual-rx-page/vizual-rx-page.model";
@@ -38,9 +38,12 @@ import {MatTooltip} from "@angular/material/tooltip";
   templateUrl: './vizual-rx-sidenav.component.html',
   styleUrl: './vizual-rx-sidenav.component.scss'
 })
-export class VizualRxSidenavComponent {
+export class VizualRxSidenavComponent implements OnDestroy {
+
+  @Output() sectionCollapseToggled = new EventEmitter<Section>;
 
   sections: Section[] = [];
+  private destroy$ = new Subject<void>();
   private readonly currentUrl$: Observable<string>;
 
   constructor(private router: Router) {
@@ -54,6 +57,11 @@ export class VizualRxSidenavComponent {
         }),
         shareReplay(1)
       );
+  }
+
+  ngOnDestroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   applyFilter(input: string): void {
@@ -83,6 +91,14 @@ export class VizualRxSidenavComponent {
     } else {
       return 'auto';
     }
+  }
+
+  toggleSectionCollapsed(section: Section): void {
+    section.toggleCollapse(200)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(collapsed => {
+        this.sectionCollapseToggled.next(section);
+      });
   }
 
   private createSections(filter = '', iSections: ISection[] = allSectionData, level = 0): Section[] {

@@ -12,11 +12,12 @@ import {BehaviorSubject, filter, map, Observable} from "rxjs";
 import {AppService} from "./app.service";
 import {AsyncPipe} from "@angular/common";
 import {MatProgressBar} from "@angular/material/progress-bar";
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule, VizualRxPlayer, VizualRxEditorComponent, VizualRxSidenavComponent, MatToolbar, MatIcon, MatIconButton, MatDrawerContainer, MatDrawer, AsyncPipe, MatProgressBar],
+    imports: [RouterOutlet, FormsModule, VizualRxPlayer, VizualRxEditorComponent, VizualRxSidenavComponent, MatToolbar, MatIcon, MatIconButton, MatDrawerContainer, MatDrawer, AsyncPipe, MatProgressBar, MatTooltip],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

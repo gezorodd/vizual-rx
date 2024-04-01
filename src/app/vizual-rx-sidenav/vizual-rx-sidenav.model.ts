@@ -1,3 +1,4 @@
+import {defer, delay, Observable, of, Subject, takeUntil, tap} from "rxjs";
 import {Page} from "../vizual-rx-page/vizual-rx-page.model";
 
 export class Section {
@@ -11,6 +12,8 @@ export class Section {
   collapsed: boolean;
   private collapsedTimeout?: ReturnType<typeof setTimeout>;
 
+  private cancelCollapse$: Subject<void>;
+
   constructor(label: string, sections: Section[], pages: Page[], level: number) {
     this.label = label;
     this.sections = sections;
@@ -19,6 +22,7 @@ export class Section {
     this.expanding = false;
     this.collapsing = false;
     this.collapsed = false;
+    this.cancelCollapse$ = new Subject<void>();
   }
 
   hasAnyPage(): boolean {
@@ -29,24 +33,37 @@ export class Section {
       .some(subSection => subSection.hasAnyPage());
   }
 
-  toggleCollapse(animationDelay: number): void {
-    if (this.expanding || this.collapsing) {
-      clearTimeout(this.collapsedTimeout);
-      this.expanding = false;
-      this.collapsing = false;
-    } else if (this.collapsed) {
-      this.expanding = true;
-      this.collapsedTimeout = setTimeout(() => {
-        this.collapsed = false;
+  toggleCollapse(animationDelay: number): Observable<boolean> {
+    return defer(() => {
+      if (this.expanding || this.collapsing) {
+        this.cancelCollapse$.next();
         this.expanding = false;
-      }, animationDelay);
-    } else {
-      this.collapsing = true;
-      this.collapsedTimeout = setTimeout(() => {
-        this.collapsed = true;
         this.collapsing = false;
-      }, 0);
-    }
+        return of(this.collapsed);
+      } else if (this.collapsed) {
+        this.expanding = true;
+        return of(false)
+          .pipe(
+            delay(animationDelay),
+            takeUntil(this.cancelCollapse$),
+            tap(() => {
+              this.collapsed = false;
+              this.expanding = false;
+            })
+          );
+      } else {
+        this.collapsing = true;
+        return of(true)
+          .pipe(
+            delay(0),
+            tap(() => {
+              this.collapsed = true;
+              this.collapsing = false;
+            }),
+            delay(animationDelay)
+          );
+      }
+    });
   }
 }
 

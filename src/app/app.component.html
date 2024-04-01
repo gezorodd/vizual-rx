@@ -3,12 +3,16 @@
     <mat-icon>menu</mat-icon>
   </button>
   <span>VizualRx</span>
+  <a class="github-link" href="https://github.com/gezorodd" matTooltip="GitHub" target="_blank">
+    <img src="assets/github-mark-white.svg" alt="github logo"/>
+  </a>
 </mat-toolbar>
-<mat-progress-bar mode="indeterminate" [style.visibility]="(loading$ | async) ? 'visible' : 'hidden'"></mat-progress-bar>
-<mat-drawer-container class="main">
+<mat-progress-bar mode="indeterminate"
+                  [style.visibility]="(loading$ | async) ? 'visible' : 'hidden'"></mat-progress-bar>
+<mat-drawer-container #drawerContainer class="main">
   <mat-drawer class="sidenav" mode="side" [opened]="sidenavOpenedState$ | async" (opened)="sidenavOpenedChanged()"
               (closed)="sidenavOpenedChanged()">
-    <app-vizual-rx-sidenav></app-vizual-rx-sidenav>
+    <app-vizual-rx-sidenav (sectionCollapseToggled)="drawerContainer.updateContentMargins()"></app-vizual-rx-sidenav>
   </mat-drawer>
   <router-outlet></router-outlet>
 </mat-drawer-container>
