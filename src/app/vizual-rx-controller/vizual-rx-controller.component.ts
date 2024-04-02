@@ -1,14 +1,10 @@
-import {Component} from '@angular/core';
-import {MatDivider} from "@angular/material/divider";
+import {Component, Input} from '@angular/core';
 import {MatSlider, MatSliderThumb} from "@angular/material/slider";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {DynamicObjectGraphics} from "../../graphics/dynamic-object-graphics";
-import {VizualRxEngine} from "../../core/vizual-rx-engine";
-import {AppService} from "../../app.service";
-import {MatToolbar} from "@angular/material/toolbar";
+import {DynamicObjectGraphics} from "../graphics/dynamic-object-graphics";
+import {VizualRxEngine} from "../core/vizual-rx-engine";
 import {MatIcon} from "@angular/material/icon";
 import {AsyncPipe, NgIf} from "@angular/common";
-import {MatMiniFabButton} from "@angular/material/button";
 import {MatRipple} from "@angular/material/core";
 import {MatTooltip} from "@angular/material/tooltip";
 
@@ -31,11 +27,7 @@ import {MatTooltip} from "@angular/material/tooltip";
 })
 export class VizualRxControllerComponent {
 
-  engine: VizualRxEngine;
-
-  constructor(appService: AppService) {
-    this.engine = appService.engine;
-  }
+  @Input({required: true}) engine!: VizualRxEngine;
 
   get timeScale(): number {
     return DynamicObjectGraphics.timeScale$.value;

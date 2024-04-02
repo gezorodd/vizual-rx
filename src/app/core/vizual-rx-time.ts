@@ -1,7 +1,6 @@
 import {BehaviorSubject, Observable} from "rxjs";
 
 export class VizualRxTime {
-  private static readonly instance = new VizualRxTime();
 
   private readonly _timeFactor$ = new BehaviorSubject<number>(1);
   private previousTime: number;
@@ -11,23 +10,15 @@ export class VizualRxTime {
     this.previousTime = this.previousVirtualTime = new Date().getTime();
   }
 
-  static get timeFactor$(): Observable<number> {
-    return this.instance._timeFactor$;
+  get timeFactor$(): Observable<number> {
+    return this._timeFactor$;
   }
 
-  static set timeFactor(value: number) {
-    this.instance.timeFactor = value;
+  get timeFactor(): number {
+    return this._timeFactor$.value;
   }
 
-  static get timeFactor(): number {
-    return this.instance._timeFactor$.value;
-  }
-
-  static virtualNow(): number {
-    return this.instance.virtualNow();
-  }
-
-  private set timeFactor(value: number) {
+  set timeFactor(value: number) {
     if (value === this._timeFactor$.value) {
       return;
     }
@@ -36,7 +27,7 @@ export class VizualRxTime {
     this._timeFactor$.next(value);
   }
 
-  private virtualNow(): number {
+  virtualNow(): number {
     const currentTime = new Date().getTime();
     const diff = currentTime - this.previousTime;
     const virtualDiff = this._timeFactor$.value * diff;

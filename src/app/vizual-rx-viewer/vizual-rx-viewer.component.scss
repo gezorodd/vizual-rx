@@ -1,10 +1,9 @@
-@import "../../../theme";
+@import "../../theme";
 
 :host {
   display: flex;
   flex-direction: column;
   gap: 0.8em;
-  padding: 1em;
 }
 
 .time-track {
@@ -12,8 +11,7 @@
   height: 30px;
   flex-shrink: 0;
   background-image: $player-component-background;
-  border: $player-component-border;
-  border-radius: $player-component-border-radius;
+  border-bottom: $player-component-border;
   position: sticky;
   top: 0;
 }
@@ -22,8 +20,8 @@
   height: 80px;
   flex-shrink: 0;
   display: flex;
-  border: $player-component-border;
-  border-radius: $player-component-border-radius;
+  border-top: $player-component-border;
+  border-bottom: $player-component-border;
   overflow: hidden;
 }
 

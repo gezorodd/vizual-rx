@@ -7,8 +7,6 @@ import {VizualRxTime} from "./vizual-rx-time";
  */
 export class VizualRxScheduler implements SchedulerLike {
 
-  public static now: () => number = () => VizualRxTime.virtualNow();
-
   /**
    * A getter method that returns a number representing the current time
    * (at the time this function was called) according to the scheduler's own
@@ -19,8 +17,8 @@ export class VizualRxScheduler implements SchedulerLike {
    */
   public now: () => number;
 
-  constructor(private schedulerActionCtor: typeof VizualRxAction, now: () => number = VizualRxScheduler.now) {
-    this.now = now;
+  constructor(public vizualRxTime: VizualRxTime) {
+    this.now = vizualRxTime.virtualNow.bind(vizualRxTime);
   }
 
   /**
@@ -41,7 +39,7 @@ export class VizualRxScheduler implements SchedulerLike {
    * the scheduled work.
    */
   public schedule<T>(work: (this: SchedulerAction<T>, state?: T) => void, delay: number = 0, state?: T): Subscription {
-    return new this.schedulerActionCtor<T>(this, work).schedule(state, delay);
+    return new VizualRxAction<T>(this, work).schedule(state, delay);
   }
 
 
@@ -81,5 +79,3 @@ export class VizualRxScheduler implements SchedulerLike {
     }
   }
 }
-
-export const vizualRxScheduler = new VizualRxScheduler(VizualRxAction);

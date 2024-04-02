@@ -13,6 +13,7 @@ import {
 } from "rxjs";
 import {VizualRxTime} from "./vizual-rx-time";
 import {VizualRxObserver} from "./vizual-rx-observer";
+import {VizualRxScheduler} from "./vizual-rx-scheduler";
 
 export class VizualRxEngine {
   code: string;
@@ -20,6 +21,8 @@ export class VizualRxEngine {
   subscriptions: Subscription[];
   error?: InterpreterError;
 
+  readonly time: VizualRxTime;
+  readonly scheduler: VizualRxScheduler;
   private readonly interpreter: VizualRxInterpreter;
   private readonly state$: BehaviorSubject<PlayerState>;
   private readonly timeFactor$: BehaviorSubject<number>;
@@ -29,8 +32,8 @@ export class VizualRxEngine {
   readonly stopped$: Observable<boolean>;
   readonly playing$: Observable<boolean>;
 
-  constructor() {
-    this.code = '';
+  constructor(code = '') {
+    this.code = code;
     this.observers = [];
     this.subscriptions = [];
     this.state$ = new BehaviorSubject<PlayerState>(PlayerState.STOPPED);
@@ -41,7 +44,9 @@ export class VizualRxEngine {
     this.stopping$ = this.getStopping();
     this.starting$ = this.getStarting();
 
-    this.interpreter = new VizualRxInterpreter();
+    this.time = new VizualRxTime();
+    this.scheduler = new VizualRxScheduler(this.time);
+    this.interpreter = new VizualRxInterpreter(this.scheduler);
     this.interpreter.observerAdded$
       .subscribe(observer => this.observers.push(observer));
     this.interpreter.subscriptionCreated$
@@ -66,7 +71,7 @@ export class VizualRxEngine {
       return;
     }
 
-    VizualRxTime.timeFactor = this.timeFactor$.value;
+    this.time.timeFactor = this.timeFactor$.value;
     if (state === PlayerState.STOPPED) {
       this.observers = [];
       this.subscriptions = [];
@@ -80,7 +85,7 @@ export class VizualRxEngine {
     if (this.state$.value !== PlayerState.PLAYING) {
       return;
     }
-    VizualRxTime.timeFactor = 0;
+    this.time.timeFactor = 0;
     this.observers.forEach(observer => observer.paused = true);
     this.state$.next(PlayerState.PAUSED);
   }
@@ -92,7 +97,7 @@ export class VizualRxEngine {
     this.subscriptions
       .filter(subscription => !subscription.closed)
       .forEach(subscription => subscription.unsubscribe());
-    VizualRxTime.timeFactor = 0;
+    this.time.timeFactor = 0;
     this.state$.next(PlayerState.STOPPED);
   }
 
@@ -108,7 +113,7 @@ export class VizualRxEngine {
   set timeFactor(factor: number) {
     this.timeFactor$.next(factor);
     if (this.playing) {
-      VizualRxTime.timeFactor = factor;
+      this.time.timeFactor = factor;
     }
   }
 

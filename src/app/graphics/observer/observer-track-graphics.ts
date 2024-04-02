@@ -60,7 +60,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
       .pipe(
         catchError(() => EMPTY),
         tap(value => {
-          const valueGraphics = new ObserverValueGraphics(value);
+          const valueGraphics = new ObserverValueGraphics(this.engine.time, value);
           this.addDynamicObject(valueGraphics);
         })
       );
@@ -71,7 +71,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
       .pipe(
         catchError(() => EMPTY),
         tap(() => {
-          const completedGraphics = new ObserverCompleteGraphics();
+          const completedGraphics = new ObserverCompleteGraphics(this.engine.time);
           this.addDynamicObject(completedGraphics);
         })
       )
@@ -81,7 +81,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
     return this.observer.error$
       .pipe(
         tap(err => {
-          const erroredGraphics = new ObserverErrorGraphics(err);
+          const erroredGraphics = new ObserverErrorGraphics(this.engine.time, err);
           this.addDynamicObject(erroredGraphics);
         })
       )

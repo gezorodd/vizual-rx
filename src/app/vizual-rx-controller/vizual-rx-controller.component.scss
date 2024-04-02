@@ -1,15 +1,12 @@
-@use "../../../../node_modules/@angular/material/index" as mat;
-@import "../../../theme";
+@use "../../../node_modules/@angular/material/index" as mat;
+@import "../../theme";
 
 :host {
   justify-content: space-evenly;
   align-items: center;
   height: 30px;
   background-image: $player-component-background;
-  border: $player-component-border;
-  border-radius: $player-component-border-radius;
   display: flex;
-  margin: 1em;
   overflow: hidden;
 
   & > * {

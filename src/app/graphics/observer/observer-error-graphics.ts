@@ -1,10 +1,11 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 import tippy from "tippy.js";
+import {VizualRxTime} from "../../core/vizual-rx-time";
 
 export class ObserverErrorGraphics extends DynamicObjectGraphics {
 
-  constructor(private err: any) {
-    super(-1);
+  constructor(vizualRxTime: VizualRxTime, private err: any) {
+    super(vizualRxTime, -1);
   }
 
   protected override init(groupContainer: SVGGElement): void {

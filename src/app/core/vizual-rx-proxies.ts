@@ -26,15 +26,18 @@ import {
   timeoutWith,
   timer
 } from "rxjs";
-import {vizualRxScheduler} from "./vizual-rx-scheduler";
 import {ajax} from "rxjs/internal/ajax/ajax";
+import {VizualRxScheduler} from "./vizual-rx-scheduler";
 
 export class VizualRxProxies {
-  private readonly _subscriptionCreated$ = new Subject<Subscription>();
   readonly rxjsProxies: { [key: string]: any };
   readonly rxjsAjaxProxies: { [key: string]: any };
 
-  constructor() {
+  private readonly _subscriptionCreated$ = new Subject<Subscription>();
+  private readonly vizualRxScheduler: VizualRxScheduler;
+
+  constructor(scheduler: VizualRxScheduler) {
+    this.vizualRxScheduler = scheduler;
     const o = this.watchObservableFactory.bind(this);
     const s = this.injectScheduler.bind(this);
     this.rxjsProxies = {
@@ -71,17 +74,18 @@ export class VizualRxProxies {
   }
 
   private injectScheduler<T extends (...p: Parameters<T>) => ReturnType<T>>(func: T, positionRelativeToEnd = 0): T {
+    const self = this;
     return new Proxy(func, {
       apply(target: T, thisArg: any, argArray: any[]): any {
         if (typeof argArray[0] === 'object') {
-          argArray[0] = {...arguments[0], scheduler: vizualRxScheduler};
+          argArray[0] = {...arguments[0], scheduler: self.vizualRxScheduler};
           return target.apply(thisArg, argArray as Parameters<T>);
         }
         const position = arguments.length - positionRelativeToEnd - 1;
         if (argArray.length > positionRelativeToEnd && argArray[position] instanceof Scheduler) {
-          argArray[position] = vizualRxScheduler;
+          argArray[position] = self.vizualRxScheduler;
         } else {
-          argArray.push(vizualRxScheduler);
+          argArray.push(self.vizualRxScheduler);
         }
         return target.apply(thisArg, argArray as Parameters<T>);
       }

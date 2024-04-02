@@ -24,7 +24,7 @@ import {
 } from "rxjs";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {AppService} from "../../app.service";
+import {AppService} from "../app.service";
 import {not} from "rxjs/internal/util/not";
 
 @Component({
@@ -44,7 +44,8 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
       language: 'typescript',
       uri: new monaco.Uri()
     },
-    theme: 'vs'
+    theme: 'vs',
+    minimap: { enabled: false }
   };
 
   private editor?: monaco.editor.IStandaloneCodeEditor;

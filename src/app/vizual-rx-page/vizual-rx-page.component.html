@@ -1,29 +1,21 @@
-<div class="left-panel">
-  <app-vizual-rx-controller class="controller"></app-vizual-rx-controller>
-  <div class="content">
-    <h1 class="content-header">
-      <span>
-        {{ page.title }}
-      </span>
-      <a mat-button *ngIf="page.documentationUrl" [attr.href]="page.documentationUrl" target="_blank"
-         matTooltip="Official Documentation">
-        <mat-icon [fontSet]="'material-symbols-rounded'">developer_guide</mat-icon>
-      </a>
-      <div class="spacer"></div>
-      <span *ngIf="page.deprecated" class="deprecated-tag">Deprecated</span>
-      <mat-icon *ngIf="page.starred" [fontSet]="'material-symbols-rounded'" class="star-icon">star</mat-icon>
-    </h1>
-    <ng-container *ngComponentOutlet="page.detailsComponent"/>
-  </div>
-  <app-vizual-rx-editor class="editor" [(code)]="code" (codeChange)="onCodeChange($event)"></app-vizual-rx-editor>
-</div>
-<div class="right-panel">
-  <div [hidden]="engine.error">
-    <app-vizual-rx-player></app-vizual-rx-player>
-  </div>
-  <app-alert-message type="danger" *ngIf="engine.error as err" class="error-panel">
-    <h2>{{ err.label }}</h2>
-    <span>{{ err.name }}: {{ err.message }}</span>
-    <pre *ngIf="err.stack">{{ err.stack }}</pre>
-  </app-alert-message>
+<div class="page-container">
+  <mat-card>
+    <mat-card-header>
+      <mat-card-title>
+        <h1 class="content-header">
+          <mat-icon *ngIf="page.starred" [fontSet]="'material-symbols-rounded'" class="star-icon">star</mat-icon>
+          <span>{{ page.title }}</span>
+          <a mat-button *ngIf="page.documentationUrl" [attr.href]="page.documentationUrl" target="_blank"
+             matTooltip="Official Documentation">
+            <mat-icon [fontSet]="'material-symbols-rounded'">developer_guide</mat-icon>
+          </a>
+          <span *ngIf="page.deprecated" class="deprecated-tag">Deprecated</span>
+        </h1>
+      </mat-card-title>
+    </mat-card-header>
+    <mat-card-content>
+      <ng-container *ngComponentOutlet="page.detailsComponent"/>
+    </mat-card-content>
+  </mat-card>
+  <app-vizual-rx-player *ngIf="engine" class="player" [engine]="engine"></app-vizual-rx-player>
 </div>

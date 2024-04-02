@@ -8,6 +8,7 @@ import {SourceMapConsumer} from "source-map-js";
 import {VizualRxObserver} from "./vizual-rx-observer";
 import {VizualRxProxies} from "./vizual-rx-proxies";
 import {VizualRxApi} from "./vizual-rx-api";
+import {VizualRxScheduler} from "./vizual-rx-scheduler";
 
 export class VizualRxInterpreter {
   private readonly _observerAdded$ = new Subject<VizualRxObserver>();
@@ -16,8 +17,8 @@ export class VizualRxInterpreter {
 
   private compilationResult?: CompilationResult;
 
-  constructor() {
-    this.vizualRxProxies = new VizualRxProxies();
+  constructor(scheduler: VizualRxScheduler) {
+    this.vizualRxProxies = new VizualRxProxies(scheduler);
     this.vizualRxApi = new VizualRxApi(this._observerAdded$);
   }
 

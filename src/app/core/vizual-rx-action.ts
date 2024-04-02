@@ -1,5 +1,4 @@
 import {distinctUntilChanged, SchedulerAction, Subscription, tap} from "rxjs";
-import {VizualRxTime} from "./vizual-rx-time";
 import {VizualRxScheduler} from "./vizual-rx-scheduler";
 
 /**
@@ -21,7 +20,7 @@ export class VizualRxAction<T> extends Subscription {
   constructor(protected scheduler: VizualRxScheduler, protected work: (this: SchedulerAction<T>, state?: T) => void) {
     super();
     this.remainingTimeRatio = 1;
-    const subscription = VizualRxTime.timeFactor$
+    const subscription = scheduler.vizualRxTime.timeFactor$
       .pipe(
         distinctUntilChanged(),
         tap(() => {
@@ -93,7 +92,7 @@ export class VizualRxAction<T> extends Subscription {
   }
 
   protected requestAsyncId(scheduler: VizualRxScheduler, _id?: TimerHandle, delay: number = 0): TimerHandle | undefined {
-    this.previousTimeFactor = VizualRxTime.timeFactor;
+    this.previousTimeFactor = this.scheduler.vizualRxTime.timeFactor;
     this.previousTime = new Date().getTime();
     const timeout = delay / this.previousTimeFactor;
     if (!Number.isFinite(timeout)) {

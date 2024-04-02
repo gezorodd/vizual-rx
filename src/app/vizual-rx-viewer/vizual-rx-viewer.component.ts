@@ -2,6 +2,7 @@ import {
   AfterViewInit,
   Component,
   ElementRef,
+  Input,
   OnDestroy,
   OnInit,
   QueryList,
@@ -9,20 +10,19 @@ import {
   ViewChildren
 } from '@angular/core';
 import {merge, of, Subject, takeUntil} from "rxjs";
-import {VizualRxEngine} from "../../core/vizual-rx-engine";
+import {VizualRxEngine} from "../core/vizual-rx-engine";
 import {AsyncPipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
-import {VizualRxObserver} from "../../core/vizual-rx-observer";
-import {TimeTrackGraphics} from "../../graphics/time/time-track-graphics";
-import {ObserverTrackGraphics} from "../../graphics/observer/observer-track-graphics";
+import {VizualRxObserver} from "../core/vizual-rx-observer";
+import {TimeTrackGraphics} from "../graphics/time/time-track-graphics";
+import {ObserverTrackGraphics} from "../graphics/observer/observer-track-graphics";
 import {MatIcon} from "@angular/material/icon";
 import {MatButton, MatMiniFabButton} from "@angular/material/button";
 import {FormsModule} from "@angular/forms";
 import {MatSlider, MatSliderThumb} from "@angular/material/slider";
 import {MatDivider} from "@angular/material/divider";
-import {AppService} from "../../app.service";
 
 @Component({
-  selector: 'app-vizual-rx-player',
+  selector: 'app-vizual-rx-viewer',
   standalone: true,
   imports: [
     NgForOf,
@@ -37,12 +37,12 @@ import {AppService} from "../../app.service";
     MatSliderThumb,
     MatDivider
   ],
-  templateUrl: './vizual-rx-player.component.html',
-  styleUrl: './vizual-rx-player.component.scss'
+  templateUrl: './vizual-rx-viewer.component.html',
+  styleUrl: './vizual-rx-viewer.component.scss'
 })
-export class VizualRxPlayer implements OnInit, AfterViewInit, OnDestroy {
+export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  engine: VizualRxEngine;
+  @Input({required: true}) engine!: VizualRxEngine;
 
   @ViewChild('timeTrack') timeTrack!: ElementRef<SVGSVGElement>;
   @ViewChildren('observerTrack') observerTracks!: QueryList<ElementRef<SVGSVGElement>>;
@@ -53,8 +53,7 @@ export class VizualRxPlayer implements OnInit, AfterViewInit, OnDestroy {
 
   private readonly destroy$ = new Subject<void>();
 
-  constructor(appService: AppService) {
-    this.engine = appService.engine;
+  constructor() {
     this.observers = [];
     this.observerTrackGraphics = new Map();
   }
