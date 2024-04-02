@@ -40,7 +40,7 @@ import {MatTooltip} from "@angular/material/tooltip";
 })
 export class VizualRxSidenavComponent implements OnDestroy {
 
-  @Output() sectionCollapseToggled = new EventEmitter<Section>;
+  @Output() layoutChanged = new EventEmitter<void>;
 
   sections: Section[] = [];
   private destroy$ = new Subject<void>();
@@ -66,6 +66,9 @@ export class VizualRxSidenavComponent implements OnDestroy {
 
   applyFilter(input: string): void {
     this.sections = this.createSections(input.toLowerCase());
+    setTimeout(() => {
+      this.layoutChanged.next();
+    }, 0);
   }
 
   isPageSelected(page: Page): Observable<boolean> {
@@ -97,7 +100,7 @@ export class VizualRxSidenavComponent implements OnDestroy {
     section.toggleCollapse(200)
       .pipe(takeUntil(this.destroy$))
       .subscribe(collapsed => {
-        this.sectionCollapseToggled.next(section);
+        this.layoutChanged.next();
       });
   }
 

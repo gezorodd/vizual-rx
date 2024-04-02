@@ -12,7 +12,7 @@
 <mat-drawer-container #drawerContainer class="main">
   <mat-drawer class="sidenav" mode="side" [opened]="sidenavOpenedState$ | async" (opened)="sidenavOpenedChanged()"
               (closed)="sidenavOpenedChanged()">
-    <app-vizual-rx-sidenav (sectionCollapseToggled)="drawerContainer.updateContentMargins()"></app-vizual-rx-sidenav>
+    <app-vizual-rx-sidenav (layoutChanged)="drawerContainer.updateContentMargins()"></app-vizual-rx-sidenav>
   </mat-drawer>
   <router-outlet></router-outlet>
 </mat-drawer-container>
