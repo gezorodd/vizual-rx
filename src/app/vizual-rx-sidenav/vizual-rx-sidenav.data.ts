@@ -84,6 +84,12 @@ import {takeUntilPage} from "../vizual-rx-page/operators/filtering/take-until/ta
 import {takeWhilePage} from "../vizual-rx-page/operators/filtering/take-while/take-while.page";
 import {throttlePage} from "../vizual-rx-page/operators/filtering/throttle/throttle.page";
 import {throttleTimePage} from "../vizual-rx-page/operators/filtering/throttle-time/throttle-time.page";
+import {combineLatestAllPage} from "../vizual-rx-page/operators/join/combine-latest-all/combine-latest-all.page";
+import {concatAllPage} from "../vizual-rx-page/operators/join/concat-all/concat-all.page";
+import {mergeAllPage} from "../vizual-rx-page/operators/join/mege-all/merge-all.page";
+import {switchAllPage} from "../vizual-rx-page/operators/join/switch-all/switch-all.page";
+import {startWithPage} from "../vizual-rx-page/operators/join/start-with/start-with.page";
+import {withLatestFromPage} from "../vizual-rx-page/operators/join/with-latest-from/with-latest-from.page";
 
 export const allSectionData: ISection[] = [
   {
@@ -193,7 +199,13 @@ export const allSectionData: ISection[] = [
         label: 'Join',
         pages: [
           combineAllPage,
-          exhaustAllPage
+          combineLatestAllPage,
+          concatAllPage,
+          exhaustAllPage,
+          mergeAllPage,
+          switchAllPage,
+          startWithPage,
+          withLatestFromPage
         ]
       },
       {

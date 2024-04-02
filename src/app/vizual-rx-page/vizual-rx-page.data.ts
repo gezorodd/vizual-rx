@@ -79,6 +79,12 @@ import {takeUntilPage} from "./operators/filtering/take-until/take-until.page";
 import {takeWhilePage} from "./operators/filtering/take-while/take-while.page";
 import {throttlePage} from "./operators/filtering/throttle/throttle.page";
 import {throttleTimePage} from "./operators/filtering/throttle-time/throttle-time.page";
+import {combineLatestAllPage} from "./operators/join/combine-latest-all/combine-latest-all.page";
+import {concatAllPage} from "./operators/join/concat-all/concat-all.page";
+import {mergeAllPage} from "./operators/join/mege-all/merge-all.page";
+import {switchAllPage} from "./operators/join/switch-all/switch-all.page";
+import {startWithPage} from "./operators/join/start-with/start-with.page";
+import {withLatestFromPage} from "./operators/join/with-latest-from/with-latest-from.page";
 
 export const pages = [
   // Creation Operators
@@ -162,9 +168,15 @@ export const pages = [
   throttleTimePage,
 
   // Join Operators
-  exhaustAllPage,
-
   combineAllPage,
+  combineLatestAllPage,
+  concatAllPage,
+  exhaustAllPage,
+  mergeAllPage,
+  switchAllPage,
+  startWithPage,
+  withLatestFromPage,
+
   defaultIfEmptyPage,
   playgroundPage
 ];

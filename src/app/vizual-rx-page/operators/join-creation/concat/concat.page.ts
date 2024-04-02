@@ -13,26 +13,29 @@ import {createValue, observe} from "vizual-rx";
 const source1$ = interval(500)
     .pipe(
         map(() => createValue('red')),
-        take(3),
-        tap(observe('source1'))
+        take(3)
     );
 
 const source2$ = interval(500)
     .pipe(
         map(() => createValue('blue')),
-        take(2),
-        tap(observe('source2'))
+        take(3)
     );
 
 const source3$ = interval(500)
     .pipe(
         map(() => createValue('green')),
-        take(4),
-        tap(observe('source3'))
+        take(3)
     );
 
 const example$ = concat(source1$, source2$, source3$);
 
+source1$
+    .subscribe(observe('source1'));
+source2$
+    .subscribe(observe('source2'));
+source3$
+    .subscribe(observe('source3'));
 example$
     .subscribe(observe('example'));`
 };

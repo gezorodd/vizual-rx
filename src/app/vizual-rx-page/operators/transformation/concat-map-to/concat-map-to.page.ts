@@ -7,27 +7,29 @@ export const concatMapToPage: Page = {
   detailsComponent: ConcatMapToDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/concatMapTo',
   deprecated: true,
-  sampleCode: `import {timer, map, take, tap, concatMapTo} from "rxjs";
+  sampleCode: `import {timer, map, take, tap, interval, concatMapTo} from "rxjs";
 import {createValue, observe, shapeAt} from "vizual-rx";
 
-const source1$ = timer(0, 2000)
+const source1$ = timer(0, 1000)
     .pipe(
         map(i => createValue('blue', shapeAt(i))),
         take(3),
         tap(observe('source1'))
     );
 
-const inner$ = timer(0, 500)
+const source2$ = interval(500)
     .pipe(
-        map(i => createValue('red', shapeAt(i))),
-        take(3),
-        tap(observe('inner'))
+        map(i => createValue('yellow', shapeAt(i))),
+        take(3)
     );
 
 const example$ = source1$
     .pipe(
-        concatMapTo(inner$)
+        concatMapTo(source2$)
     );
+
+source2$
+    .subscribe(observe('source2'));
 example$
     .subscribe(observe('example'));`
 };

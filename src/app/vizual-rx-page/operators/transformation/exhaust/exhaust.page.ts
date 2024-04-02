@@ -7,28 +7,34 @@ export const exhaustPage: Page = {
   detailsComponent: ExhaustDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/exhaust',
   deprecated: true,
-  sampleCode: `import {timer, map, take, tap, exhaust} from "rxjs";
-import {createValue, observe, shapeAt} from "vizual-rx";
+  sampleCode: `import {exhaust, timer, tap, map, take} from "rxjs";
+import {observe, createValue, colorAt} from "vizual-rx";
 
-const source1$ = timer(0, 1000)
+const source$ = timer(0, 1100)
     .pipe(
-        map(i => createValue('blue', shapeAt(i))),
-        take(5),
-        tap(observe('source1'))
+        map(i => createValue(colorAt(i), 'square')),
+        take(4),
+        tap(observe('source'))
     );
 
-const example$ = source1$
+const innerObservers = new Array(4).fill(undefined)
+    .map((_, i) => observe('inner ' + i));
+    console.log(innerObservers);
+
+const example$ = source$
     .pipe(
-        map(value =>
-            timer(0, 600)
+        map((value, index) => {
+            const inner = timer(0, 500)
                 .pipe(
-                    map(() => createValue('red', value.shape)),
-                    take(3),
-                    tap(observe('inner'))
-                )
-        ),
+                    map(() => createValue(value.color, 'circle')),
+                    take(5)
+                );
+            inner.subscribe(innerObservers[index]);
+            return inner;
+        }),
         exhaust()
-    );
+    )
+
 example$
     .subscribe(observe('example'));`
 };

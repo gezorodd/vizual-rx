@@ -1,12 +1,12 @@
 import {Page} from "../../../vizual-rx-page.model";
-import {ExhaustAllDetailsComponent} from "./exhaust-all-details/exhaust-all-details.component";
+import {MergeAllDetailsComponent} from "./merge-all-details/merge-all-details.component";
 
-export const exhaustAllPage: Page = {
-  title: 'exhaustAll',
-  routeUrl: 'operators/exhaust-all',
-  detailsComponent: ExhaustAllDetailsComponent,
-  documentationUrl: 'https://rxjs.dev/api/operators/exhaust',
-  sampleCode: `import {exhaustAll, timer, tap, map, take} from "rxjs";
+export const mergeAllPage: Page = {
+  title: 'mergeAll',
+  routeUrl: 'operators/merge-all',
+  detailsComponent: MergeAllDetailsComponent,
+  documentationUrl: 'https://rxjs.dev/api/operators/mergeAll',
+  sampleCode: `import {mergeAll, timer, tap, map, take} from "rxjs";
 import {observe, createValue, colorAt} from "vizual-rx";
 
 const source$ = timer(0, 1100)
@@ -31,7 +31,7 @@ const example$ = source$
             inner.subscribe(innerObservers[index]);
             return inner;
         }),
-        exhaustAll()
+        mergeAll()
     )
 
 example$

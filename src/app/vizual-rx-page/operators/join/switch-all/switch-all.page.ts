@@ -1,12 +1,12 @@
 import {Page} from "../../../vizual-rx-page.model";
-import {ExhaustAllDetailsComponent} from "./exhaust-all-details/exhaust-all-details.component";
+import {SwitchAllDetailsComponent} from "./switch-all-details/switch-all-details.component";
 
-export const exhaustAllPage: Page = {
-  title: 'exhaustAll',
-  routeUrl: 'operators/exhaust-all',
-  detailsComponent: ExhaustAllDetailsComponent,
-  documentationUrl: 'https://rxjs.dev/api/operators/exhaust',
-  sampleCode: `import {exhaustAll, timer, tap, map, take} from "rxjs";
+export const switchAllPage: Page = {
+  title: 'switchAll',
+  routeUrl: 'operators/switch-all',
+  detailsComponent: SwitchAllDetailsComponent,
+  documentationUrl: 'https://rxjs.dev/api/operators/switchAll',
+  sampleCode: `import {switchAll, timer, tap, map, take} from "rxjs";
 import {observe, createValue, colorAt} from "vizual-rx";
 
 const source$ = timer(0, 1100)
@@ -31,7 +31,7 @@ const example$ = source$
             inner.subscribe(innerObservers[index]);
             return inner;
         }),
-        exhaustAll()
+        switchAll()
     )
 
 example$

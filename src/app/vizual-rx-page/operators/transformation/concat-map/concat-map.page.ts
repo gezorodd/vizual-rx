@@ -7,27 +7,33 @@ export const concatMapPage: Page = {
   detailsComponent: ConcatMapDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/concatMap',
   starred: true,
-  sampleCode: `import {timer, map, take, tap, concatMap} from "rxjs";
-import {createValue, observe, shapeAt} from "vizual-rx";
+  sampleCode: `import {concatMap, timer, tap, map, take} from "rxjs";
+import {observe, createValue, colorAt} from "vizual-rx";
 
-const source1$ = timer(0, 2000)
+const source$ = timer(0, 1100)
     .pipe(
-        map(i => createValue('blue', shapeAt(i))),
-        take(3),
-        tap(observe('source1'))
+        map(i => createValue(colorAt(i), 'square')),
+        take(4),
+        tap(observe('source'))
     );
 
-const example$ = source1$
+const innerObservers = new Array(4).fill(undefined)
+    .map((_, i) => observe('inner ' + i));
+    console.log(innerObservers);
+
+const example$ = source$
     .pipe(
-        concatMap(value =>
-            timer(0, 500)
+        concatMap((value, index) => {
+            const inner = timer(0, 500)
                 .pipe(
-                    map(() => createValue('red', value.shape)),
-                    take(3),
-                    tap(observe('inner'))
-                )
-        )
-    );
+                    map(() => createValue(value.color, 'circle')),
+                    take(5)
+                );
+            inner.subscribe(innerObservers[index]);
+            return inner;
+        })
+    )
+
 example$
     .subscribe(observe('example'));`
 };
