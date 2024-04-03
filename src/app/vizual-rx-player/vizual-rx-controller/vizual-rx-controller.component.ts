@@ -1,8 +1,8 @@
 import {Component, Input} from '@angular/core';
 import {MatSlider, MatSliderThumb} from "@angular/material/slider";
 import {FormsModule, ReactiveFormsModule} from "@angular/forms";
-import {DynamicObjectGraphics} from "../graphics/dynamic-object-graphics";
-import {VizualRxEngine} from "../core/vizual-rx-engine";
+import {DynamicObjectGraphics} from "../../graphics/dynamic-object-graphics";
+import {VizualRxEngine} from "../../core/vizual-rx-engine";
 import {MatIcon} from "@angular/material/icon";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {MatRipple} from "@angular/material/core";

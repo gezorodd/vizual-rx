@@ -1,7 +1,7 @@
 import {ResolveFn} from '@angular/router';
 import {forkJoin, map, Observable, Subject} from "rxjs";
 import {inject, NgZone} from "@angular/core";
-import {VizualRxEditorService} from "../vizual-rx-editor/vizual-rx-editor.service";
+import {VizualRxEditorService} from "./vizual-rx-editor.service";
 import {EditorComponent, NGX_MONACO_EDITOR_CONFIG} from "ngx-monaco-editor-v2";
 import {NgxMonacoEditorConfig} from "ngx-monaco-editor-v2/lib/config";
 

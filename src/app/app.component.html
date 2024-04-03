@@ -14,6 +14,10 @@
               (closed)="sidenavOpenedChanged()">
     <app-vizual-rx-sidenav (layoutChanged)="drawerContainer.updateContentMargins()"></app-vizual-rx-sidenav>
   </mat-drawer>
-  <router-outlet></router-outlet>
+  <div class="outer-page-container">
+    <div class="inner-page-container">
+      <router-outlet></router-outlet>
+    </div>
+  </div>
 </mat-drawer-container>
 

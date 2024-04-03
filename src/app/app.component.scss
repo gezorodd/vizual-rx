@@ -26,8 +26,6 @@
   }
 }
 
-
-
 .sidenav {
   box-shadow: 0 0 10px 0 #bdbdbd;
 }
@@ -35,10 +33,18 @@
 .main {
   flex-grow: 1;
   overflow: hidden;
-}
 
-.page {
-  flex-grow: 1;
+  .outer-page-container {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+  }
+
+  .inner-page-container {
+    flex-grow: 1;
+    padding: 2em;
+    overflow: auto;
+  }
 }
 
 ::ng-deep {

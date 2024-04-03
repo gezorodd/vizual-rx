@@ -10,9 +10,8 @@ export class Section {
   expanding: boolean;
   collapsing: boolean;
   collapsed: boolean;
-  private collapsedTimeout?: ReturnType<typeof setTimeout>;
 
-  private cancelCollapse$: Subject<void>;
+  private readonly cancelCollapse$: Subject<void>;
 
   constructor(label: string, sections: Section[], pages: Page[], level: number) {
     this.label = label;

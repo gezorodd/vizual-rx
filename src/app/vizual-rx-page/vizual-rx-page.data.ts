@@ -16,7 +16,6 @@ import {iifPage} from "./operators/creation/iif/iif.page";
 import {combineAllPage} from "./operators/join/combine-all/combine-all.page";
 import {combineLatestPage} from "./operators/join-creation/combine-latest/combine-latest.page";
 import {defaultIfEmptyPage} from "./operators/conditional/default-if-empty/default-if-empty.page";
-import {playgroundPage} from "./vizual-rx/playground/playground.page";
 import {concatPage} from "./operators/join-creation/concat/concat.page";
 import {forkJoinPage} from "./operators/join-creation/forkJoin/fork-join.page";
 import {mergePage} from "./operators/join-creation/merge/merge.page";
@@ -177,6 +176,5 @@ export const pages = [
   startWithPage,
   withLatestFromPage,
 
-  defaultIfEmptyPage,
-  playgroundPage
+  defaultIfEmptyPage
 ];

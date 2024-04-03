@@ -24,7 +24,7 @@ import {
 } from "rxjs";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {AppService} from "../app.service";
+import {AppService} from "../../app.service";
 import {not} from "rxjs/internal/util/not";
 
 @Component({

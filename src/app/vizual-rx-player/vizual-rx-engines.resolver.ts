@@ -1,8 +1,9 @@
 import {ResolveFn} from "@angular/router";
 import {VizualRxEngine} from "../core/vizual-rx-engine";
 import {delay, from, map, Observable, of} from "rxjs";
-import {vizualRxEditorReadyResolver} from "../vizual-rx-editor/vizual-rx-editor.resolver";
-import {VizualRxCodeMap} from "./vizual-rx-player.model";
+import {vizualRxEditorReadyResolver} from "./vizual-rx-editor/vizual-rx-editor.resolver";
+import {VizualRxCode, VizualRxCodeMap} from "./vizual-rx-player.model";
+import {inject} from "@angular/core";
 
 export const vizualRxEnginesResolver: ResolveFn<Map<string, VizualRxEngine>> = (route, state) => {
   const codes = route.data['codes'] as VizualRxCodeMap;
@@ -18,16 +19,17 @@ export const vizualRxEnginesResolver: ResolveFn<Map<string, VizualRxEngine>> = (
     editorReady$ = from(editorReady);
   }
 
+  const codeStringMap = getCodeStringMap(codes);
+
   return editorReady$
     .pipe(
       map(() => {
         const engines = new Map<string, VizualRxEngine>();
-        Object.keys(codes)
+        Object.keys(codeStringMap)
           .forEach(name => {
-            const code = codes[name];
-            const codeValue = typeof code === 'string' ? code : code();
+            const code = codeStringMap[name];
             const engine = new VizualRxEngine();
-            engine.prepare(codeValue);
+            engine.prepare(code);
             engines.set(name, engine);
           })
         return engines;
@@ -35,3 +37,24 @@ export const vizualRxEnginesResolver: ResolveFn<Map<string, VizualRxEngine>> = (
       delay(500)
     );
 };
+
+function getCodeStringMap(vizualRxCodeMap: VizualRxCodeMap): { [name: string]: string } {
+  const codeStringMap: { [name: string]: string } = {};
+  Object.keys(vizualRxCodeMap)
+    .forEach(name => {
+      const code = vizualRxCodeMap[name];
+      codeStringMap[name] = getCodeString(code);
+    });
+  return codeStringMap;
+}
+
+function getCodeString(vizualRxCode: VizualRxCode): string {
+  if (typeof vizualRxCode === 'string') {
+    return vizualRxCode;
+  }
+  const providerType = vizualRxCode[0];
+  const providerFunction = vizualRxCode[1];
+
+  const provider = inject(providerType);
+  return providerFunction.call(provider);
+}

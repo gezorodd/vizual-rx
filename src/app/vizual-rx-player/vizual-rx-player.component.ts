@@ -1,13 +1,13 @@
-import {Component, Input} from '@angular/core';
+import {Component, EventEmitter, Input, Output} from '@angular/core';
 import {VizualRxEngine} from "../core/vizual-rx-engine";
 import {AlertMessageComponent} from "../ui/alert-message/alert-message.component";
 import {MatAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
 import {NgComponentOutlet, NgIf} from "@angular/common";
-import {VizualRxControllerComponent} from "../vizual-rx-controller/vizual-rx-controller.component";
-import {VizualRxEditorComponent} from "../vizual-rx-editor/vizual-rx-editor.component";
-import {VizualRxViewerComponent} from "../vizual-rx-viewer/vizual-rx-viewer.component";
+import {VizualRxControllerComponent} from "./vizual-rx-controller/vizual-rx-controller.component";
+import {VizualRxEditorComponent} from "./vizual-rx-editor/vizual-rx-editor.component";
+import {VizualRxViewerComponent} from "./vizual-rx-viewer/vizual-rx-viewer.component";
 
 @Component({
   selector: 'app-vizual-rx-player',
@@ -29,4 +29,5 @@ import {VizualRxViewerComponent} from "../vizual-rx-viewer/vizual-rx-viewer.comp
 export class VizualRxPlayerComponent {
 
   @Input({required: true}) engine!: VizualRxEngine;
+  @Output() codeChange = new EventEmitter<string>();
 }
