@@ -1,0 +1,21 @@
+:host {
+  display: flex;
+  flex-direction: column;
+  gap: 2em;
+}
+
+.code {
+  font-weight: 600;
+
+  &:before {
+    content: "`";
+  }
+
+  &:after {
+    content: "`";
+  }
+}
+
+mat-card-content h2:not(:first-child) {
+  margin-top: 1em;
+}

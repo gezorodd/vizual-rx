@@ -42,10 +42,13 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
   editorOptions = {
     model: {
       language: 'typescript',
-      uri: new monaco.Uri()
+      uri: monaco.Uri.parse(`${Math.random() * 9999999}`)
     },
     theme: 'vs',
-    minimap: { enabled: false }
+    minimap: { enabled: false },
+    scrollbar: {
+      handleMouseWheel: false
+    }
   };
 
   private editor?: monaco.editor.IStandaloneCodeEditor;

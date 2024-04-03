@@ -1,6 +1,6 @@
 <svg #timeTrack class="time-track">
 </svg>
-<div class="observer" *ngFor="let observer of observers">
+<div class="observer" *ngFor="let observer of observers; trackBy: identifyObserver">
   <div class="observer-label">
     <span>{{ observer.label }}</span>
   </div>

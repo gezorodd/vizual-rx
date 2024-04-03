@@ -1,0 +1,148 @@
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h1>Welcome to VisualRx!</h1>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>
+      VisualRx is a powerful tool designed to help you understand and explore the world of Reactive Programming using
+      RxJS. Whether you're a beginner eager to grasp the basics or an experienced developer looking to deepen your
+      knowledge, this web application is tailored to cater to your needs.
+    </p>
+    <h2>How does VisualRx work?</h2>
+    <p>
+      VisualRx offers an interactive environment where you can experiment with RxJS operators and observe their behavior
+      in real-time. The application allows you to input custom code snippets containing RxJS functions and observers,
+      which are then executed and visualized using marble diagrams. These diagrams provide a clear visualization of how
+      data flows through your RxJS code, helping you understand the inner workings of Reactive Programming concepts.
+    </p>
+    <p>
+      Here's a breakdown of how it works in practice:
+    </p>
+    <ul>
+      <li>You can import any RxJS function or operator into your script.</li>
+      <li>You can import specific functions tailored to VisualRx, which enable you to render the result. These functions
+        will be thoroughly explained on the page.
+      </li>
+      <li>One of the most crucial functions is the <span class="code">observe</span> function, which creates an observer
+        that displays values in
+        the diagram.
+      </li>
+    </ul>
+    <p>
+      Below is a very basic example illustrating the application's functionality, try to click the play button to see it
+      in action.
+    </p>
+    <app-vizual-rx-player *ngIf="basicExampleEngine" [engine]="basicExampleEngine"
+                          style="height: 210px"></app-vizual-rx-player>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h1>Visualization of Values and Events</h1>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <h2>The <span class="code">createValue</span> Function</h2>
+    <p>
+      In VisualRx, you have the flexibility to create more visually appealing values using the <span class="code">createValue</span>
+      function.
+      This function generates a value with a specified shape and color, enhancing the clarity and visual representation
+      of your data. You can optionally pass parameters to define the shape and/or color of the value. If no shape or
+      color is provided, VisualRx will randomly assign these properties.
+    </p>
+    <p>
+      Supported Shapes: circle, square, triangle, diamond, pentagon. <br/>
+      Supported Colors: red, blue, green, orange, yellow, purple, cyan, pink
+    </p>
+    <p>
+      Below is an example demonstrating the usage of the <span class="code">createValue</span> function.
+    </p>
+    <app-vizual-rx-player *ngIf="createValueExampleEngine" [engine]="createValueExampleEngine"
+                          style="height: 410px"></app-vizual-rx-player>
+
+    <h2>The <span class="code">colorAt</span> and <span class="code">shapeAt</span> Functions</h2>
+    <p>
+      VisualRx provides two utility functions, <span class="code">colorAt</span> and <span class="code">shapeAt</span>,
+      which return a color or a shape based on an index.
+      These functions can be incredibly useful when you need to generate values from a sequence, such as from the
+      <span class="code">interval</span> or <span class="code">timer</span> function.
+    </p>
+    <ul>
+      <li><span class="code">colorAt</span>: return the color at the given index</li>
+      <li><span class="code">shapeAt</span>: return the shape at the given index</li>
+    </ul>
+    <p>
+      In this example, we'll demonstrate the usage of the <span class="code">colorAt</span> and <span class="code">shapeAt</span>
+      functions to dynamically assign colors and shapes to values based on their indices.
+    </p>
+    <app-vizual-rx-player *ngIf="colorAndShapeAtExampleEngine" [engine]="colorAndShapeAtExampleEngine"
+                          style="height: 380px"></app-vizual-rx-player>
+    <h2>Visualization of Arrays</h2>
+    <p>
+      The values created by the <span class="code">createValue</span> function can also be organized into an array,
+      providing a structured
+      representation of your data. In VisualRx, arrays are displayed using bracket symbols, visually indicating the
+      collection of values within. This visualization aids in understanding operations involving multiple values, such
+      as buffering or zipping.
+    </p>
+    <p>
+      Below is an example demonstrating how the array representation appears in the diagram:
+    </p>
+    <app-vizual-rx-player *ngIf="arrayExampleEngine" [engine]="arrayExampleEngine"
+                          style="height: 340px"></app-vizual-rx-player>
+    <h2>Completion, Errors, and Other Values</h2>
+    <p>
+      As observed in the previous diagrams, various events and values are visually represented to provide a
+      comprehensive understanding of the data flow within VisualRx.
+    </p>
+    <ul>
+      <li><b>Completion:</b> The completion event is represented by a vertical bar, indicating the successful completion
+        of a stream or operation.
+      </li>
+      <li><b>Errors: </b> Errors are denoted by a distinctive red error symbol. Hovering over the error symbol reveals
+        the content of the error as a tooltip, allowing for easy identification and troubleshooting.
+      </li>
+      <li><b>Regular Values: </b> Regular values are depicted as simple circles. In cases where the content of the value
+        exceeds the circle's capacity, it will be displayed in a tooltip on the value, ensuring that no information is
+        lost.
+      </li>
+    </ul>
+    <p>Below is an example showcasing the representation of the completion sign, an error, and an object value:</p>
+    <app-vizual-rx-player *ngIf="miscExampleEngine" [engine]="miscExampleEngine"
+                          style="height: 320px"></app-vizual-rx-player>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h1>Using VisualRx to Break Down a Pipe</h1>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>
+      One of the powerful features of VisualRx is its ability to breakdown the execution of an RxJS pipe, enabling a
+      step-by-step visualization of the data transformation process.
+    </p>
+    <p>
+      Because the <span class="code">observe</span> function returns an observer, it can also be utilized within the
+      <span class="code">tap</span> operator. This becomes particularly useful when you want to dissect the execution of
+      an RxJS pipe and observe each step of the process as it unfolds.
+    </p>
+    <p>
+      Below is an example demonstrating how VisualRx can be used to track each step of the process:
+    </p>
+    <ol>
+      <li>A source of values is produced.</li>
+      <li>We apply the <span class="code">filter</span> operator to keep only the blue values.</li>
+      <li>Next, the <span class="code">map</span> operator is applied to transform each value into a triangle.</li>
+      <li>Finally, the values are buffered by groups of 3 items using <span class="code">bufferCount</span>.</li>
+    </ol>
+    <app-vizual-rx-player *ngIf="pipeExampleEngine" [engine]="pipeExampleEngine"
+                          style="height: 460px"></app-vizual-rx-player>
+  </mat-card-content>
+</mat-card>

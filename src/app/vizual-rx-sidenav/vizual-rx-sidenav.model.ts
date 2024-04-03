@@ -1,5 +1,4 @@
 import {defer, delay, Observable, of, Subject, takeUntil, tap} from "rxjs";
-import {Page} from "../vizual-rx-page/vizual-rx-page.model";
 
 export class Section {
   readonly label: string;
@@ -70,4 +69,11 @@ export interface ISection {
   readonly label: string;
   readonly sections?: ISection[];
   readonly pages?: Page[];
+}
+
+export interface Page {
+  title: string;
+  routeUrl: string;
+  deprecated?: boolean;
+  starred?: boolean;
 }

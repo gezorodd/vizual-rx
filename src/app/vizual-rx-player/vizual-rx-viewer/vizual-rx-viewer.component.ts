@@ -1,5 +1,5 @@
 import {
-  AfterViewInit,
+  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef,
   Component,
   ElementRef,
   Input,
@@ -38,7 +38,8 @@ import {MatDivider} from "@angular/material/divider";
     MatDivider
   ],
   templateUrl: './vizual-rx-viewer.component.html',
-  styleUrl: './vizual-rx-viewer.component.scss'
+  styleUrl: './vizual-rx-viewer.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
 export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
@@ -53,7 +54,7 @@ export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy
 
   private readonly destroy$ = new Subject<void>();
 
-  constructor() {
+  constructor(private changeDetectorRef: ChangeDetectorRef) {
     this.observers = [];
     this.observerTrackGraphics = new Map();
   }
@@ -63,7 +64,10 @@ export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy
       .pipe(
         takeUntil(this.destroy$)
       )
-      .subscribe(() => this.observers = this.engine.observers);
+      .subscribe(() => {
+        this.observers = this.engine.observers;
+        this.changeDetectorRef.detectChanges();
+      });
   }
 
   ngAfterViewInit(): void {
@@ -107,5 +111,9 @@ export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy
     for (const graphic of this.observerTrackGraphics.values()) {
       graphic.destroy();
     }
+  }
+
+  identifyObserver(_: number, item: VizualRxObserver) {
+    return item.id;
   }
 }

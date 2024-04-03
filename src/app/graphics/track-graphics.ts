@@ -1,4 +1,4 @@
-import {filter, interval, merge, Observable, Subject, takeUntil, tap} from "rxjs";
+import {filter, interval, merge, mergeMap, Observable, of, Subject, takeUntil, tap, windowToggle} from "rxjs";
 import {DynamicObjectGraphics} from "./dynamic-object-graphics";
 import {VizualRxEngine} from "../core/vizual-rx-engine";
 
@@ -11,6 +11,7 @@ export class TrackGraphics {
   protected sceneLayers: Map<number, SVGGElement>;
   protected readonly destroy$ = new Subject<void>();
   private readonly className: string;
+  private updateIntervalId?: ReturnType<typeof setInterval>;
 
   constructor(engine: VizualRxEngine, svg: SVGSVGElement, className: string) {
     this.engine = engine;
@@ -25,8 +26,25 @@ export class TrackGraphics {
     this.trackContainer = this.createTrackContainer();
     this.sceneContainer = this.createSceneContainer();
 
-    this.scheduleUpdate()
-      .subscribe();
+    merge(of(undefined), this.engine.starting$)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.updateIntervalId) {
+          clearInterval(this.updateIntervalId);
+        }
+        this.updateIntervalId = setInterval(() => {
+          if (this.engine.playing) {
+            this.update();
+          }
+        }, 15);
+      });
+    this.engine.stopping$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.updateIntervalId) {
+          clearInterval(this.updateIntervalId);
+        }
+      });
   }
 
   addDynamicObject(dynamicObject: DynamicObjectGraphics): void {
@@ -46,6 +64,9 @@ export class TrackGraphics {
   destroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
+    if (this.updateIntervalId) {
+      clearInterval(this.updateIntervalId);
+    }
   }
 
   private createTrackContainer(): SVGGElement {
@@ -91,17 +112,6 @@ export class TrackGraphics {
       }
     }
     return sceneLayer;
-  }
-
-  private scheduleUpdate(): Observable<number> {
-    return merge(
-      interval(15)
-        .pipe(filter(() => this.engine.playing)),
-      DynamicObjectGraphics.timeScale$
-    ).pipe(
-      tap(() => this.update()),
-      takeUntil(this.destroy$)
-    );
   }
 
   private update(): void {

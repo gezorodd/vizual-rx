@@ -40,5 +40,5 @@
 .observer-track {
   background-color: $player-observer-track-background;
   height: 80px;
-  width: 100%;
+  flex-grow: 1;
 }

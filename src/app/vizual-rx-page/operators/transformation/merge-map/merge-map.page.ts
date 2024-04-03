@@ -19,7 +19,6 @@ const source$ = timer(0, 1100)
 
 const innerObservers = new Array(4).fill(undefined)
     .map((_, i) => observe('inner ' + i));
-    console.log(innerObservers);
 
 const example$ = source$
     .pipe(
