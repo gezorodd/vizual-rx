@@ -34,7 +34,7 @@
       Below is a very basic example illustrating the application's functionality, try to click the play button to see it
       in action.
     </p>
-    <app-vizual-rx-player *ngIf="basicExampleEngine" [engine]="basicExampleEngine"
+    <app-vizual-rx-player *ngIf="basicExampleEngine" [engine]="basicExampleEngine" [disableMouseWheel]="true"
                           style="height: 210px"></app-vizual-rx-player>
   </mat-card-content>
 </mat-card>
@@ -62,6 +62,7 @@
       Below is an example demonstrating the usage of the <span class="code">createValue</span> function.
     </p>
     <app-vizual-rx-player *ngIf="createValueExampleEngine" [engine]="createValueExampleEngine"
+                          [disableMouseWheel]="true"
                           style="height: 410px"></app-vizual-rx-player>
 
     <h2>The <span class="code">colorAt</span> and <span class="code">shapeAt</span> Functions</h2>
@@ -80,6 +81,7 @@
       functions to dynamically assign colors and shapes to values based on their indices.
     </p>
     <app-vizual-rx-player *ngIf="colorAndShapeAtExampleEngine" [engine]="colorAndShapeAtExampleEngine"
+                          [disableMouseWheel]="true"
                           style="height: 380px"></app-vizual-rx-player>
     <h2>Visualization of Arrays</h2>
     <p>
@@ -92,7 +94,7 @@
     <p>
       Below is an example demonstrating how the array representation appears in the diagram:
     </p>
-    <app-vizual-rx-player *ngIf="arrayExampleEngine" [engine]="arrayExampleEngine"
+    <app-vizual-rx-player *ngIf="arrayExampleEngine" [engine]="arrayExampleEngine" [disableMouseWheel]="true"
                           style="height: 340px"></app-vizual-rx-player>
     <h2>Completion, Errors, and Other Values</h2>
     <p>
@@ -112,7 +114,7 @@
       </li>
     </ul>
     <p>Below is an example showcasing the representation of the completion sign, an error, and an object value:</p>
-    <app-vizual-rx-player *ngIf="miscExampleEngine" [engine]="miscExampleEngine"
+    <app-vizual-rx-player *ngIf="miscExampleEngine" [engine]="miscExampleEngine" [disableMouseWheel]="true"
                           style="height: 320px"></app-vizual-rx-player>
   </mat-card-content>
 </mat-card>
@@ -142,7 +144,7 @@
       <li>Next, the <span class="code">map</span> operator is applied to transform each value into a triangle.</li>
       <li>Finally, the values are buffered by groups of 3 items using <span class="code">bufferCount</span>.</li>
     </ol>
-    <app-vizual-rx-player *ngIf="pipeExampleEngine" [engine]="pipeExampleEngine"
+    <app-vizual-rx-player *ngIf="pipeExampleEngine" [engine]="pipeExampleEngine" [disableMouseWheel]="true"
                           style="height: 460px"></app-vizual-rx-player>
   </mat-card-content>
 </mat-card>

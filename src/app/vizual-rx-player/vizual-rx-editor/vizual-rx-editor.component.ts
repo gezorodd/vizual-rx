@@ -36,19 +36,17 @@ import {not} from "rxjs/internal/util/not";
 })
 export class VizualRxEditorComponent implements OnInit, OnDestroy {
 
+  @Input() disableMouseWheel?: boolean;
   @Output() codeChange = new EventEmitter<string>();
   private _code: string = '';
 
-  editorOptions = {
+  editorOptions: any = {
     model: {
       language: 'typescript',
       uri: monaco.Uri.parse(`${Math.random() * 9999999}`)
     },
     theme: 'vs',
-    minimap: { enabled: false },
-    scrollbar: {
-      handleMouseWheel: false
-    }
+    minimap: { enabled: false }
   };
 
   private editor?: monaco.editor.IStandaloneCodeEditor;
@@ -65,6 +63,11 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe();
+    if (this.disableMouseWheel) {
+      this.editorOptions.scrollbar = {
+        handleMouseWheel: false
+      };
+    }
   }
 
   ngOnDestroy(): void {

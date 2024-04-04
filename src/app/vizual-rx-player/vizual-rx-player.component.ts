@@ -29,5 +29,7 @@ import {VizualRxViewerComponent} from "./vizual-rx-viewer/vizual-rx-viewer.compo
 export class VizualRxPlayerComponent {
 
   @Input({required: true}) engine!: VizualRxEngine;
+  @Input() disableMouseWheel?: boolean;
+
   @Output() codeChange = new EventEmitter<string>();
 }
