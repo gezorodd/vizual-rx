@@ -7,7 +7,7 @@
     <img src="assets/github-mark-white.svg" alt="github logo"/>
   </a>
 </mat-toolbar>
-<mat-progress-bar mode="indeterminate"
+<mat-progress-bar class="loading-bar" mode="indeterminate"
                   [style.visibility]="(loading$ | async) ? 'visible' : 'hidden'"></mat-progress-bar>
 <mat-drawer-container #drawerContainer class="main">
   <mat-drawer class="sidenav" mode="side" [opened]="sidenavOpenedState$ | async" (opened)="sidenavOpenedChanged()"

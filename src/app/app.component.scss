@@ -26,6 +26,10 @@
   }
 }
 
+.loading-bar {
+  flex-shrink: 0;
+}
+
 .sidenav {
   box-shadow: 0 0 10px 0 #bdbdbd;
 }
