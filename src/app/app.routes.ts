@@ -57,5 +57,10 @@ export const routes: Routes = [
     resolve: {
       engines: vizualRxEnginesResolver
     }
+  },
+  {
+    path: '',
+    redirectTo: 'introduction',
+    pathMatch: "full"
   }
 ];

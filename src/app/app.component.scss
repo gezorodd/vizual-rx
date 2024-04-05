@@ -38,6 +38,13 @@
   flex-shrink: 0;
 }
 
+.initialize-spinner-container {
+  height: 100%;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
 .sidenav {
   box-shadow: 0 0 10px 0 #bdbdbd;
 }

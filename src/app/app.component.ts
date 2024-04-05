@@ -8,16 +8,17 @@ import {MatToolbar} from "@angular/material/toolbar";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
 import {MatDrawer, MatDrawerContainer} from "@angular/material/sidenav";
-import {BehaviorSubject, filter, map, Observable} from "rxjs";
+import {BehaviorSubject, distinctUntilChanged, filter, map, Observable, take} from "rxjs";
 import {AppService} from "./app.service";
-import {AsyncPipe} from "@angular/common";
+import {AsyncPipe, NgIf} from "@angular/common";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {MatTooltip} from "@angular/material/tooltip";
+import {MatProgressSpinner} from "@angular/material/progress-spinner";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-    imports: [RouterOutlet, FormsModule, VizualRxViewerComponent, VizualRxEditorComponent, VizualRxSidenavComponent, MatToolbar, MatIcon, MatIconButton, MatDrawerContainer, MatDrawer, AsyncPipe, MatProgressBar, MatTooltip],
+  imports: [RouterOutlet, FormsModule, VizualRxViewerComponent, VizualRxEditorComponent, VizualRxSidenavComponent, MatToolbar, MatIcon, MatIconButton, MatDrawerContainer, MatDrawer, AsyncPipe, MatProgressBar, MatTooltip, MatProgressSpinner, NgIf],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
@@ -25,6 +26,7 @@ export class AppComponent {
 
   readonly sidenavOpenedState$: BehaviorSubject<boolean>;
   readonly loading$: Observable<boolean>;
+  readonly initialized$: Observable<boolean>;
 
   constructor(private appService: AppService, router: Router) {
     this.sidenavOpenedState$ = appService.sidenavOpenedState$;
@@ -40,6 +42,12 @@ export class AppComponent {
         }),
         filter(loading => loading !== undefined),
         map(loading => !!loading)
+      );
+    this.initialized$ = this.loading$
+      .pipe(
+        map(loading => !loading),
+        distinctUntilChanged(),
+        take(2)
       );
   }
 
