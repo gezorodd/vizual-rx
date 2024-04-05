@@ -30,6 +30,7 @@ export class VizualRxPlayerComponent {
 
   @Input({required: true}) engine!: VizualRxEngine;
   @Input() disableMouseWheel?: boolean;
+  @Input() updateLayoutLightMode?: boolean;
 
   @Output() codeChange = new EventEmitter<string>();
 }

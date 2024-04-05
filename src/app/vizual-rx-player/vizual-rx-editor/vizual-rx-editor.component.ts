@@ -6,6 +6,7 @@ import {MatSelectModule} from "@angular/material/select";
 import * as monaco from "monaco-editor";
 import {VizualRxEditorService} from "./vizual-rx-editor.service";
 import {
+  defer,
   distinctUntilChanged,
   expand,
   filter,
@@ -37,6 +38,8 @@ import {not} from "rxjs/internal/util/not";
 export class VizualRxEditorComponent implements OnInit, OnDestroy {
 
   @Input() disableMouseWheel?: boolean;
+  @Input() updateLayoutLightMode?: boolean;
+
   @Output() codeChange = new EventEmitter<string>();
   private _code: string = '';
 
@@ -46,15 +49,14 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
       uri: monaco.Uri.parse(`${Math.random() * 9999999}`)
     },
     theme: 'vs',
-    minimap: { enabled: false }
+    minimap: {enabled: false},
+    scrollBeyondLastLine: false
   };
 
   private editor?: monaco.editor.IStandaloneCodeEditor;
   private destroy$ = new Subject<void>();
 
   constructor(private vizualRxEditorService: VizualRxEditorService, private appService: AppService) {
-    this.updateEditorLayoutDuringSidenavChange()
-      .subscribe();
   }
 
   ngOnInit(): void {
@@ -68,6 +70,8 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
         handleMouseWheel: false
       };
     }
+    this.updateEditorLayoutDuringSidenavChange()
+      .subscribe();
   }
 
   ngOnDestroy(): void {
@@ -100,32 +104,36 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
   }
 
   private updateEditorLayoutDuringSidenavChange(): Observable<any> {
-    const sidenavIsChanging$ = of(1)
-      .pipe(
-        expand(counter => {
-          return race(
-            this.appService.sidenavOpenedState$.pipe(skip(1), map(() => counter + 1)),
-            this.appService.sidenavOpenedChanged$.pipe(map(() => counter - 1))
-          ).pipe(first());
-        }),
-        map(counter => counter > 0),
-        distinctUntilChanged()
-      );
-    const sidenavStartChanging$ = sidenavIsChanging$
-      .pipe(
-        filter(identity)
-      );
-    const sidenavStopChanging$ = sidenavIsChanging$
-      .pipe(
-        filter(not(identity, this))
-      );
-    const intervalDuringSidenavChange$ = sidenavStartChanging$
-      .pipe(
-        mergeMap(() =>
-          interval(5).pipe(takeUntil(sidenavStopChanging$))
-        )
-      );
-    return intervalDuringSidenavChange$
+    return defer(() => {
+      if (this.updateLayoutLightMode) {
+        return this.appService.sidenavOpenedChanged$;
+      }
+      const sidenavIsChanging$ = of(1)
+        .pipe(
+          expand(counter => {
+            return race(
+              this.appService.sidenavOpenedState$.pipe(skip(1), map(() => counter + 1)),
+              this.appService.sidenavOpenedChanged$.pipe(map(() => counter - 1))
+            ).pipe(first());
+          }),
+          map(counter => counter > 0),
+          distinctUntilChanged()
+        );
+      const sidenavStartChanging$ = sidenavIsChanging$
+        .pipe(
+          filter(identity)
+        );
+      const sidenavStopChanging$ = sidenavIsChanging$
+        .pipe(
+          filter(not(identity, this))
+        );
+      return sidenavStartChanging$
+        .pipe(
+          mergeMap(() =>
+            interval(15).pipe(takeUntil(sidenavStopChanging$))
+          )
+        );
+    })
       .pipe(
         takeUntil(this.destroy$),
         tap(() => this.editor?.layout())
