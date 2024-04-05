@@ -1,4 +1,4 @@
-import {Component, EventEmitter, Input, Output} from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
 import {VizualRxEngine} from "../core/vizual-rx-engine";
 import {AlertMessageComponent} from "../ui/alert-message/alert-message.component";
 import {MatAnchor} from "@angular/material/button";
@@ -33,4 +33,25 @@ export class VizualRxPlayerComponent {
   @Input() updateLayoutLightMode?: boolean;
 
   @Output() codeChange = new EventEmitter<string>();
+  private wasPausedOnBlur: boolean;
+
+  constructor() {
+    this.wasPausedOnBlur = false;
+  }
+
+  @HostListener('window:blur')
+  handleWindowBlur(): void {
+    if (this.engine.playing) {
+      this.engine.pause();
+      this.wasPausedOnBlur = true;
+    }
+  }
+
+  @HostListener('window:focus')
+  handleWindowFocus(): void {
+    if (this.wasPausedOnBlur) {
+      this.engine.play();
+      this.wasPausedOnBlur = false;
+    }
+  }
 }
