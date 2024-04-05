@@ -5,7 +5,7 @@ import {VizualRxEngine} from "../../core/vizual-rx-engine";
 import {ActivatedRoute} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {VizualRxPlayerComponent} from "../../vizual-rx-player/vizual-rx-player.component";
-import {miscExampleCode} from "./overview-page.model";
+import {miscExampleCode} from "./overview-page.data";
 
 @Component({
   selector: 'app-overview-page',

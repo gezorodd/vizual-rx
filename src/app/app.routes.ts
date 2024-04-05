@@ -1,22 +1,22 @@
 import {Routes} from '@angular/router';
-import {VizualRxPageComponent} from "./vizual-rx-page/vizual-rx-page.component";
-import {pages} from "./vizual-rx-page/vizual-rx-page.data";
 import {vizualRxEnginesResolver} from "./vizual-rx-player/vizual-rx-engines.resolver";
-import {VizualRxPlaygroundComponent} from "./vizual-rx-playground/vizual-rx-playground.component";
-import {VizualRxPlaygroundService} from "./vizual-rx-playground/vizual-rx-playground.service";
+import {PlaygroundPageComponent} from "./pages/playground-page/playground-page.component";
+import {PlaygroundPageService} from "./pages/playground-page/playground-page.service";
 import {OverviewPageComponent} from "./pages/overview-page/overview-page.component";
 import {
   arrayExampleCode,
   basicExampleCode,
   colorAndShapeAtExampleCode,
   createValueExampleCode, miscExampleCode, overviewPage, pipeExampleCode
-} from "./pages/overview-page/overview-page.model";
+} from "./pages/overview-page/overview-page.data";
+import {docPages} from "./pages/doc-page/doc-page.data";
+import {DocPageComponent} from "./pages/doc-page/doc-page.component";
 
 export const routes: Routes = [
-  ...pages
+  ...docPages
     .map(page => ({
       path: page.routeUrl,
-      component: VizualRxPageComponent,
+      component: DocPageComponent,
       data: {
         page,
         codes: {
@@ -29,10 +29,10 @@ export const routes: Routes = [
     })),
   {
     path: 'playground',
-    component: VizualRxPlaygroundComponent,
+    component: PlaygroundPageComponent,
     data: {
       codes: {
-        playground: [VizualRxPlaygroundService, function (this: VizualRxPlaygroundService) {
+        playground: [PlaygroundPageService, function (this: PlaygroundPageService) {
           return this.code
         }]
       }

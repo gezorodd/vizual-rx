@@ -3,7 +3,7 @@ import {NavigationEnd, NavigationSkipped, NavigationStart, Router, RouterOutlet}
 import {FormsModule} from "@angular/forms";
 import {VizualRxViewerComponent} from "./vizual-rx-player/vizual-rx-viewer/vizual-rx-viewer.component";
 import {VizualRxEditorComponent} from "./vizual-rx-player/vizual-rx-editor/vizual-rx-editor.component";
-import {VizualRxSidenavComponent} from "./vizual-rx-sidenav/vizual-rx-sidenav.component";
+import {SidenavComponent} from "./sidenav/sidenav.component";
 import {MatToolbar} from "@angular/material/toolbar";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
@@ -18,7 +18,7 @@ import {MatProgressSpinner} from "@angular/material/progress-spinner";
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule, VizualRxViewerComponent, VizualRxEditorComponent, VizualRxSidenavComponent, MatToolbar, MatIcon, MatIconButton, MatDrawerContainer, MatDrawer, AsyncPipe, MatProgressBar, MatTooltip, MatProgressSpinner, NgIf],
+  imports: [RouterOutlet, FormsModule, VizualRxViewerComponent, VizualRxEditorComponent, SidenavComponent, MatToolbar, MatIcon, MatIconButton, MatDrawerContainer, MatDrawer, AsyncPipe, MatProgressBar, MatTooltip, MatProgressSpinner, NgIf],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

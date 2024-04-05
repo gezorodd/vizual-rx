@@ -15,7 +15,7 @@
 <mat-drawer-container #drawerContainer class="main">
   <mat-drawer class="sidenav" mode="side" [opened]="sidenavOpenedState$ | async" (opened)="sidenavOpenedChanged()"
               (closed)="sidenavOpenedChanged()">
-    <app-vizual-rx-sidenav (layoutChanged)="drawerContainer.updateContentMargins()"></app-vizual-rx-sidenav>
+    <app-sidenav (layoutChanged)="drawerContainer.updateContentMargins()"></app-sidenav>
   </mat-drawer>
   <div class="outer-page-container">
     <div class="inner-page-container">
