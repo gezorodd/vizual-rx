@@ -1,8 +1,8 @@
 import {Page} from "../../vizual-rx-sidenav/vizual-rx-sidenav.model";
 
-export const introductionPage: Page = {
-  title: 'Introduction',
-  routeUrl: 'introduction'
+export const overviewPage: Page = {
+  title: 'Overview',
+  routeUrl: 'overview'
 }
 
 export const basicExampleCode = `import {timer, take} from "rxjs";

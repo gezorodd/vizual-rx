@@ -4,13 +4,13 @@ import {pages} from "./vizual-rx-page/vizual-rx-page.data";
 import {vizualRxEnginesResolver} from "./vizual-rx-player/vizual-rx-engines.resolver";
 import {VizualRxPlaygroundComponent} from "./vizual-rx-playground/vizual-rx-playground.component";
 import {VizualRxPlaygroundService} from "./vizual-rx-playground/vizual-rx-playground.service";
-import {IntroductionPageComponent} from "./pages/introduction-page/introduction-page.component";
+import {OverviewPageComponent} from "./pages/overview-page/overview-page.component";
 import {
   arrayExampleCode,
   basicExampleCode,
   colorAndShapeAtExampleCode,
-  createValueExampleCode, miscExampleCode, pipeExampleCode
-} from "./pages/introduction-page/introduction-page.model";
+  createValueExampleCode, miscExampleCode, overviewPage, pipeExampleCode
+} from "./pages/overview-page/overview-page.model";
 
 export const routes: Routes = [
   ...pages
@@ -42,8 +42,8 @@ export const routes: Routes = [
     }
   },
   {
-    path: 'introduction',
-    component: IntroductionPageComponent,
+    path: overviewPage.routeUrl,
+    component: OverviewPageComponent,
     data: {
       codes: {
         basicExample: basicExampleCode,
@@ -60,7 +60,7 @@ export const routes: Routes = [
   },
   {
     path: '',
-    redirectTo: 'introduction',
+    redirectTo: overviewPage.routeUrl,
     pathMatch: "full"
   }
 ];

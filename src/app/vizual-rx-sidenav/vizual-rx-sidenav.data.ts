@@ -90,14 +90,14 @@ import {mergeAllPage} from "../vizual-rx-page/operators/join/mege-all/merge-all.
 import {switchAllPage} from "../vizual-rx-page/operators/join/switch-all/switch-all.page";
 import {startWithPage} from "../vizual-rx-page/operators/join/start-with/start-with.page";
 import {withLatestFromPage} from "../vizual-rx-page/operators/join/with-latest-from/with-latest-from.page";
-import {introductionPage} from "../pages/introduction-page/introduction-page.model";
+import {overviewPage} from "../pages/overview-page/overview-page.model";
 
 export const allSectionData: ISection[] = [
   {
     label: 'VizualRx',
     sections: [],
     pages: [
-      introductionPage,
+      overviewPage,
       playgroundPage
     ]
   },

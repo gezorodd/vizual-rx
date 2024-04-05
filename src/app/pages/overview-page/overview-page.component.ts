@@ -5,16 +5,16 @@ import {VizualRxEngine} from "../../core/vizual-rx-engine";
 import {ActivatedRoute} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {VizualRxPlayerComponent} from "../../vizual-rx-player/vizual-rx-player.component";
-import {miscExampleCode} from "./introduction-page.model";
+import {miscExampleCode} from "./overview-page.model";
 
 @Component({
-  selector: 'app-introduction-page',
+  selector: 'app-overview-page',
   standalone: true,
   imports: [MatCardModule, NgIf, VizualRxPlayerComponent],
-  templateUrl: './introduction-page.component.html',
-  styleUrl: './introduction-page.component.scss'
+  templateUrl: './overview-page.component.html',
+  styleUrl: './overview-page.component.scss'
 })
-export class IntroductionPageComponent implements OnInit, OnDestroy {
+export class OverviewPageComponent implements OnInit, OnDestroy {
 
   basicExampleEngine?: VizualRxEngine;
   createValueExampleEngine?: VizualRxEngine;
