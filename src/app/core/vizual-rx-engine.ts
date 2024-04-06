@@ -7,6 +7,7 @@ import {
   mergeMap,
   Observable,
   pairwise,
+  Subject,
   Subscription,
   takeUntil,
   tap,
@@ -23,14 +24,17 @@ export class VizualRxEngine {
 
   readonly time: VizualRxTime;
   readonly scheduler: VizualRxScheduler;
-  private readonly interpreter: VizualRxInterpreter;
-  private readonly state$: BehaviorSubject<PlayerState>;
-  private readonly timeFactor$: BehaviorSubject<number>;
 
   readonly stopping$: Observable<void>;
   readonly starting$: Observable<void>;
   readonly stopped$: Observable<boolean>;
   readonly playing$: Observable<boolean>;
+
+  private readonly interpreter: VizualRxInterpreter;
+  private readonly state$: BehaviorSubject<PlayerState>;
+  private readonly timeFactor$: BehaviorSubject<number>;
+  private readonly destroy$ = new Subject<void>();
+  private readonly _observerAdded$ = new Subject<VizualRxObserver>();
 
   constructor(code = '') {
     this.code = code;
@@ -48,11 +52,17 @@ export class VizualRxEngine {
     this.scheduler = new VizualRxScheduler(this.time);
     this.interpreter = new VizualRxInterpreter(this.scheduler);
     this.interpreter.observerAdded$
+      .pipe(
+        tap(observer => this._observerAdded$.next(observer)),
+        takeUntil(this.destroy$)
+      )
       .subscribe(observer => this.observers.push(observer));
     this.interpreter.subscriptionCreated$
+      .pipe(takeUntil(this.destroy$))
       .subscribe(subscription => this.subscriptions.push(subscription));
 
     this.stopEngineWhenAllSubscriptionsAreClosed()
+      .pipe(takeUntil(this.destroy$))
       .subscribe();
   }
 
@@ -115,6 +125,15 @@ export class VizualRxEngine {
     if (this.playing) {
       this.time.timeFactor = factor;
     }
+  }
+
+  get observerAdded(): Observable<VizualRxObserver> {
+    return this._observerAdded$.asObservable();
+  }
+
+  destroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
   }
 
   private runCode(): void {

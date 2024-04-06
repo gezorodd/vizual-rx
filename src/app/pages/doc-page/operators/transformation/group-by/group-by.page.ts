@@ -18,18 +18,17 @@ const source$ = timer(0, 500)
                 return createValue('red', shapeAt(i));
             }
         }),
+        take(10),
         tap(observe('source'))
     );
 
 const example$ = source$
     .pipe(
-        take(10),
         groupBy(value => value.color),
         mergeMap(group$ =>
             group$
                 .pipe(
-                    tap(observe(group$.key + ' color')),
-                    reduce((acc, cur) => [...acc, cur], [])
+                    reduce((acc, cur) => [...acc, cur], []),
                 )
         ),
         delayWhen((_, i) => timer(i * 1000))

@@ -1,5 +1,7 @@
 import {
-  AfterViewInit, ChangeDetectionStrategy, ChangeDetectorRef,
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   Input,
@@ -60,10 +62,8 @@ export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   ngOnInit(): void {
-    this.engine.starting$
-      .pipe(
-        takeUntil(this.destroy$)
-      )
+    merge(this.engine.starting$, this.engine.observerAdded, this.engine.stopping$)
+      .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.observers = this.engine.observers;
         this.changeDetectorRef.detectChanges();
@@ -111,6 +111,7 @@ export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy
     for (const graphic of this.observerTrackGraphics.values()) {
       graphic.destroy();
     }
+    this.engine.destroy();
   }
 
   identifyObserver(_: number, item: VizualRxObserver) {
