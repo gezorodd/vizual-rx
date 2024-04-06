@@ -109,7 +109,7 @@ export class SidenavComponent implements OnDestroy {
         const subSections = iSection.sections ? this.createSections(filter, iSection.sections, level + 1) : [];
         const pages = (iSection.pages ?? [])
           .filter(page => page.title.toLowerCase().includes(filter));
-        return new Section(iSection.label, subSections, pages, level);
+        return new Section(iSection.label, subSections, pages, level, iSection.version);
       })
       .filter(section => section.hasAnyPage());
   }

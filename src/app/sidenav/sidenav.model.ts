@@ -5,6 +5,7 @@ export class Section {
   readonly sections: Section[];
   readonly pages: Page[];
   readonly level: number;
+  readonly version?: string;
 
   expanding: boolean;
   collapsing: boolean;
@@ -12,11 +13,12 @@ export class Section {
 
   private readonly cancelCollapse$: Subject<void>;
 
-  constructor(label: string, sections: Section[], pages: Page[], level: number) {
+  constructor(label: string, sections: Section[], pages: Page[], level: number, version?: string) {
     this.label = label;
     this.sections = sections;
     this.pages = pages;
     this.level = level;
+    this.version = version;
     this.expanding = false;
     this.collapsing = false;
     this.collapsed = false;
@@ -67,6 +69,7 @@ export class Section {
 
 export interface ISection {
   readonly label: string;
+  readonly version?: string;
   readonly sections?: ISection[];
   readonly pages?: Page[];
 }

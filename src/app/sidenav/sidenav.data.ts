@@ -102,10 +102,11 @@ export const allSectionData: ISection[] = [
     ]
   },
   {
-    label: 'RxJS Operators',
+    label: 'RxJS',
+    version: 'v7.8.0',
     sections: [
       {
-        label: 'Creation',
+        label: 'Creation Operators',
         pages: [
           ajaxPage,
           bindCallbackPage,
@@ -125,7 +126,7 @@ export const allSectionData: ISection[] = [
         ]
       },
       {
-        label: 'Join Creation',
+        label: 'Join Creation Operators',
         pages: [
           combineLatestPage,
           concatPage,
@@ -137,7 +138,7 @@ export const allSectionData: ISection[] = [
         ]
       },
       {
-        label: 'Transformation',
+        label: 'Transformation Operators',
         pages: [
           bufferPage,
           bufferCountPage,
@@ -170,7 +171,7 @@ export const allSectionData: ISection[] = [
         ]
       },
       {
-        label: 'Filtering',
+        label: 'Filtering Operators',
         pages: [
           auditPage,
           auditTimePage,
@@ -200,7 +201,7 @@ export const allSectionData: ISection[] = [
         ]
       },
       {
-        label: 'Join',
+        label: 'Join Operators',
         pages: [
           combineAllPage,
           combineLatestAllPage,
@@ -213,7 +214,7 @@ export const allSectionData: ISection[] = [
         ]
       },
       {
-        label: 'Conditional',
+        label: 'Conditional Operators',
         pages: [
           defaultIfEmptyPage
         ]

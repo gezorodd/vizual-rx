@@ -17,6 +17,7 @@
             <mat-icon [fontSet]="'material-symbols-rounded'">chevron_right</mat-icon>
           </button>
           <span>{{ section.label }}</span>
+          <span *ngIf="section.version as version" class="version">{{ version }}</span>
         </div>
         <div class="section-children-container"
              [style.height]="getSectionHeight(section, sectionChildren.clientHeight)">
