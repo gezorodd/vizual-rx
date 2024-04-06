@@ -1,4 +1,4 @@
-import {filter, interval, merge, mergeMap, Observable, of, Subject, takeUntil, tap, windowToggle} from "rxjs";
+import {interval, merge, of, Subject, takeUntil} from "rxjs";
 import {DynamicObjectGraphics} from "./dynamic-object-graphics";
 import {VizualRxEngine} from "../core/vizual-rx-engine";
 
@@ -26,31 +26,23 @@ export class TrackGraphics {
     this.trackContainer = this.createTrackContainer();
     this.sceneContainer = this.createSceneContainer();
 
-    merge(of(undefined), this.engine.starting$)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (this.updateIntervalId) {
-          clearInterval(this.updateIntervalId);
-        }
-        this.updateIntervalId = setInterval(() => {
-          if (this.engine.playing) {
-            this.update();
-          }
-        }, 15);
-      });
-    this.engine.stopping$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (this.updateIntervalId) {
-          clearInterval(this.updateIntervalId);
-        }
-      });
+    this.startUpdateLoop();
+    this.removeOutboundDynamicObjectsAtInterval();
   }
 
   addDynamicObject(dynamicObject: DynamicObjectGraphics): void {
     this.dynamicObjects.push(dynamicObject);
     const sceneLayer = this.getSceneLayer(dynamicObject.layerIndex);
     sceneLayer.appendChild(dynamicObject.groupContainer);
+  }
+
+  removeDynamicObject(dynamicObject: DynamicObjectGraphics): void {
+    const sceneLayer = this.getSceneLayer(dynamicObject.layerIndex);
+    sceneLayer.removeChild(dynamicObject.groupContainer);
+    const index = this.dynamicObjects.indexOf(dynamicObject);
+    if (index !== -1) {
+      this.dynamicObjects.splice(index, 1);
+    }
   }
 
   clearDynamicObjects(): void {
@@ -114,8 +106,49 @@ export class TrackGraphics {
     return sceneLayer;
   }
 
+  private startUpdateLoop() {
+    merge(of(undefined), this.engine.starting$)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.updateIntervalId) {
+          clearInterval(this.updateIntervalId);
+        }
+        this.updateIntervalId = setInterval(() => {
+          if (this.engine.playing) {
+            this.update();
+          }
+        }, 15);
+      });
+    this.engine.stopping$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        if (this.updateIntervalId) {
+          clearInterval(this.updateIntervalId);
+        }
+      });
+  }
+
   private update(): void {
-    this.dynamicObjects.forEach(dynamicObject => dynamicObject.update());
+    this.dynamicObjects.forEach(dynamicObject => {
+      dynamicObject.update();
+    });
+  }
+
+  private removeOutboundDynamicObjectsAtInterval(): void {
+    interval(1000)
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        const parentBoundingRect = this.trackContainer.viewportElement?.getBoundingClientRect();
+        if (parentBoundingRect) {
+          const outboundObjects = this.dynamicObjects
+            .filter(dynamicObject => {
+              const objectBoundingRect = dynamicObject.groupContainer.getBoundingClientRect();
+              return objectBoundingRect.x > (parentBoundingRect.x + parentBoundingRect.width);
+            });
+          outboundObjects
+            .forEach(dynamicObject => this.removeDynamicObject(dynamicObject));
+        }
+      });
   }
 }
 
