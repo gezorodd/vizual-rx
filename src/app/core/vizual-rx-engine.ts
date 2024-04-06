@@ -52,11 +52,11 @@ export class VizualRxEngine {
     this.scheduler = new VizualRxScheduler(this.time);
     this.interpreter = new VizualRxInterpreter(this.scheduler);
     this.interpreter.observerAdded$
-      .pipe(
-        tap(observer => this._observerAdded$.next(observer)),
-        takeUntil(this.destroy$)
-      )
-      .subscribe(observer => this.observers.push(observer));
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(observer => {
+        this.observers.push(observer);
+        this._observerAdded$.next(observer);
+      });
     this.interpreter.subscriptionCreated$
       .pipe(takeUntil(this.destroy$))
       .subscribe(subscription => this.subscriptions.push(subscription));
