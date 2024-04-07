@@ -1,0 +1,11 @@
+<app-alert-message type="warning">
+  Deprecation Notes: Will be removed in v8. To create a connectable observable with an AsyncSubject under the hood, use
+  <a [routerLink]="['/operators/connectable']">connectable</a>. <span class="code">source.pipe(publishLast())</span> is
+  equivalent to <span class="code">connectable(source, &#123;connector: () => new AsyncSubject(), resetOnDisconnect: false &#125;)</span>.
+  If you're using refCount after publishLast, use the share operator instead. <span class="code">source.pipe(publishLast(), refCount())</span>
+  is equivalent to <span class="code">source.pipe(share(&#123;connector: () => new AsyncSubject(), resetOnError: false, resetOnComplete: false, resetOnRefCountZero: false &#125;))</span>.
+</app-alert-message>
+<p>
+  Returns a connectable observable sequence that shares a single subscription to the underlying sequence containing only
+  the last notification.
+</p>

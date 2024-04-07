@@ -1,0 +1,10 @@
+<app-alert-message type="warning">
+  Deprecation Notes: Will be removed in v8. Use the <a [routerLink]="['/operators/connectable']">connectable</a> observable,
+  the <a
+  [routerLink]="['/operators/connect']">connect</a> operator or the <a [routerLink]="['/operators/share']">share</a>
+  operator instead.
+</app-alert-message>
+<p>
+  Returns a ConnectableObservable, which is a variety of Observable that waits until its connect method is called before
+  it begins emitting items to those Observers that have subscribed to it.
+</p>

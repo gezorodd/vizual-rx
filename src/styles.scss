@@ -1,3 +1,4 @@
+@use "sass:map";
 @import "theme";
 
 html, body {
@@ -7,6 +8,20 @@ html, body {
 body {
   margin: 0;
   font-family: Roboto, "Helvetica Neue", sans-serif;
+}
+
+.code {
+  font-family: monospace;
+  background: rgba(217, 217, 217, 0.52);
+  padding: 0 0.2em;
+  border-radius: 0.2em;
+  color: black
+}
+
+a {
+  color: map.get($primary, "default");
+  font-weight: 500;
+  text-decoration: none;
 }
 
 @keyframes observer-value-popping {

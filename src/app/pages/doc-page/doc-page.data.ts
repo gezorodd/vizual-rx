@@ -84,6 +84,18 @@ import {mergeAllPage} from "./operators/join/mege-all/merge-all.page";
 import {switchAllPage} from "./operators/join/switch-all/switch-all.page";
 import {startWithPage} from "./operators/join/start-with/start-with.page";
 import {withLatestFromPage} from "./operators/join/with-latest-from/with-latest-from.page";
+import {multicastPage} from "./operators/multicasting/multicast/multicast.page";
+import {publishPage} from "./operators/multicasting/publish/publish.page";
+import {publishBehaviorPage} from "./operators/multicasting/publish-behavior/publish-behavior.page";
+import {publishLastPage} from "./operators/multicasting/publish-last/publish-last.page";
+import {publishReplayPage} from "./operators/multicasting/publish-replay/publish-replay.page";
+import {sharePage} from "./operators/multicasting/share/share.page";
+import {shareReplayPage} from "./operators/multicasting/share-replay/share-replay.page";
+import {connectPage} from "./operators/multicasting/connect/connect.page";
+import {connectablePage} from "./operators/multicasting/connectable/connectable.page";
+import {catchErrorPage} from "./operators/error-handling/catch-error/catch-error.page";
+import {retryPage} from "./operators/error-handling/retry/retry.page";
+import {retryWhenPage} from "./operators/error-handling/retry-when/retry-when.page";
 
 export const docPages = [
   // Creation Operators
@@ -165,7 +177,6 @@ export const docPages = [
   takeWhilePage,
   throttlePage,
   throttleTimePage,
-
   // Join Operators
   combineAllPage,
   combineLatestAllPage,
@@ -175,6 +186,20 @@ export const docPages = [
   switchAllPage,
   startWithPage,
   withLatestFromPage,
+  // Multicasting
+  connectPage,
+  connectablePage,
+  multicastPage,
+  publishPage,
+  publishBehaviorPage,
+  publishLastPage,
+  publishReplayPage,
+  sharePage,
+  shareReplayPage,
+  // Error Handling
+  catchErrorPage,
+  retryPage,
+  retryWhenPage,
 
   defaultIfEmptyPage
 ];

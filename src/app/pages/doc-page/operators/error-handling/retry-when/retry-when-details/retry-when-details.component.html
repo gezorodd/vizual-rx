@@ -1,0 +1,10 @@
+<app-alert-message type="warning">
+  Deprecation Notes: Will be removed in v9 or v10. Use <a [routerLink]="['/operators/retry']">retry</a>'s delay option
+  instead. Instead of <span class="code">retryWhen(() => notify$)</span>, use: <span class="code">retry(&#123; delay: () => notify$ &#125;)</span>.
+</app-alert-message>
+<p>
+  Returns an Observable that mirrors the source Observable with the exception of an error. If the source Observable
+  calls error, this method will emit the Throwable that caused the error to the ObservableInput returned from notifier.
+  If that Observable calls complete or error then this method will call complete or error on the child subscription.
+  Otherwise this method will resubscribe to the source Observable.
+</p>

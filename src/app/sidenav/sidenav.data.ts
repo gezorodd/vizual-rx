@@ -91,6 +91,18 @@ import {switchAllPage} from "../pages/doc-page/operators/join/switch-all/switch-
 import {startWithPage} from "../pages/doc-page/operators/join/start-with/start-with.page";
 import {withLatestFromPage} from "../pages/doc-page/operators/join/with-latest-from/with-latest-from.page";
 import {overviewPage} from "../pages/overview-page/overview-page.data";
+import {multicastPage} from "../pages/doc-page/operators/multicasting/multicast/multicast.page";
+import {publishPage} from "../pages/doc-page/operators/multicasting/publish/publish.page";
+import {publishBehaviorPage} from "../pages/doc-page/operators/multicasting/publish-behavior/publish-behavior.page";
+import {publishLastPage} from "../pages/doc-page/operators/multicasting/publish-last/publish-last.page";
+import {publishReplayPage} from "../pages/doc-page/operators/multicasting/publish-replay/publish-replay.page";
+import {sharePage} from "../pages/doc-page/operators/multicasting/share/share.page";
+import {shareReplayPage} from "../pages/doc-page/operators/multicasting/share-replay/share-replay.page";
+import {connectPage} from "../pages/doc-page/operators/multicasting/connect/connect.page";
+import {connectablePage} from "../pages/doc-page/operators/multicasting/connectable/connectable.page";
+import {catchErrorPage} from "../pages/doc-page/operators/error-handling/catch-error/catch-error.page";
+import {retryPage} from "../pages/doc-page/operators/error-handling/retry/retry.page";
+import {retryWhenPage} from "../pages/doc-page/operators/error-handling/retry-when/retry-when.page";
 
 export const allSectionData: ISection[] = [
   {
@@ -211,6 +223,28 @@ export const allSectionData: ISection[] = [
           switchAllPage,
           startWithPage,
           withLatestFromPage
+        ]
+      },
+      {
+        label: 'Multicasting Operators',
+        pages: [
+          connectPage,
+          connectablePage,
+          multicastPage,
+          publishPage,
+          publishBehaviorPage,
+          publishLastPage,
+          publishReplayPage,
+          sharePage,
+          shareReplayPage
+        ]
+      },
+      {
+        label: 'Error Handling Operators',
+        pages: [
+          catchErrorPage,
+          retryPage,
+          retryWhenPage
         ]
       },
       {
