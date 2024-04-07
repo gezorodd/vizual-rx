@@ -2,7 +2,7 @@ import {defer, delay, Observable, of, Subject, takeUntil, tap} from "rxjs";
 
 export class Section {
   readonly label: string;
-  readonly sections: Section[];
+  readonly children: Section[];
   readonly pages: Page[];
   readonly level: number;
   readonly version?: string;
@@ -13,24 +13,20 @@ export class Section {
 
   private readonly cancelCollapse$: Subject<void>;
 
-  constructor(label: string, sections: Section[], pages: Page[], level: number, version?: string) {
-    this.label = label;
-    this.sections = sections;
-    this.pages = pages;
+  constructor(sectionDefinition: SectionDefinition, level: number = 0) {
+    this.label = sectionDefinition.label;
+    this.children = sectionDefinition.children?.map(child => new Section(child, level + 1)) ?? [];
+    this.pages = sectionDefinition.pages ?? [];
     this.level = level;
-    this.version = version;
+    this.version = sectionDefinition.version;
     this.expanding = false;
     this.collapsing = false;
     this.collapsed = false;
     this.cancelCollapse$ = new Subject<void>();
   }
 
-  hasAnyPage(): boolean {
-    if (this.pages.length) {
-      return true;
-    }
-    return this.sections
-      .some(subSection => subSection.hasAnyPage());
+  get hidden(): boolean {
+    return this.children.every(child => child.hidden) && this.pages.every(page => page.hidden);
   }
 
   toggleCollapse(animationDelay: number): Observable<boolean> {
@@ -67,10 +63,10 @@ export class Section {
   }
 }
 
-export interface ISection {
+export interface SectionDefinition {
   readonly label: string;
   readonly version?: string;
-  readonly sections?: ISection[];
+  readonly children?: SectionDefinition[];
   readonly pages?: Page[];
 }
 
@@ -79,4 +75,5 @@ export interface Page {
   routeUrl: string;
   deprecated?: boolean;
   starred?: boolean;
+  hidden?: boolean;
 }

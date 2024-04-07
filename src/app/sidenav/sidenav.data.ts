@@ -1,4 +1,4 @@
-import {ISection} from "./sidenav.model";
+import {SectionDefinition} from "./sidenav.model";
 import {ajaxPage} from "../pages/doc-page/operators/creation/ajax/ajax.page";
 import {bindCallbackPage} from "../pages/doc-page/operators/creation/bind-callback/bind-callback.page";
 import {bindNodeCallbackPage} from "../pages/doc-page/operators/creation/bind-node-callback/bind-node-callback.page";
@@ -104,10 +104,10 @@ import {catchErrorPage} from "../pages/doc-page/operators/error-handling/catch-e
 import {retryPage} from "../pages/doc-page/operators/error-handling/retry/retry.page";
 import {retryWhenPage} from "../pages/doc-page/operators/error-handling/retry-when/retry-when.page";
 
-export const allSectionData: ISection[] = [
+export const sectionDefinitions: SectionDefinition[] = [
   {
     label: 'VizualRx',
-    sections: [],
+    children: [],
     pages: [
       overviewPage,
       playgroundPageData
@@ -116,7 +116,7 @@ export const allSectionData: ISection[] = [
   {
     label: 'RxJS',
     version: 'v7.8.0',
-    sections: [
+    children: [
       {
         label: 'Creation Operators',
         pages: [

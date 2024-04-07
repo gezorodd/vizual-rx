@@ -4,11 +4,11 @@ import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {NavigationEnd, Router} from "@angular/router";
-import {filter, map, noop, Observable, shareReplay, Subject, takeUntil} from "rxjs";
+import {debounceTime, filter, map, noop, Observable, shareReplay, Subject, takeUntil, tap} from "rxjs";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
-import {ISection, Page, Section} from "./sidenav.model";
-import {allSectionData} from "./sidenav.data";
+import {Page, Section} from "./sidenav.model";
+import {sectionDefinitions} from "./sidenav.data";
 import {MatAnchor, MatButton} from "@angular/material/button";
 import {MatTooltip} from "@angular/material/tooltip";
 
@@ -41,12 +41,17 @@ export class SidenavComponent implements OnDestroy {
 
   @Output() layoutChanged = new EventEmitter<void>;
 
-  sections: Section[] = [];
+  readonly sections: Section[] = [];
+  readonly filterChanged$: Subject<string>
+
   private destroy$ = new Subject<void>();
   private readonly currentUrl$: Observable<string>;
 
   constructor(private router: Router) {
-    this.sections = this.createSections();
+    this.filterChanged$ = new Subject<string>();
+    this.sections = sectionDefinitions
+      .map(sectionDefinition => new Section(sectionDefinition));
+
     this.currentUrl$ = this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
@@ -56,18 +61,19 @@ export class SidenavComponent implements OnDestroy {
         }),
         shareReplay(1)
       );
+
+    this.filterChanged$
+      .pipe(
+        debounceTime(300),
+        tap(input => this.applyFilter(input)),
+        takeUntil(this.destroy$)
+      )
+      .subscribe();
   }
 
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  applyFilter(input: string): void {
-    this.sections = this.createSections(input.toLowerCase());
-    setTimeout(() => {
-      this.layoutChanged.next();
-    }, 0);
   }
 
   isPageSelected(page: Page): Observable<boolean> {
@@ -103,14 +109,39 @@ export class SidenavComponent implements OnDestroy {
       });
   }
 
-  private createSections(filter = '', iSections: ISection[] = allSectionData, level = 0): Section[] {
-    return iSections
-      .map(iSection => {
-        const subSections = iSection.sections ? this.createSections(filter, iSection.sections, level + 1) : [];
-        const pages = (iSection.pages ?? [])
-          .filter(page => page.title.toLowerCase().includes(filter));
-        return new Section(iSection.label, subSections, pages, level, iSection.version);
-      })
-      .filter(section => section.hasAnyPage());
+  private applyFilter(input: string): void {
+    if (!input) {
+      this.getAllPages()
+        .forEach(page => page.hidden = false);
+      return;
+    }
+    this.getAllPages()
+      .forEach(page => page.hidden = !page.title.toLowerCase().includes(input));
+    this.getAllSections()
+      .filter(section => !section.hidden)
+      .forEach(section => section.collapsed = false);
+    setTimeout(() => {
+      this.layoutChanged.next();
+    }, 0);
+  }
+
+  private getAllPages(sections: Section[] = this.sections): Page[] {
+    if (sections.length === 0) {
+      return [];
+    }
+    return [
+      ...sections.flatMap(section => section.pages),
+      ...this.getAllPages(sections.flatMap(section => section.children))
+    ];
+  }
+
+  private getAllSections(sections: Section[] = this.sections): Section[] {
+    if (sections.length === 0) {
+      return [];
+    }
+    return [
+      ...sections,
+      ...this.getAllSections(sections.flatMap(section => section.children))
+    ];
   }
 }
