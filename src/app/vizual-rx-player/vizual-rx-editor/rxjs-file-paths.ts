@@ -152,5 +152,6 @@ export const rxjsFilePaths: string[] = [
   'internal/operators/withLatestFrom.d.ts',
   'internal/operators/zip.d.ts',
   'internal/operators/zipAll.d.ts',
-  'internal/operators/zipWith.d.ts'
+  'internal/operators/zipWith.d.ts',
+  'internal/types.d.ts',
 ];

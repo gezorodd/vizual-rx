@@ -1,0 +1,10 @@
+<app-alert-message type="warning">
+  Deprecation Notes: Replaced with <a [routerLink]="['/operators/timeout']">timeout</a>. Instead of <span class="code">timeoutWith(100, a$, scheduler)</span>, use
+  <span class="code">timeout</span> with the configuration object: <span class="code">timeout(&#123; each: 100, with: () => a$, scheduler &#125;)</span>.
+  Instead of <span class="code">timeoutWith(someDate, a$, scheduler)</span>, use <span class="code">timeout</span> with
+  the configuration object: <span class="code">timeout(&#123;first: someDate, with: () => a$, scheduler &#125;)</span>. Will be removed in v8.
+</app-alert-message>
+<p>
+  When the passed timespan elapses before the source emits any given value, it will unsubscribe from the source, and
+  switch the subscription to another observable.
+</p>

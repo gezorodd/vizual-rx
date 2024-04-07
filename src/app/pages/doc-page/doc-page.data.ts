@@ -96,6 +96,16 @@ import {connectablePage} from "./operators/multicasting/connectable/connectable.
 import {catchErrorPage} from "./operators/error-handling/catch-error/catch-error.page";
 import {retryPage} from "./operators/error-handling/retry/retry.page";
 import {retryWhenPage} from "./operators/error-handling/retry-when/retry-when.page";
+import {tapPage} from "./operators/utility/tap/tap.page";
+import {delayPage} from "./operators/utility/delay/delay.page";
+import {delayWhenPage} from "./operators/utility/delay-when/delay-when.page";
+import {dematerializePage} from "./operators/utility/dematerialize/dematerialize.page";
+import {materializePage} from "./operators/utility/materialize/materialize.page";
+import {timeIntervalPage} from "./operators/utility/time-interval/time-interval.page";
+import {timestampPage} from "./operators/utility/timestamp/timestamp.page";
+import {timeoutPage} from "./operators/utility/timeout/timeout.page";
+import {timeoutWithPage} from "./operators/utility/timeout-with/timeout-with.page";
+import {toArrayPage} from "./operators/utility/to-array/to-array.page";
 
 export const docPages = [
   // Creation Operators
@@ -200,6 +210,18 @@ export const docPages = [
   catchErrorPage,
   retryPage,
   retryWhenPage,
+
+  // Utility
+  tapPage,
+  delayPage,
+  delayWhenPage,
+  dematerializePage,
+  materializePage,
+  timeIntervalPage,
+  timestampPage,
+  timeoutPage,
+  timeoutWithPage,
+  toArrayPage,
 
   defaultIfEmptyPage
 ];

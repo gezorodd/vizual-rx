@@ -51,8 +51,6 @@ export class VizualRxProxies {
       sampleTime: s(sampleTime),
       timeInterval: s(timeInterval),
       throttleTime: s(throttleTime, 1),
-      observeOn: s(observeOn, 1),
-      subscribeOn: s(subscribeOn, 1),
       timeoutWith: s(timeoutWith),
       shareReplay: s(shareReplay),
       timeout: s(timeout),
