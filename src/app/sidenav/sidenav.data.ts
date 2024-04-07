@@ -114,6 +114,14 @@ import {timestampPage} from "../pages/doc-page/operators/utility/timestamp/times
 import {timeoutPage} from "../pages/doc-page/operators/utility/timeout/timeout.page";
 import {timeoutWithPage} from "../pages/doc-page/operators/utility/timeout-with/timeout-with.page";
 import {toArrayPage} from "../pages/doc-page/operators/utility/to-array/to-array.page";
+import {everyPage} from "../pages/doc-page/operators/conditional/every/every.page";
+import {findPage} from "../pages/doc-page/operators/conditional/find/find.page";
+import {findIndexPage} from "../pages/doc-page/operators/conditional/find-index/find-index.page";
+import {isEmptyPage} from "../pages/doc-page/operators/conditional/is-empty/is-empty.page";
+import {countPage} from "../pages/doc-page/operators/aggregate/count/count.page";
+import {minPage} from "../pages/doc-page/operators/aggregate/min/min.page";
+import {maxPage} from "../pages/doc-page/operators/aggregate/max/max.page";
+import {reducePage} from "../pages/doc-page/operators/aggregate/reduce/reduce.page";
 
 export const sectionDefinitions: SectionDefinition[] = [
   {
@@ -285,7 +293,21 @@ export const sectionDefinitions: SectionDefinition[] = [
         label: 'Conditional Operators',
         collapsed: true,
         pages: [
-          defaultIfEmptyPage
+          defaultIfEmptyPage,
+          everyPage,
+          findPage,
+          findIndexPage,
+          isEmptyPage
+        ]
+      },
+      {
+        label: 'Aggregate Operators',
+        collapsed: true,
+        pages: [
+          countPage,
+          maxPage,
+          minPage,
+          reducePage
         ]
       }
     ]

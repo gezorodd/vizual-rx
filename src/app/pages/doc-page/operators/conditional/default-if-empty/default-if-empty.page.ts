@@ -6,30 +6,21 @@ export const defaultIfEmptyPage: DocPage = {
   routeUrl: 'operators/default-if-empty',
   detailsComponent: DefaultIfEmptyDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/defaultIfEmpty',
-  sampleCode: `import {defaultIfEmpty, of, tap} from "rxjs";
+  sampleCode: `import {defaultIfEmpty, timer, mergeMap, EMPTY} from "rxjs";
 import {createValue, observe} from "vizual-rx";
 
-const source1$ = of()
+const source$ = timer(1000)
     .pipe(
-        tap(observe('source 1'))
+        mergeMap(() => EMPTY)
+    )
+
+const example$ = source$
+    .pipe(
+        defaultIfEmpty(createValue('green', 'circle'))
     );
 
-const source2$ = of(createValue('red', 'circle'))
-    .pipe(
-        tap(observe('source 2'))
-    );
-
-const example1$ = source1$
-    .pipe(
-        defaultIfEmpty(createValue('yellow', 'triangle'))
-    );
-example1$
-    .subscribe(observe('source 1 or yellow triangle'));
-
-const example2$ = source2$
-    .pipe(
-        defaultIfEmpty(createValue('yellow', 'triangle'))
-    );
-example2$
-    .subscribe(observe('source 2 or yellow triangle'));`
+source$
+    .subscribe(observe('source'));
+example$
+    .subscribe(observe('example'));`
 };

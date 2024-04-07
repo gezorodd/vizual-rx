@@ -106,6 +106,14 @@ import {timestampPage} from "./operators/utility/timestamp/timestamp.page";
 import {timeoutPage} from "./operators/utility/timeout/timeout.page";
 import {timeoutWithPage} from "./operators/utility/timeout-with/timeout-with.page";
 import {toArrayPage} from "./operators/utility/to-array/to-array.page";
+import {everyPage} from "./operators/conditional/every/every.page";
+import {findPage} from "./operators/conditional/find/find.page";
+import {findIndexPage} from "./operators/conditional/find-index/find-index.page";
+import {isEmptyPage} from "./operators/conditional/is-empty/is-empty.page";
+import {countPage} from "./operators/aggregate/count/count.page";
+import {minPage} from "./operators/aggregate/min/min.page";
+import {maxPage} from "./operators/aggregate/max/max.page";
+import {reducePage} from "./operators/aggregate/reduce/reduce.page";
 
 export const docPages = [
   // Creation Operators
@@ -210,7 +218,6 @@ export const docPages = [
   catchErrorPage,
   retryPage,
   retryWhenPage,
-
   // Utility
   tapPage,
   delayPage,
@@ -222,6 +229,15 @@ export const docPages = [
   timeoutPage,
   timeoutWithPage,
   toArrayPage,
-
-  defaultIfEmptyPage
+  // Conditional
+  defaultIfEmptyPage,
+  everyPage,
+  findPage,
+  findIndexPage,
+  isEmptyPage,
+  // Aggregate
+  countPage,
+  maxPage,
+  minPage,
+  reducePage
 ];
