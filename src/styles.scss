@@ -64,6 +64,10 @@ a {
   }
 }
 
+svg.observer-track, svg.time-track {
+  width: 100%;
+}
+
 .track-container {
   stroke-linecap: round;
 

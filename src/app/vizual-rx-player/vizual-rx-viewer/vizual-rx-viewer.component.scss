@@ -29,6 +29,7 @@
   background-image: $player-component-background;
   border-right: $player-component-border;
   width: 150px;
+  min-width: 150px;
 
   span {
     padding: 0.8em;

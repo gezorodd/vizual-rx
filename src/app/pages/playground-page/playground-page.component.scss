@@ -1,3 +1,9 @@
-:host, .player {
+:host {
   height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.player {
+  flex-grow: 1;
 }

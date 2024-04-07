@@ -4,15 +4,22 @@ import {PlaygroundPageService} from "./playground-page.service";
 import {VizualRxPlayerComponent} from "../../vizual-rx-player/vizual-rx-player.component";
 import {Subject, takeUntil} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
-import {NgIf} from "@angular/common";
+import {NgComponentOutlet, NgIf} from "@angular/common";
+import {MatAnchor} from "@angular/material/button";
+import {MatIcon} from "@angular/material/icon";
+import {MatTooltip} from "@angular/material/tooltip";
 
 @Component({
   selector: 'app-playground-page',
   standalone: true,
-  imports: [
-    VizualRxPlayerComponent,
-    NgIf
-  ],
+    imports: [
+        VizualRxPlayerComponent,
+        NgIf,
+        MatAnchor,
+        MatIcon,
+        MatTooltip,
+        NgComponentOutlet
+    ],
   templateUrl: './playground-page.component.html',
   styleUrl: './playground-page.component.scss'
 })
