@@ -1,6 +1,16 @@
+@use "sass:map";
+@import "../../../theme";
+
 :host {
   height: 100%;
   display: flex;
+
+  ::ng-deep p {
+    border-left: 5px map.get($primary, "default") solid;
+    padding-left: 0.5em;
+    border-radius: 5px;
+    margin-bottom: 0;
+  }
 }
 
 .page-container {
