@@ -114,8 +114,9 @@ export class SidenavComponent implements OnDestroy {
       this.getAllPages()
         .forEach(page => page.hidden = false);
     } else {
+      const inputLower = input.toLowerCase();
       this.getAllPages()
-        .forEach(page => page.hidden = !page.title.toLowerCase().includes(input));
+        .forEach(page => page.hidden = !page.title.toLowerCase().includes(inputLower));
       this.getAllSections()
         .filter(section => !section.hidden)
         .forEach(section => section.collapsed = false);
