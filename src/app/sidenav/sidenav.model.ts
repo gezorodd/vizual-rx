@@ -21,7 +21,7 @@ export class Section {
     this.version = sectionDefinition.version;
     this.expanding = false;
     this.collapsing = false;
-    this.collapsed = false;
+    this.collapsed = sectionDefinition.collapsed ?? false;
     this.cancelCollapse$ = new Subject<void>();
   }
 
@@ -68,6 +68,7 @@ export interface SectionDefinition {
   readonly version?: string;
   readonly children?: SectionDefinition[];
   readonly pages?: Page[];
+  readonly collapsed?: boolean;
 }
 
 export interface Page {

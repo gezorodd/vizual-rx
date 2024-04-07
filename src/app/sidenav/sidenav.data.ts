@@ -119,6 +119,7 @@ export const sectionDefinitions: SectionDefinition[] = [
     children: [
       {
         label: 'Creation Operators',
+        collapsed: true,
         pages: [
           ajaxPage,
           bindCallbackPage,
@@ -139,6 +140,7 @@ export const sectionDefinitions: SectionDefinition[] = [
       },
       {
         label: 'Join Creation Operators',
+        collapsed: true,
         pages: [
           combineLatestPage,
           concatPage,
@@ -151,6 +153,7 @@ export const sectionDefinitions: SectionDefinition[] = [
       },
       {
         label: 'Transformation Operators',
+        collapsed: true,
         pages: [
           bufferPage,
           bufferCountPage,
@@ -184,6 +187,7 @@ export const sectionDefinitions: SectionDefinition[] = [
       },
       {
         label: 'Filtering Operators',
+        collapsed: true,
         pages: [
           auditPage,
           auditTimePage,
@@ -214,6 +218,7 @@ export const sectionDefinitions: SectionDefinition[] = [
       },
       {
         label: 'Join Operators',
+        collapsed: true,
         pages: [
           combineAllPage,
           combineLatestAllPage,
@@ -227,6 +232,7 @@ export const sectionDefinitions: SectionDefinition[] = [
       },
       {
         label: 'Multicasting Operators',
+        collapsed: true,
         pages: [
           connectPage,
           connectablePage,
@@ -241,6 +247,7 @@ export const sectionDefinitions: SectionDefinition[] = [
       },
       {
         label: 'Error Handling Operators',
+        collapsed: true,
         pages: [
           catchErrorPage,
           retryPage,
@@ -249,6 +256,7 @@ export const sectionDefinitions: SectionDefinition[] = [
       },
       {
         label: 'Conditional Operators',
+        collapsed: true,
         pages: [
           defaultIfEmptyPage
         ]
