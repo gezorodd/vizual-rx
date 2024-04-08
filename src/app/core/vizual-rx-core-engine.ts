@@ -16,29 +16,26 @@ import {VizualRxTime} from "./vizual-rx-time";
 import {VizualRxObserver} from "./vizual-rx-observer";
 import {VizualRxScheduler} from "./vizual-rx-scheduler";
 
-export class VizualRxEngine {
+export class VizualRxCoreEngine {
   code: string;
-  observers: VizualRxObserver[];
   subscriptions: Subscription[];
   error?: InterpreterError;
 
-  readonly time: VizualRxTime;
   readonly scheduler: VizualRxScheduler;
-
   readonly stopping$: Observable<void>;
   readonly starting$: Observable<void>;
   readonly stopped$: Observable<boolean>;
   readonly playing$: Observable<boolean>;
 
+  private readonly time: VizualRxTime;
   private readonly interpreter: VizualRxInterpreter;
   private readonly state$: BehaviorSubject<PlayerState>;
   private readonly timeFactor$: BehaviorSubject<number>;
   private readonly destroy$ = new Subject<void>();
-  private readonly _observerAdded$ = new Subject<VizualRxObserver>();
+  private readonly _observers = new BehaviorSubject<VizualRxObserver[]>([]);
 
   constructor(code = '') {
     this.code = code;
-    this.observers = [];
     this.subscriptions = [];
     this.state$ = new BehaviorSubject<PlayerState>(PlayerState.STOPPED);
     this.timeFactor$ = new BehaviorSubject<number>(1);
@@ -54,8 +51,7 @@ export class VizualRxEngine {
     this.interpreter.observerAdded$
       .pipe(takeUntil(this.destroy$))
       .subscribe(observer => {
-        this.observers.push(observer);
-        this._observerAdded$.next(observer);
+        this._observers.next([...this._observers.value, observer]);
       });
     this.interpreter.subscriptionCreated$
       .pipe(takeUntil(this.destroy$))
@@ -83,11 +79,11 @@ export class VizualRxEngine {
 
     this.time.timeFactor = this.timeFactor$.value;
     if (state === PlayerState.STOPPED) {
-      this.observers = [];
+      this._observers.next([]);
       this.subscriptions = [];
       this.runCode();
     }
-    this.observers.forEach(observer => observer.paused = false);
+    this._observers.value.forEach(observer => observer.paused = false);
     this.state$.next(PlayerState.PLAYING);
   }
 
@@ -96,7 +92,7 @@ export class VizualRxEngine {
       return;
     }
     this.time.timeFactor = 0;
-    this.observers.forEach(observer => observer.paused = true);
+    this._observers.value.forEach(observer => observer.paused = true);
     this.state$.next(PlayerState.PAUSED);
   }
 
@@ -127,8 +123,8 @@ export class VizualRxEngine {
     }
   }
 
-  get observerAdded(): Observable<VizualRxObserver> {
-    return this._observerAdded$.asObservable();
+  get observers(): Observable<VizualRxObserver[]> {
+    return this._observers.asObservable();
   }
 
   destroy(): void {

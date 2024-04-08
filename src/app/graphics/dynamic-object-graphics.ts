@@ -1,5 +1,5 @@
 import {BehaviorSubject} from "rxjs";
-import {VizualRxTime} from "../core/vizual-rx-time";
+import {VizualRxScheduler} from "../core/vizual-rx-scheduler";
 
 export abstract class DynamicObjectGraphics {
   static timeScale$ = new BehaviorSubject(1);
@@ -7,8 +7,8 @@ export abstract class DynamicObjectGraphics {
   readonly time: number;
   private _groupContainer?: SVGGElement;
 
-  protected constructor(private vizualRxTime: VizualRxTime, layerIndex = 0) {
-    this.time = this.vizualRxTime.virtualNow();
+  protected constructor(private scheduler: VizualRxScheduler, layerIndex = 0) {
+    this.time = this.scheduler.now();
     this.layerIndex = layerIndex;
   }
 
@@ -23,7 +23,7 @@ export abstract class DynamicObjectGraphics {
   protected abstract init(groupContainer: SVGGElement): void
 
   update(): void {
-    const diff = this.vizualRxTime.virtualNow() - this.time;
+    const diff = this.scheduler.now() - this.time;
     const position = (diff / 10) * DynamicObjectGraphics.timeScale$.value;
     this.groupContainer.style.transform = `translate(${position}px, 0)`;
   }

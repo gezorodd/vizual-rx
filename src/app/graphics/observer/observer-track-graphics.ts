@@ -1,10 +1,10 @@
 import {TrackGraphics} from "../track-graphics";
-import {VizualRxEngine} from "../../core/vizual-rx-engine";
 import {ObserverValueGraphics} from "./observer-value-graphics";
 import {catchError, EMPTY, merge, takeUntil, tap} from "rxjs";
 import {ObserverCompleteGraphics} from "./observer-complete-graphics";
 import {ObserverErrorGraphics} from "./observer-error-graphics";
 import {VizualRxObserver} from "../../core/vizual-rx-observer";
+import {VizualRxEngine} from "../../engine/vizual-rx-engine.model";
 
 export class ObserverTrackGraphics extends TrackGraphics {
   private readonly observer: VizualRxObserver;
@@ -60,7 +60,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
       .pipe(
         catchError(() => EMPTY),
         tap(value => {
-          const valueGraphics = new ObserverValueGraphics(this.engine.time, value);
+          const valueGraphics = new ObserverValueGraphics(this.engine.scheduler, value);
           this.addDynamicObject(valueGraphics);
         })
       );
@@ -71,7 +71,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
       .pipe(
         catchError(() => EMPTY),
         tap(() => {
-          const completedGraphics = new ObserverCompleteGraphics(this.engine.time);
+          const completedGraphics = new ObserverCompleteGraphics(this.engine.scheduler);
           this.addDynamicObject(completedGraphics);
         })
       )
@@ -81,7 +81,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
     return this.observer.error$
       .pipe(
         tap(err => {
-          const erroredGraphics = new ObserverErrorGraphics(this.engine.time, err);
+          const erroredGraphics = new ObserverErrorGraphics(this.engine.scheduler, err);
           this.addDynamicObject(erroredGraphics);
         })
       )

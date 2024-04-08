@@ -1,14 +1,14 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 import tippy from 'tippy.js'
 import {VizualRxValue} from "../../core/vizual-rx-value";
-import {VizualRxTime} from "../../core/vizual-rx-time";
+import {VizualRxScheduler} from "../../core/vizual-rx-scheduler";
 
 
 export class ObserverValueGraphics extends DynamicObjectGraphics {
   private readonly value: any;
 
-  constructor(vizualRxTime: VizualRxTime, value: any) {
-    super(vizualRxTime);
+  constructor(scheduler: VizualRxScheduler, value: any) {
+    super(scheduler);
     this.value = value;
   }
 

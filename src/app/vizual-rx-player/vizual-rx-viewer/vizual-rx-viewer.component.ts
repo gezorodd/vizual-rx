@@ -12,7 +12,6 @@ import {
   ViewChildren
 } from '@angular/core';
 import {merge, of, Subject, takeUntil} from "rxjs";
-import {VizualRxEngine} from "../../core/vizual-rx-engine";
 import {AsyncPipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {VizualRxObserver} from "../../core/vizual-rx-observer";
 import {TimeTrackGraphics} from "../../graphics/time/time-track-graphics";
@@ -22,6 +21,7 @@ import {MatButton, MatMiniFabButton} from "@angular/material/button";
 import {FormsModule} from "@angular/forms";
 import {MatSlider, MatSliderThumb} from "@angular/material/slider";
 import {MatDivider} from "@angular/material/divider";
+import {VizualRxEngine} from "../../engine/vizual-rx-engine.model";
 
 @Component({
   selector: 'app-vizual-rx-viewer',
@@ -62,10 +62,10 @@ export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   ngOnInit(): void {
-    merge(this.engine.starting$, this.engine.observerAdded, this.engine.stopping$)
+    this.engine.observers
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        this.observers = this.engine.observers;
+      .subscribe(observers => {
+        this.observers = observers;
         this.changeDetectorRef.detectChanges();
       });
   }

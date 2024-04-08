@@ -1,6 +1,6 @@
 import {interval, merge, of, Subject, takeUntil} from "rxjs";
 import {DynamicObjectGraphics} from "./dynamic-object-graphics";
-import {VizualRxEngine} from "../core/vizual-rx-engine";
+import {VizualRxEngine} from "../engine/vizual-rx-engine.model";
 
 export class TrackGraphics {
   protected readonly engine: VizualRxEngine;

@@ -49,6 +49,19 @@ export class AppComponent {
         distinctUntilChanged(),
         take(2)
       );
+
+    if (typeof Worker !== 'undefined') {
+      const test = new Test();
+      // Create a new
+      const worker = new Worker(new URL('./engine/vizual-rx-engine.worker', import.meta.url));
+      worker.onmessage = ({ data }) => {
+        console.log(`page got message: ${data}`);
+      };
+      worker.postMessage({t: 'test'});
+    } else {
+      // Web workers are not supported in this environment.
+      // You should add a fallback so that your program still executes correctly.
+    }
   }
 
   toggleSidenav(): void {
@@ -57,5 +70,12 @@ export class AppComponent {
 
   sidenavOpenedChanged(): void {
     this.appService.sidenavOpenedChanged$.next();
+  }
+}
+
+export class Test {
+
+  test() {
+    console.log('this is a test');
   }
 }

@@ -1,10 +1,10 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
-import {VizualRxTime} from "../../core/vizual-rx-time";
+import {VizualRxScheduler} from "../../core/vizual-rx-scheduler";
 
 export class ObserverCompleteGraphics extends DynamicObjectGraphics {
 
-  constructor(vizualRxTime: VizualRxTime) {
-    super(vizualRxTime, -1);
+  constructor(scheduler: VizualRxScheduler) {
+    super(scheduler, -1);
   }
 
   protected override init(groupContainer: SVGGElement): void {

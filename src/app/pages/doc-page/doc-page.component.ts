@@ -8,7 +8,8 @@ import {MatTooltip} from "@angular/material/tooltip";
 import {MatAnchor} from "@angular/material/button";
 import {MatCardModule} from "@angular/material/card";
 import {VizualRxPlayerComponent} from "../../vizual-rx-player/vizual-rx-player.component";
-import {VizualRxEngine} from "../../core/vizual-rx-engine";
+import {VizualRxCoreEngine} from "../../core/vizual-rx-core-engine";
+import {VizualRxEngine} from "../../engine/vizual-rx-engine.model";
 
 @Component({
   selector: 'app-doc-page',

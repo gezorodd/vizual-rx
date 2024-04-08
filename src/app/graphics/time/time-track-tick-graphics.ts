@@ -1,11 +1,11 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
-import {VizualRxTime} from "../../core/vizual-rx-time";
+import {VizualRxScheduler} from "../../core/vizual-rx-scheduler";
 
 export class TimeTrackTickGraphics extends DynamicObjectGraphics {
   sequence: number
 
-  constructor(vizualRxTime: VizualRxTime, sequence: number) {
-    super(vizualRxTime);
+  constructor(scheduler: VizualRxScheduler, sequence: number) {
+    super(scheduler);
     this.sequence = sequence;
   }
 

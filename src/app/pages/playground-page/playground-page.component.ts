@@ -1,5 +1,5 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {VizualRxEngine} from "../../core/vizual-rx-engine";
+import {VizualRxCoreEngine} from "../../core/vizual-rx-core-engine";
 import {PlaygroundPageService} from "./playground-page.service";
 import {VizualRxPlayerComponent} from "../../vizual-rx-player/vizual-rx-player.component";
 import {Subject, takeUntil} from "rxjs";
@@ -8,6 +8,7 @@ import {NgComponentOutlet, NgIf} from "@angular/common";
 import {MatAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
+import {VizualRxEngine} from "../../engine/vizual-rx-engine.model";
 
 @Component({
   selector: 'app-playground-page',

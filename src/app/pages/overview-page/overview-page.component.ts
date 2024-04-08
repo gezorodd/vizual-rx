@@ -1,11 +1,10 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
 import {MatCardModule} from "@angular/material/card";
 import {filter, map, Subject, takeUntil} from "rxjs";
-import {VizualRxEngine} from "../../core/vizual-rx-engine";
 import {ActivatedRoute} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {VizualRxPlayerComponent} from "../../vizual-rx-player/vizual-rx-player.component";
-import {miscExampleCode} from "./overview-page.data";
+import {VizualRxEngine} from "../../engine/vizual-rx-engine.model";
 
 @Component({
   selector: 'app-overview-page',

@@ -1,9 +1,10 @@
 import {ResolveFn} from "@angular/router";
-import {VizualRxEngine} from "../core/vizual-rx-engine";
 import {delay, from, map, Observable, of} from "rxjs";
 import {vizualRxEditorReadyResolver} from "./vizual-rx-editor/vizual-rx-editor.resolver";
 import {VizualRxCode, VizualRxCodeMap} from "./vizual-rx-player.model";
 import {inject} from "@angular/core";
+import {VizualRxEngine} from "../engine/vizual-rx-engine.model";
+import {VizualRxEngineService} from "../engine/vizual-rx-engine.service";
 
 export const vizualRxEnginesResolver: ResolveFn<Map<string, VizualRxEngine>> = (route, state) => {
   const codes = route.data['codes'] as VizualRxCodeMap;
@@ -20,6 +21,7 @@ export const vizualRxEnginesResolver: ResolveFn<Map<string, VizualRxEngine>> = (
   }
 
   const codeStringMap = getCodeStringMap(codes);
+  const engineService = inject(VizualRxEngineService);
 
   return editorReady$
     .pipe(
@@ -28,7 +30,7 @@ export const vizualRxEnginesResolver: ResolveFn<Map<string, VizualRxEngine>> = (
         Object.keys(codeStringMap)
           .forEach(name => {
             const code = codeStringMap[name];
-            const engine = new VizualRxEngine();
+            const engine = engineService.createEngine();
             engine.prepare(code);
             engines.set(name, engine);
           })

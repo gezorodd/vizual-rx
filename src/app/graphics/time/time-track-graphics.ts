@@ -1,7 +1,7 @@
 import {TrackGraphics} from "../track-graphics";
-import {VizualRxEngine} from "../../core/vizual-rx-engine";
 import {interval, map, mergeMap, mergeWith, of, takeUntil, tap} from "rxjs";
 import {TimeTrackTickGraphics} from "./time-track-tick-graphics";
+import {VizualRxEngine} from "../../engine/vizual-rx-engine.model";
 
 export class TimeTrackGraphics extends TrackGraphics {
 
@@ -30,7 +30,7 @@ export class TimeTrackGraphics extends TrackGraphics {
                   )
               ),
               tap(value => {
-                this.addDynamicObject(new TimeTrackTickGraphics(this.engine.time, value / 10));
+                this.addDynamicObject(new TimeTrackTickGraphics(this.engine.scheduler, value / 10));
               })
             );
         }),

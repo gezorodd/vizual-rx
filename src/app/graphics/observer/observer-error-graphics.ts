@@ -1,11 +1,11 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 import tippy from "tippy.js";
-import {VizualRxTime} from "../../core/vizual-rx-time";
+import {VizualRxScheduler} from "../../core/vizual-rx-scheduler";
 
 export class ObserverErrorGraphics extends DynamicObjectGraphics {
 
-  constructor(vizualRxTime: VizualRxTime, private err: any) {
-    super(vizualRxTime, -1);
+  constructor(scheduler: VizualRxScheduler, private err: any) {
+    super(scheduler, -1);
   }
 
   protected override init(groupContainer: SVGGElement): void {
