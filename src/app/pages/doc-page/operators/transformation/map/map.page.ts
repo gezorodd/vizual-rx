@@ -7,20 +7,22 @@ export const mapPage: DocPage = {
   detailsComponent: MapDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/map',
   starred: true,
-  sampleCode: `import {map, timer, tap, take} from "rxjs";
-import {observe} from "vizual-rx";
+  sampleCode: `import {map, timer, take} from "rxjs";
+import {observe, createValue, colorAt} from "vizual-rx";
 
 const source$ = timer(0, 500)
     .pipe(
-        take(8),
-        tap(observe('source'))
+        map(i => createValue(colorAt(i), 'square')),
+        take(5)
     );
 
 const example$ = source$
     .pipe(
-        map(i => Math.pow(i, 2))
+        map(value => createValue(value.color, 'circle'))
     )
 
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };

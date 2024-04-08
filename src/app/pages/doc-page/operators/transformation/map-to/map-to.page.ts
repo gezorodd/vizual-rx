@@ -7,13 +7,12 @@ export const mapToPage: DocPage = {
   detailsComponent: MapToDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/mapTo',
   deprecated: true,
-  sampleCode: `import {mapTo, timer, tap, take} from "rxjs";
+  sampleCode: `import {mapTo, timer, take} from "rxjs";
 import {observe, createValue} from "vizual-rx";
 
 const source$ = timer(0, 500)
     .pipe(
-        take(8),
-        tap(observe('source'))
+        take(5)
     );
 
 const example$ = source$
@@ -21,6 +20,8 @@ const example$ = source$
         mapTo(createValue('blue', 'circle'))
     )
 
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };
