@@ -3,7 +3,7 @@ import {MatListItem, MatListOption, MatSelectionList, MatSelectionListChange} fr
 import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {NavigationEnd, Router} from "@angular/router";
+import {NavigationEnd, NavigationStart, Router} from "@angular/router";
 import {debounceTime, filter, map, noop, Observable, shareReplay, Subject, takeUntil, tap} from "rxjs";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
@@ -43,21 +43,28 @@ export class SidenavComponent implements OnDestroy {
 
   readonly sections: Section[] = [];
   readonly filterChanged$: Subject<string>
+  readonly currentPage$: Observable<Page | undefined>;
 
   private destroy$ = new Subject<void>();
-  private readonly currentUrl$: Observable<string>;
 
   constructor(private router: Router) {
     this.filterChanged$ = new Subject<string>();
     this.sections = sectionDefinitions
       .map(sectionDefinition => new Section(sectionDefinition));
 
-    this.currentUrl$ = this.router.events
+    const allPages = this.getAllPages();
+    this.currentPage$ = this.router.events
       .pipe(
-        filter(event => event instanceof NavigationEnd),
+        filter(event => event instanceof NavigationStart),
         map(event => {
-          const navigationEnd = event as NavigationEnd;
-          return navigationEnd.url;
+          const navigationStart = event as NavigationStart;
+          const url = navigationStart.url;
+          const currentPage = allPages.find(page => url === `/${page.routeUrl}`);
+          if (currentPage) {
+            this.findSectionsContainingPage(currentPage)
+              .forEach(section => section.collapsed = false);
+          }
+          return currentPage;
         }),
         shareReplay(1)
       );
@@ -74,13 +81,6 @@ export class SidenavComponent implements OnDestroy {
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  isPageSelected(page: Page): Observable<boolean> {
-    return this.currentUrl$
-      .pipe(
-        map(currentUrl => currentUrl === `/${page.routeUrl}`)
-      );
   }
 
   navigateTo(change: MatSelectionListChange): void {
@@ -144,5 +144,15 @@ export class SidenavComponent implements OnDestroy {
       ...sections,
       ...this.getAllSections(sections.flatMap(section => section.children))
     ];
+  }
+
+  private findSectionsContainingPage(page: Page, sections: Section[] = this.sections): Section[] {
+    if (sections.length === 0) {
+      return [];
+    }
+    return [
+      ...sections.filter(section => section.pages.includes(page)),
+      ...this.findSectionsContainingPage(page, sections.flatMap(section => section.children))
+    ]
   }
 }

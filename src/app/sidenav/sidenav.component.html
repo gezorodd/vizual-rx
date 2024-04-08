@@ -26,7 +26,7 @@
               <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: child}"></ng-container>
             </ng-container>
             <ng-container *ngFor="let page of section.pages">
-              <mat-list-option *ngIf="!page.hidden" [value]="page.routeUrl" [selected]="isPageSelected(page) | async">
+              <mat-list-option *ngIf="!page.hidden" [value]="page.routeUrl" [selected]="(currentPage$ | async) === page">
                 <div class="page-option">
                   <span [class.deprecated]="page.deprecated">{{ page.title }}</span>
                   <mat-icon *ngIf="page.starred" [fontSet]="'material-symbols-rounded'" class="star-icon">star
