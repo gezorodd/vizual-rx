@@ -3,7 +3,7 @@ import {MatListItem, MatListOption, MatSelectionList, MatSelectionListChange} fr
 import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {NavigationEnd, NavigationStart, Router} from "@angular/router";
+import {NavigationEnd, NavigationStart, Router, RouterLink} from "@angular/router";
 import {debounceTime, filter, map, noop, Observable, shareReplay, Subject, takeUntil, tap} from "rxjs";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
@@ -32,7 +32,8 @@ import {MatTooltip} from "@angular/material/tooltip";
     MatTooltip,
     NgIf,
     MatButton,
-    NgClass
+    NgClass,
+    RouterLink
   ],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss'
