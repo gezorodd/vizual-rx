@@ -1,7 +1,5 @@
 import {Observable} from "rxjs";
-import {VizualRxObserver} from "../core/vizual-rx-observer";
 import {InterpreterError} from "../core/vizual-rx-interpreter";
-import {VizualRxScheduler} from "../core/vizual-rx-scheduler";
 
 export interface VizualRxEngine {
 
@@ -12,6 +10,8 @@ export interface VizualRxEngine {
   stop(): void;
 
   replay(): void;
+
+  now(): number;
 
   destroy(): void;
 
@@ -37,7 +37,28 @@ export interface VizualRxEngine {
 
   get error(): InterpreterError | undefined;
 
-  get observers(): Observable<VizualRxObserver[]>;
+  get observers$(): Observable<VizualRxObserver[]>;
+}
 
-  get scheduler(): VizualRxScheduler;
+export interface VizualRxObserver {
+  readonly id: string;
+  readonly label: string;
+
+  get next$(): Observable<VizualRxNextNotification>;
+
+  get error$(): Observable<VizualRxErrorNotification>;
+
+  get complete$(): Observable<VizualRxNotification>;
+}
+
+export interface VizualRxNotification {
+  time: number;
+}
+
+export interface VizualRxNextNotification extends VizualRxNotification {
+  value: any;
+}
+
+export interface VizualRxErrorNotification extends VizualRxNotification {
+  err: any;
 }

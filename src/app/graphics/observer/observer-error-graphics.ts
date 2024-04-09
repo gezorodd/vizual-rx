@@ -1,11 +1,14 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 import tippy from "tippy.js";
-import {VizualRxScheduler} from "../../core/vizual-rx-scheduler";
+import {VizualRxEngine, VizualRxErrorNotification} from "../../engine/vizual-rx-engine.model";
 
 export class ObserverErrorGraphics extends DynamicObjectGraphics {
 
-  constructor(scheduler: VizualRxScheduler, private err: any) {
-    super(scheduler, -1);
+  private readonly err: any;
+
+  constructor(engine: VizualRxEngine, notification: VizualRxErrorNotification) {
+    super(engine, notification.time, -1);
+    this.err = notification.err;
   }
 
   protected override init(groupContainer: SVGGElement): void {

@@ -1,9 +1,15 @@
-import {Observable} from "rxjs";
+import {map, Observable} from "rxjs";
 import {InterpreterError} from "../core/vizual-rx-interpreter";
-import {VizualRxObserver} from "../core/vizual-rx-observer";
-import {VizualRxEngine} from "./vizual-rx-engine.model";
+import {
+  VizualRxEngine,
+  VizualRxErrorNotification,
+  VizualRxNextNotification,
+  VizualRxNotification,
+  VizualRxObserver
+} from "./vizual-rx-engine.model";
 import {VizualRxCoreEngine} from "../core/vizual-rx-core-engine"
 import {VizualRxScheduler} from "../core/vizual-rx-scheduler";
+import {VizualRxCoreObserver} from "../core/vizual-rx-core-observer";
 
 export class VizualRxCoreEngineAdapter implements VizualRxEngine {
   private readonly coreEngine: VizualRxCoreEngine;
@@ -26,6 +32,10 @@ export class VizualRxCoreEngineAdapter implements VizualRxEngine {
 
   replay(): void {
     this.coreEngine.replay();
+  }
+
+  now(): number {
+    return this.coreEngine.scheduler.now();
   }
 
   destroy(): void {
@@ -76,11 +86,52 @@ export class VizualRxCoreEngineAdapter implements VizualRxEngine {
     return this.coreEngine.error;
   }
 
-  get observers(): Observable<VizualRxObserver[]> {
-    return this.coreEngine.observers;
+  get observers$(): Observable<VizualRxObserver[]> {
+    const scheduler = this.coreEngine.scheduler;
+    return this.coreEngine.observers$
+      .pipe(
+        map(observers =>
+          observers.map(observer => new VizualRxCoreObserverAdapter(scheduler, observer))
+        )
+      );
+  }
+}
+
+class VizualRxCoreObserverAdapter implements VizualRxObserver {
+  readonly id: string;
+  readonly label: string;
+
+  constructor(private scheduler: VizualRxScheduler, private coreObserver: VizualRxCoreObserver) {
+    this.id = coreObserver.id;
+    this.label = coreObserver.label;
   }
 
-  get scheduler(): VizualRxScheduler {
-    return this.coreEngine.scheduler;
+  get next$(): Observable<VizualRxNextNotification> {
+    return this.coreObserver.next$
+      .pipe(
+        map(value => ({
+          time: this.scheduler.now(),
+          value
+        }))
+      );
+  }
+
+  get error$(): Observable<VizualRxErrorNotification> {
+    return this.coreObserver.error$
+      .pipe(
+        map(err => ({
+          time: this.scheduler.now(),
+          err
+        }))
+      );
+  }
+
+  get complete$(): Observable<VizualRxNotification> {
+    return this.coreObserver.complete$
+      .pipe(
+        map(() => ({
+          time: this.scheduler.now()
+        }))
+      );
   }
 }

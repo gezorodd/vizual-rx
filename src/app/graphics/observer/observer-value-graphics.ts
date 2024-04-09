@@ -1,15 +1,15 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 import tippy from 'tippy.js'
 import {VizualRxValue} from "../../core/vizual-rx-value";
-import {VizualRxScheduler} from "../../core/vizual-rx-scheduler";
+import {VizualRxEngine, VizualRxNextNotification} from "../../engine/vizual-rx-engine.model";
 
 
 export class ObserverValueGraphics extends DynamicObjectGraphics {
   private readonly value: any;
 
-  constructor(scheduler: VizualRxScheduler, value: any) {
-    super(scheduler);
-    this.value = value;
+  constructor(engine: VizualRxEngine, notification: VizualRxNextNotification) {
+    super(engine, notification.time);
+    this.value = notification.value;
   }
 
   protected override init(groupContainer: SVGGElement): void {

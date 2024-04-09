@@ -13,7 +13,7 @@ import {
   tap,
 } from "rxjs";
 import {VizualRxTime} from "./vizual-rx-time";
-import {VizualRxObserver} from "./vizual-rx-observer";
+import {VizualRxCoreObserver} from "./vizual-rx-core-observer";
 import {VizualRxScheduler} from "./vizual-rx-scheduler";
 
 export class VizualRxCoreEngine {
@@ -32,7 +32,7 @@ export class VizualRxCoreEngine {
   private readonly state$: BehaviorSubject<PlayerState>;
   private readonly timeFactor$: BehaviorSubject<number>;
   private readonly destroy$ = new Subject<void>();
-  private readonly _observers = new BehaviorSubject<VizualRxObserver[]>([]);
+  private readonly _observers$ = new BehaviorSubject<VizualRxCoreObserver[]>([]);
 
   constructor(code = '') {
     this.code = code;
@@ -51,7 +51,7 @@ export class VizualRxCoreEngine {
     this.interpreter.observerAdded$
       .pipe(takeUntil(this.destroy$))
       .subscribe(observer => {
-        this._observers.next([...this._observers.value, observer]);
+        this._observers$.next([...this._observers$.value, observer]);
       });
     this.interpreter.subscriptionCreated$
       .pipe(takeUntil(this.destroy$))
@@ -79,11 +79,11 @@ export class VizualRxCoreEngine {
 
     this.time.timeFactor = this.timeFactor$.value;
     if (state === PlayerState.STOPPED) {
-      this._observers.next([]);
+      this._observers$.next([]);
       this.subscriptions = [];
       this.runCode();
     }
-    this._observers.value.forEach(observer => observer.paused = false);
+    this._observers$.value.forEach(observer => observer.paused = false);
     this.state$.next(PlayerState.PLAYING);
   }
 
@@ -92,7 +92,7 @@ export class VizualRxCoreEngine {
       return;
     }
     this.time.timeFactor = 0;
-    this._observers.value.forEach(observer => observer.paused = true);
+    this._observers$.value.forEach(observer => observer.paused = true);
     this.state$.next(PlayerState.PAUSED);
   }
 
@@ -123,8 +123,8 @@ export class VizualRxCoreEngine {
     }
   }
 
-  get observers(): Observable<VizualRxObserver[]> {
-    return this._observers.asObservable();
+  get observers$(): Observable<VizualRxCoreObserver[]> {
+    return this._observers$.asObservable();
   }
 
   destroy(): void {

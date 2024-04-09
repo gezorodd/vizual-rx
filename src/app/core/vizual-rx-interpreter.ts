@@ -5,13 +5,13 @@ import * as rxjsOperators from "rxjs/operators";
 import * as ts from "typescript";
 import {ModuleKind} from "typescript";
 import {SourceMapConsumer} from "source-map-js";
-import {VizualRxObserver} from "./vizual-rx-observer";
+import {VizualRxCoreObserver} from "./vizual-rx-core-observer";
 import {VizualRxProxies} from "./vizual-rx-proxies";
 import {VizualRxApi} from "./vizual-rx-api";
 import {VizualRxScheduler} from "./vizual-rx-scheduler";
 
 export class VizualRxInterpreter {
-  private readonly _observerAdded$ = new Subject<VizualRxObserver>();
+  private readonly _observerAdded$ = new Subject<VizualRxCoreObserver>();
   private readonly vizualRxProxies: VizualRxProxies;
   private readonly vizualRxApi: VizualRxApi;
 
@@ -55,7 +55,7 @@ export class VizualRxInterpreter {
     }
   }
 
-  get observerAdded$(): Observable<VizualRxObserver> {
+  get observerAdded$(): Observable<VizualRxCoreObserver> {
     return this._observerAdded$.asObservable();
   }
 

@@ -1,6 +1,6 @@
-import {Observable, Observer, ReplaySubject, Subscription, SubscriptionLike} from "rxjs";
+import {Observable, Observer, ReplaySubject, SubscriptionLike} from "rxjs";
 
-export class VizualRxObserver implements Observer<any>, SubscriptionLike {
+export class VizualRxCoreObserver implements Observer<any>, SubscriptionLike {
   private static idSeq = 1;
 
   readonly id: string;
@@ -8,16 +8,15 @@ export class VizualRxObserver implements Observer<any>, SubscriptionLike {
   private readonly _next$: ReplaySubject<any>;
   private readonly _error$: ReplaySubject<any>;
   private readonly _complete$: ReplaySubject<void>;
-  subscription?: Subscription;
   closed: boolean;
   paused: boolean;
 
   constructor(name: string) {
-    this.id = 'observer_' + VizualRxObserver.idSeq++;
+    this.id = 'observer_' + VizualRxCoreObserver.idSeq++;
     this.label = name;
-    this._next$ = new ReplaySubject();
-    this._error$ = new ReplaySubject();
-    this._complete$ = new ReplaySubject();
+    this._next$ = new ReplaySubject<any>();
+    this._error$ = new ReplaySubject<any>();
+    this._complete$ = new ReplaySubject<void>();
     this.closed = false;
     this.paused = false;
   }
@@ -43,19 +42,18 @@ export class VizualRxObserver implements Observer<any>, SubscriptionLike {
   }
 
   unsubscribe(): void {
-    this.subscription?.unsubscribe();
     this.closed = true;
   }
 
   get next$(): Observable<any> {
-    return this._next$;
+    return this._next$.asObservable();
   }
 
   get error$(): Observable<any> {
-    return this._error$;
+    return this._error$.asObservable();
   }
 
   get complete$(): Observable<void> {
-    return this._complete$;
+    return this._complete$.asObservable();
   }
 }

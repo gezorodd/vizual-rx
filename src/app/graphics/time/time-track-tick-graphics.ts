@@ -1,18 +1,18 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
-import {VizualRxScheduler} from "../../core/vizual-rx-scheduler";
+import {VizualRxEngine} from "../../engine/vizual-rx-engine.model";
 
 export class TimeTrackTickGraphics extends DynamicObjectGraphics {
-  sequence: number
+  readonly seconds: number
 
-  constructor(scheduler: VizualRxScheduler, sequence: number) {
-    super(scheduler);
-    this.sequence = sequence;
+  constructor(engine: VizualRxEngine, time: number, seconds: number) {
+    super(engine, time);
+    this.seconds = seconds;
   }
 
   protected override init(groupContainer: SVGGElement): void {
-    if (this.sequence % 1 === 0) {
+    if (this.seconds % 1 === 0) {
       this.drawSecondTick(groupContainer);
-    } else if (this.sequence % 0.5 === 0) {
+    } else if (this.seconds % 0.5 === 0) {
       this.drawHalfSecondThick(groupContainer);
     } else {
       this.drawTenthOfSecondThick(groupContainer);
@@ -32,7 +32,7 @@ export class TimeTrackTickGraphics extends DynamicObjectGraphics {
     text.setAttribute('x', '6');
     text.setAttribute('dominant-baseline', 'middle');
     text.setAttribute('text-anchor', 'left');
-    text.innerHTML = `${this.sequence}`;
+    text.innerHTML = `${this.seconds}`;
     groupContainer.appendChild(text);
   }
 

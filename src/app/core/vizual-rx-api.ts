@@ -1,5 +1,5 @@
 import {Observer, Subject} from "rxjs";
-import {VizualRxObserver} from "./vizual-rx-observer";
+import {VizualRxCoreObserver} from "./vizual-rx-core-observer";
 import {
   COLORS,
   SHAPES,
@@ -10,9 +10,9 @@ import {
 } from "./vizual-rx-value";
 
 export class VizualRxApi {
-  private readonly observerAdded$: Subject<VizualRxObserver>;
+  private readonly observerAdded$: Subject<VizualRxCoreObserver>;
 
-  constructor(observerAdded$: Subject<VizualRxObserver>) {
+  constructor(observerAdded$: Subject<VizualRxCoreObserver>) {
     this.observerAdded$ = observerAdded$;
   }
 
@@ -26,7 +26,7 @@ export class VizualRxApi {
   }
 
   private observe(name?: string): Observer<any> {
-    const observer = new VizualRxObserver(name ?? '');
+    const observer = new VizualRxCoreObserver(name ?? '');
     this.observerAdded$.next(observer);
     return observer;
   }
