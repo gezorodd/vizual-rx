@@ -1,14 +1,14 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 import tippy from 'tippy.js'
 import {VizualRxValue} from "../../core/vizual-rx-value";
-import {VizualRxEngine, VizualRxNextNotification} from "../../engine/vizual-rx-engine.model";
+import {VizualRxRemote, VizualRxRemoteNextNotification} from "../../remote/vizual-rx-remote.model";
 
 
 export class ObserverValueGraphics extends DynamicObjectGraphics {
   private readonly value: any;
 
-  constructor(engine: VizualRxEngine, notification: VizualRxNextNotification) {
-    super(engine, notification.time);
+  constructor(remote: VizualRxRemote, notification: VizualRxRemoteNextNotification) {
+    super(remote, notification.time);
     this.value = notification.value;
   }
 

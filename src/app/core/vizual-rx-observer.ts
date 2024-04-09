@@ -1,6 +1,6 @@
 import {Observable, Observer, ReplaySubject, SubscriptionLike} from "rxjs";
 
-export class VizualRxCoreObserver implements Observer<any>, SubscriptionLike {
+export class VizualRxObserver implements Observer<any>, SubscriptionLike {
   private static idSeq = 1;
 
   readonly id: string;
@@ -12,7 +12,7 @@ export class VizualRxCoreObserver implements Observer<any>, SubscriptionLike {
   paused: boolean;
 
   constructor(name: string) {
-    this.id = 'observer_' + VizualRxCoreObserver.idSeq++;
+    this.id = 'observer_' + VizualRxObserver.idSeq++;
     this.label = name;
     this._next$ = new ReplaySubject<any>();
     this._error$ = new ReplaySubject<any>();

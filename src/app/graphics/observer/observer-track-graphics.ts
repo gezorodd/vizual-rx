@@ -3,13 +3,13 @@ import {ObserverValueGraphics} from "./observer-value-graphics";
 import {catchError, EMPTY, merge, takeUntil, tap} from "rxjs";
 import {ObserverCompleteGraphics} from "./observer-complete-graphics";
 import {ObserverErrorGraphics} from "./observer-error-graphics";
-import {VizualRxEngine, VizualRxObserver} from "../../engine/vizual-rx-engine.model";
+import {VizualRxRemote, VizualRxRemoteObserver} from "../../remote/vizual-rx-remote.model";
 
 export class ObserverTrackGraphics extends TrackGraphics {
-  private readonly observer: VizualRxObserver;
+  private readonly observer: VizualRxRemoteObserver;
 
-  constructor(engine: VizualRxEngine, observer: VizualRxObserver, svg: SVGSVGElement) {
-    super(engine, svg, 'observer-track');
+  constructor(remote: VizualRxRemote, observer: VizualRxRemoteObserver, svg: SVGSVGElement) {
+    super(remote, svg, 'observer-track');
     this.observer = observer;
   }
 
@@ -23,7 +23,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
       this.createCompletedGraphicsWhenCompleted(),
       this.createErroredGraphicsWhenErrored()
     ).pipe(
-      takeUntil(this.engine.stopping$),
+      takeUntil(this.remote.stopping$),
       takeUntil(this.destroy$)
     ).subscribe();
   }
@@ -59,7 +59,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
       .pipe(
         catchError(() => EMPTY),
         tap(notification => {
-          const valueGraphics = new ObserverValueGraphics(this.engine, notification);
+          const valueGraphics = new ObserverValueGraphics(this.remote, notification);
           this.addDynamicObject(valueGraphics);
         })
       );
@@ -70,7 +70,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
       .pipe(
         catchError(() => EMPTY),
         tap(notification => {
-          const completedGraphics = new ObserverCompleteGraphics(this.engine, notification);
+          const completedGraphics = new ObserverCompleteGraphics(this.remote, notification);
           this.addDynamicObject(completedGraphics);
         })
       )
@@ -80,7 +80,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
     return this.observer.error$
       .pipe(
         tap(notification => {
-          const erroredGraphics = new ObserverErrorGraphics(this.engine, notification);
+          const erroredGraphics = new ObserverErrorGraphics(this.remote, notification);
           this.addDynamicObject(erroredGraphics);
         })
       )

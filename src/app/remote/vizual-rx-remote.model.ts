@@ -1,7 +1,7 @@
 import {Observable} from "rxjs";
 import {InterpreterError} from "../core/vizual-rx-interpreter";
 
-export interface VizualRxEngine {
+export interface VizualRxRemote {
 
   play(): void;
 
@@ -37,28 +37,28 @@ export interface VizualRxEngine {
 
   get error(): InterpreterError | undefined;
 
-  get observers$(): Observable<VizualRxObserver[]>;
+  get observers$(): Observable<VizualRxRemoteObserver[]>;
 }
 
-export interface VizualRxObserver {
+export interface VizualRxRemoteObserver {
   readonly id: string;
   readonly label: string;
 
-  get next$(): Observable<VizualRxNextNotification>;
+  get next$(): Observable<VizualRxRemoteNextNotification>;
 
-  get error$(): Observable<VizualRxErrorNotification>;
+  get error$(): Observable<VizualRxRemoteErrorNotification>;
 
-  get complete$(): Observable<VizualRxNotification>;
+  get complete$(): Observable<VizualRxRemoteNotification>;
 }
 
-export interface VizualRxNotification {
+export interface VizualRxRemoteNotification {
   time: number;
 }
 
-export interface VizualRxNextNotification extends VizualRxNotification {
+export interface VizualRxRemoteNextNotification extends VizualRxRemoteNotification {
   value: any;
 }
 
-export interface VizualRxErrorNotification extends VizualRxNotification {
+export interface VizualRxRemoteErrorNotification extends VizualRxRemoteNotification {
   err: any;
 }

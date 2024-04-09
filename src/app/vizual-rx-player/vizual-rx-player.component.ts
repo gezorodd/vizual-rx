@@ -7,7 +7,7 @@ import {NgComponentOutlet, NgIf} from "@angular/common";
 import {VizualRxControllerComponent} from "./vizual-rx-controller/vizual-rx-controller.component";
 import {VizualRxEditorComponent} from "./vizual-rx-editor/vizual-rx-editor.component";
 import {VizualRxViewerComponent} from "./vizual-rx-viewer/vizual-rx-viewer.component";
-import {VizualRxEngine} from "../engine/vizual-rx-engine.model";
+import {VizualRxRemote} from "../remote/vizual-rx-remote.model";
 
 @Component({
   selector: 'app-vizual-rx-player',
@@ -28,7 +28,7 @@ import {VizualRxEngine} from "../engine/vizual-rx-engine.model";
 })
 export class VizualRxPlayerComponent {
 
-  @Input({required: true}) engine!: VizualRxEngine;
+  @Input({required: true}) remote!: VizualRxRemote;
   @Input() disableMouseWheel?: boolean;
   @Input() updateLayoutLightMode?: boolean;
 
@@ -41,8 +41,8 @@ export class VizualRxPlayerComponent {
 
   @HostListener('window:blur')
   handleWindowBlur(): void {
-    if (this.engine.playing) {
-      this.engine.pause();
+    if (this.remote.playing) {
+      this.remote.pause();
       this.wasPausedOnBlur = true;
     }
   }
@@ -50,7 +50,7 @@ export class VizualRxPlayerComponent {
   @HostListener('window:focus')
   handleWindowFocus(): void {
     if (this.wasPausedOnBlur) {
-      this.engine.play();
+      this.remote.play();
       this.wasPausedOnBlur = false;
     }
   }

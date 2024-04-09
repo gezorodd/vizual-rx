@@ -1,11 +1,11 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
-import {VizualRxEngine} from "../../engine/vizual-rx-engine.model";
+import {VizualRxRemote} from "../../remote/vizual-rx-remote.model";
 
 export class TimeTrackTickGraphics extends DynamicObjectGraphics {
   readonly seconds: number
 
-  constructor(engine: VizualRxEngine, time: number, seconds: number) {
-    super(engine, time);
+  constructor(remote: VizualRxRemote, time: number, seconds: number) {
+    super(remote, time);
     this.seconds = seconds;
   }
 

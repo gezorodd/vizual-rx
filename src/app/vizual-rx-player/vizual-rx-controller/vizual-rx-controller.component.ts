@@ -6,7 +6,7 @@ import {MatIcon} from "@angular/material/icon";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {MatRipple} from "@angular/material/core";
 import {MatTooltip} from "@angular/material/tooltip";
-import {VizualRxEngine} from "../../engine/vizual-rx-engine.model";
+import {VizualRxRemote} from "../../remote/vizual-rx-remote.model";
 
 @Component({
   selector: 'app-vizual-rx-controller',
@@ -27,7 +27,7 @@ import {VizualRxEngine} from "../../engine/vizual-rx-engine.model";
 })
 export class VizualRxControllerComponent {
 
-  @Input({required: true}) engine!: VizualRxEngine;
+  @Input({required: true}) remote!: VizualRxRemote;
 
   get timeScale(): number {
     return DynamicObjectGraphics.timeScale$.value;

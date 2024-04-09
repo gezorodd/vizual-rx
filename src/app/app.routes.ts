@@ -1,5 +1,5 @@
 import {Routes} from '@angular/router';
-import {vizualRxEnginesResolver} from "./vizual-rx-player/vizual-rx-engines.resolver";
+import {vizualRxRemotesResolver} from "./vizual-rx-player/vizual-rx-remotes.resolver";
 import {PlaygroundPageComponent} from "./pages/playground-page/playground-page.component";
 import {PlaygroundPageService} from "./pages/playground-page/playground-page.service";
 import {OverviewPageComponent} from "./pages/overview-page/overview-page.component";
@@ -7,7 +7,10 @@ import {
   arrayExampleCode,
   basicExampleCode,
   colorAndShapeAtExampleCode,
-  createValueExampleCode, miscExampleCode, overviewPage, pipeExampleCode
+  createValueExampleCode,
+  miscExampleCode,
+  overviewPage,
+  pipeExampleCode
 } from "./pages/overview-page/overview-page.data";
 import {docPages} from "./pages/doc-page/doc-page.data";
 import {DocPageComponent} from "./pages/doc-page/doc-page.component";
@@ -24,7 +27,7 @@ export const routes: Routes = [
         }
       },
       resolve: {
-        engines: vizualRxEnginesResolver
+        remotes: vizualRxRemotesResolver
       }
     })),
   {
@@ -38,7 +41,7 @@ export const routes: Routes = [
       }
     },
     resolve: {
-      engines: vizualRxEnginesResolver
+      remotes: vizualRxRemotesResolver
     }
   },
   {
@@ -55,7 +58,7 @@ export const routes: Routes = [
       }
     },
     resolve: {
-      engines: vizualRxEnginesResolver
+      remotes: vizualRxRemotesResolver
     }
   },
   {

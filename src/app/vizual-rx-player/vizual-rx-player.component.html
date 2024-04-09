@@ -1,14 +1,14 @@
 <div class="left-panel">
-  <app-vizual-rx-controller [engine]="engine" class="controller"></app-vizual-rx-controller>
-  <app-vizual-rx-editor class="editor" [(code)]="engine.code" (codeChange)="codeChange.next($event)"
+  <app-vizual-rx-controller [remote]="remote" class="controller"></app-vizual-rx-controller>
+  <app-vizual-rx-editor class="editor" [(code)]="remote.code" (codeChange)="codeChange.next($event)"
                         [disableMouseWheel]="disableMouseWheel"
                         [updateLayoutLightMode]="updateLayoutLightMode"></app-vizual-rx-editor>
 </div>
 <div class="right-panel">
-  <div [hidden]="engine.error">
-    <app-vizual-rx-viewer [engine]="engine"></app-vizual-rx-viewer>
+  <div [hidden]="remote.error">
+    <app-vizual-rx-viewer [remote]="remote"></app-vizual-rx-viewer>
   </div>
-  <app-alert-message type="danger" *ngIf="engine.error as err" class="error-panel">
+  <app-alert-message type="danger" *ngIf="remote.error as err" class="error-panel">
     <div class="error-panel-content">
       <h2>{{ err.label }}</h2>
       <span>{{ err.name }}: {{ err.message }}</span>

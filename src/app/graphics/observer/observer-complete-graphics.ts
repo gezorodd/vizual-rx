@@ -1,11 +1,11 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 import {VizualRxScheduler} from "../../core/vizual-rx-scheduler";
-import {VizualRxEngine, VizualRxNotification} from "../../engine/vizual-rx-engine.model";
+import {VizualRxRemote, VizualRxRemoteNotification} from "../../remote/vizual-rx-remote.model";
 
 export class ObserverCompleteGraphics extends DynamicObjectGraphics {
 
-  constructor(engine: VizualRxEngine, notification: VizualRxNotification) {
-    super(engine, notification.time, -1);
+  constructor(remote: VizualRxRemote, notification: VizualRxRemoteNotification) {
+    super(remote, notification.time, -1);
   }
 
   protected override init(groupContainer: SVGGElement): void {

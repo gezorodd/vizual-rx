@@ -1,19 +1,19 @@
-<button matRipple (click)="engine.replay()" matTooltip="Replay">
+<button matRipple (click)="remote.replay()" matTooltip="Replay">
   <mat-icon>refresh</mat-icon>
 </button>
-<button *ngIf="engine.playing$ | async" (click)="engine.pause()" matTooltip="Pause">
+<button *ngIf="remote.playing$ | async" (click)="remote.pause()" matTooltip="Pause">
   <mat-icon>pause</mat-icon>
 </button>
-<button matRipple *ngIf="!(engine.playing$ | async)" (click)="engine.play()" matTooltip="Play">
+<button matRipple *ngIf="!(remote.playing$ | async)" (click)="remote.play()" matTooltip="Play">
   <mat-icon>play_arrow</mat-icon>
 </button>
-<button matRipple (click)="engine.stop()" matTooltip="Stop">
+<button matRipple (click)="remote.stop()" matTooltip="Stop">
   <mat-icon>stop</mat-icon>
 </button>
 <div class="slider grow-1">
   <label>Time Speed</label>
   <mat-slider min="0" max="2" step="0.1" [showTickMarks]="true" [discrete]="true">
-    <input matSliderThumb [(ngModel)]="engine.timeFactor" [matTooltip]="engine.timeFactor.toString()">
+    <input matSliderThumb [(ngModel)]="remote.timeFactor" [matTooltip]="remote.timeFactor.toString()">
   </mat-slider>
 </div>
 <div class="slider">

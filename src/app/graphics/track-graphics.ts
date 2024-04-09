@@ -1,9 +1,9 @@
 import {interval, merge, of, Subject, takeUntil} from "rxjs";
 import {DynamicObjectGraphics} from "./dynamic-object-graphics";
-import {VizualRxEngine} from "../engine/vizual-rx-engine.model";
+import {VizualRxRemote} from "../remote/vizual-rx-remote.model";
 
 export class TrackGraphics {
-  protected readonly engine: VizualRxEngine;
+  protected readonly remote: VizualRxRemote;
   protected readonly svg: SVGSVGElement;
   protected readonly dynamicObjects: DynamicObjectGraphics[];
   protected trackContainer!: SVGGElement;
@@ -13,8 +13,8 @@ export class TrackGraphics {
   private readonly className: string;
   private updateIntervalId?: ReturnType<typeof setInterval>;
 
-  constructor(engine: VizualRxEngine, svg: SVGSVGElement, className: string) {
-    this.engine = engine;
+  constructor(remote: VizualRxRemote, svg: SVGSVGElement, className: string) {
+    this.remote = remote;
     this.svg = svg;
     this.dynamicObjects = [];
     this.className = className;
@@ -107,19 +107,19 @@ export class TrackGraphics {
   }
 
   private startUpdateLoop() {
-    merge(of(undefined), this.engine.starting$)
+    merge(of(undefined), this.remote.starting$)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         if (this.updateIntervalId) {
           clearInterval(this.updateIntervalId);
         }
         this.updateIntervalId = setInterval(() => {
-          if (this.engine.playing) {
+          if (this.remote.playing) {
             this.update();
           }
         }, 15);
       });
-    this.engine.stopping$
+    this.remote.stopping$
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         if (this.updateIntervalId) {

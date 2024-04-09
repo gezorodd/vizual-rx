@@ -1,5 +1,4 @@
 import {Component, OnDestroy, OnInit} from '@angular/core';
-import {VizualRxCoreEngine} from "../../core/vizual-rx-core-engine";
 import {PlaygroundPageService} from "./playground-page.service";
 import {VizualRxPlayerComponent} from "../../vizual-rx-player/vizual-rx-player.component";
 import {Subject, takeUntil} from "rxjs";
@@ -8,7 +7,7 @@ import {NgComponentOutlet, NgIf} from "@angular/common";
 import {MatAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
-import {VizualRxEngine} from "../../engine/vizual-rx-engine.model";
+import {VizualRxRemote} from "../../remote/vizual-rx-remote.model";
 
 @Component({
   selector: 'app-playground-page',
@@ -26,7 +25,7 @@ import {VizualRxEngine} from "../../engine/vizual-rx-engine.model";
 })
 export class PlaygroundPageComponent implements OnInit, OnDestroy {
 
-  engine?: VizualRxEngine;
+  remote?: VizualRxRemote;
   private readonly destroy$ = new Subject<void>();
 
   constructor(private vizualRxPlaygroundService: PlaygroundPageService, private route: ActivatedRoute) {
@@ -38,7 +37,7 @@ export class PlaygroundPageComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(data => {
-        this.engine = data['engines']?.get('playground');
+        this.remote = data['remotes']?.get('playground');
       });
   }
 

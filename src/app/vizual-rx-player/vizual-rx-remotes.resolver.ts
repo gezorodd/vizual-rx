@@ -3,10 +3,10 @@ import {delay, from, map, Observable, of} from "rxjs";
 import {vizualRxEditorReadyResolver} from "./vizual-rx-editor/vizual-rx-editor.resolver";
 import {VizualRxCode, VizualRxCodeMap} from "./vizual-rx-player.model";
 import {inject} from "@angular/core";
-import {VizualRxEngine} from "../engine/vizual-rx-engine.model";
-import {VizualRxEngineService} from "../engine/vizual-rx-engine.service";
+import {VizualRxRemote} from "../remote/vizual-rx-remote.model";
+import {VizualRxRemoteService} from "../remote/vizual-rx-remote.service";
 
-export const vizualRxEnginesResolver: ResolveFn<Map<string, VizualRxEngine>> = (route, state) => {
+export const vizualRxRemotesResolver: ResolveFn<Map<string, VizualRxRemote>> = (route, state) => {
   const codes = route.data['codes'] as VizualRxCodeMap;
   if (!codes || Object.keys(codes).length === 0) {
     return of(new Map());
@@ -21,20 +21,20 @@ export const vizualRxEnginesResolver: ResolveFn<Map<string, VizualRxEngine>> = (
   }
 
   const codeStringMap = getCodeStringMap(codes);
-  const engineService = inject(VizualRxEngineService);
+  const remoteService = inject(VizualRxRemoteService);
 
   return editorReady$
     .pipe(
       map(() => {
-        const engines = new Map<string, VizualRxEngine>();
+        const remotes = new Map<string, VizualRxRemote>();
         Object.keys(codeStringMap)
           .forEach(name => {
             const code = codeStringMap[name];
-            const engine = engineService.createEngine();
-            engine.prepare(code);
-            engines.set(name, engine);
+            const remote = remoteService.createRemote();
+            remote.prepare(code);
+            remotes.set(name, remote);
           })
-        return engines;
+        return remotes;
       }),
       delay(500)
     );

@@ -5,7 +5,7 @@ import {routes} from './app.routes';
 import {provideAnimationsAsync} from '@angular/platform-browser/animations/async';
 import {MonacoEditorModule} from "ngx-monaco-editor-v2";
 import {provideHttpClient} from "@angular/common/http";
-import {VizualRxEngineService} from "./engine/vizual-rx-engine.service";
+import {VizualRxRemoteService} from "./remote/vizual-rx-remote.service";
 
 export const appConfig: ApplicationConfig = {
   providers: [
@@ -13,6 +13,6 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     ...MonacoEditorModule.forRoot()!.providers!,
     provideHttpClient(),
-    {provide: VizualRxEngineService, useValue: new VizualRxEngineService(false)}
+    {provide: VizualRxRemoteService, useValue: new VizualRxRemoteService(false)}
   ]
 };

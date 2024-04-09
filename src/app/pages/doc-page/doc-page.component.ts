@@ -8,8 +8,7 @@ import {MatTooltip} from "@angular/material/tooltip";
 import {MatAnchor} from "@angular/material/button";
 import {MatCardModule} from "@angular/material/card";
 import {VizualRxPlayerComponent} from "../../vizual-rx-player/vizual-rx-player.component";
-import {VizualRxCoreEngine} from "../../core/vizual-rx-core-engine";
-import {VizualRxEngine} from "../../engine/vizual-rx-engine.model";
+import {VizualRxRemote} from "../../remote/vizual-rx-remote.model";
 
 @Component({
   selector: 'app-doc-page',
@@ -28,7 +27,7 @@ import {VizualRxEngine} from "../../engine/vizual-rx-engine.model";
 })
 export class DocPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  engine?: VizualRxEngine;
+  remote?: VizualRxRemote;
   page!: DocPage;
   private readonly destroy$ = new Subject<void>();
 
@@ -42,14 +41,14 @@ export class DocPageComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe(data => {
         this.page = data['page'];
-        this.engine = data['engines']?.get('page');
+        this.remote = data['remotes']?.get('page');
       });
   }
 
   ngAfterViewInit(): void {
     timer(0)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.engine?.play());
+      .subscribe(() => this.remote?.play());
   }
 
   ngOnDestroy(): void {

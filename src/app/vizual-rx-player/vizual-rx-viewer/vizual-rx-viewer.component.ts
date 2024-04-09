@@ -13,7 +13,7 @@ import {
 } from '@angular/core';
 import {merge, of, Subject, takeUntil} from "rxjs";
 import {AsyncPipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
-import {VizualRxCoreObserver} from "../../core/vizual-rx-core-observer";
+import {VizualRxObserver} from "../../core/vizual-rx-observer";
 import {TimeTrackGraphics} from "../../graphics/time/time-track-graphics";
 import {ObserverTrackGraphics} from "../../graphics/observer/observer-track-graphics";
 import {MatIcon} from "@angular/material/icon";
@@ -21,7 +21,7 @@ import {MatButton, MatMiniFabButton} from "@angular/material/button";
 import {FormsModule} from "@angular/forms";
 import {MatSlider, MatSliderThumb} from "@angular/material/slider";
 import {MatDivider} from "@angular/material/divider";
-import {VizualRxEngine, VizualRxObserver} from "../../engine/vizual-rx-engine.model";
+import {VizualRxRemote, VizualRxRemoteObserver} from "../../remote/vizual-rx-remote.model";
 
 @Component({
   selector: 'app-vizual-rx-viewer',
@@ -45,12 +45,12 @@ import {VizualRxEngine, VizualRxObserver} from "../../engine/vizual-rx-engine.mo
 })
 export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  @Input({required: true}) engine!: VizualRxEngine;
+  @Input({required: true}) remote!: VizualRxRemote;
 
   @ViewChild('timeTrack') timeTrack!: ElementRef<SVGSVGElement>;
   @ViewChildren('observerTrack') observerTracks!: QueryList<ElementRef<SVGSVGElement>>;
 
-  observers: VizualRxObserver[];
+  observers: VizualRxRemoteObserver[];
   timeTrackGraphics!: TimeTrackGraphics;
   observerTrackGraphics: Map<string, ObserverTrackGraphics>;
 
@@ -62,7 +62,7 @@ export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   ngOnInit(): void {
-    this.engine.observers$
+    this.remote.observers$
       .pipe(takeUntil(this.destroy$))
       .subscribe(observers => {
         this.observers = observers;
@@ -71,7 +71,7 @@ export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy
   }
 
   ngAfterViewInit(): void {
-    this.timeTrackGraphics = new TimeTrackGraphics(this.engine, this.timeTrack.nativeElement);
+    this.timeTrackGraphics = new TimeTrackGraphics(this.remote, this.timeTrack.nativeElement);
     this.timeTrackGraphics.init();
 
     merge(of(undefined), this.observerTracks.changes)
@@ -88,7 +88,7 @@ export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy
         newElements.forEach(newSvg => {
           const observer = this.observers.find(observer => observer.id === newSvg.id);
           if (observer) {
-            const observerTrackGraphics = new ObserverTrackGraphics(this.engine, observer, newSvg);
+            const observerTrackGraphics = new ObserverTrackGraphics(this.remote, observer, newSvg);
             observerTrackGraphics.init();
             this.observerTrackGraphics.set(observer.id, observerTrackGraphics);
           }
@@ -111,10 +111,10 @@ export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy
     for (const graphic of this.observerTrackGraphics.values()) {
       graphic.destroy();
     }
-    this.engine.destroy();
+    this.remote.destroy();
   }
 
-  identifyObserver(_: number, item: VizualRxObserver) {
+  identifyObserver(_: number, item: VizualRxRemoteObserver) {
     return item.id;
   }
 }

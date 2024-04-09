@@ -13,10 +13,10 @@ import {
   tap,
 } from "rxjs";
 import {VizualRxTime} from "./vizual-rx-time";
-import {VizualRxCoreObserver} from "./vizual-rx-core-observer";
+import {VizualRxObserver} from "./vizual-rx-observer";
 import {VizualRxScheduler} from "./vizual-rx-scheduler";
 
-export class VizualRxCoreEngine {
+export class VizualRxEngine {
   code: string;
   subscriptions: Subscription[];
   error?: InterpreterError;
@@ -32,7 +32,7 @@ export class VizualRxCoreEngine {
   private readonly state$: BehaviorSubject<PlayerState>;
   private readonly timeFactor$: BehaviorSubject<number>;
   private readonly destroy$ = new Subject<void>();
-  private readonly _observers$ = new BehaviorSubject<VizualRxCoreObserver[]>([]);
+  private readonly _observers$ = new BehaviorSubject<VizualRxObserver[]>([]);
 
   constructor(code = '') {
     this.code = code;
@@ -123,7 +123,7 @@ export class VizualRxCoreEngine {
     }
   }
 
-  get observers$(): Observable<VizualRxCoreObserver[]> {
+  get observers$(): Observable<VizualRxObserver[]> {
     return this._observers$.asObservable();
   }
 
