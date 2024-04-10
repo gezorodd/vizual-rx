@@ -9,25 +9,11 @@ import {
   QueryList,
   ViewChildren
 } from '@angular/core';
-import {MatListItem, MatListOption, MatSelectionList, MatSelectionListChange} from "@angular/material/list";
 import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {NavigationStart, Router, RouterLink} from "@angular/router";
-import {
-  debounceTime,
-  filter,
-  from,
-  map,
-  merge,
-  mergeMap,
-  noop,
-  Observable,
-  shareReplay,
-  Subject,
-  takeUntil,
-  tap
-} from "rxjs";
+import {debounceTime, filter, from, map, merge, mergeMap, Observable, shareReplay, Subject, takeUntil, tap} from "rxjs";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
 import {Page, Section} from "./sidenav.model";
@@ -39,9 +25,6 @@ import {MatTooltip} from "@angular/material/tooltip";
   selector: 'app-sidenav',
   standalone: true,
   imports: [
-    MatListOption,
-    MatListItem,
-    MatSelectionList,
     MatFormField,
     MatIcon,
     MatInput,
@@ -115,19 +98,11 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
     this.destroy$.complete();
   }
 
-  navigateTo(change: MatSelectionListChange): void {
-    const route = change.options[0]?.value;
-    if (route) {
-      this.router.navigate([route])
-        .then(_ => noop());
-    }
-  }
-
   toggleSectionCollapsed(section: Section): void {
     section.toggleCollapse(200)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        // this.layoutChanged.next();
+        this.layoutChanged.next();
       });
   }
 

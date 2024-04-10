@@ -4,8 +4,7 @@
     <input #searchInput type="text" matInput (input)="filterChanged$.next(searchInput.value)">
     <mat-icon matSuffix>search</mat-icon>
   </mat-form-field>
-  <mat-selection-list class="section-list" [multiple]="false" [hideSingleSelectionIndicator]="true"
-                      (selectionChange)="navigateTo($event)">
+  <div class="section-list">
     <ng-container *ngFor="let section of sections">
       <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: section}"></ng-container>
     </ng-container>
@@ -24,19 +23,19 @@
             <ng-container *ngFor="let child of section.children">
               <ng-container *ngTemplateOutlet="sectionTemplate; context: {$implicit: child}"></ng-container>
             </ng-container>
-            <ng-container *ngFor="let page of section.pages">
-              <mat-list-option *ngIf="!page.hidden" [value]="page.routeUrl" [selected]="(currentPage$ | async) === page" class="page-option">
-                <a [routerLink]="[page.routeUrl]">
+            <div *ngIf="section.pages.length" class="page-container">
+              <ng-container *ngFor="let page of section.pages">
+                <a *ngIf="!page.hidden" [routerLink]="[page.routeUrl]" [class.selected]="(currentPage$ | async) === page">
                   <span [class.deprecated]="page.deprecated">{{ page.title }}</span>
                   <mat-icon *ngIf="page.starred" [fontSet]="'material-symbols-rounded'" class="star-icon">star
                   </mat-icon>
                 </a>
-              </mat-list-option>
-            </ng-container>
+              </ng-container>
+            </div>
           </div>
         </div>
       </div>
     </ng-template>
-  </mat-selection-list>
+  </div>
 </div>
 

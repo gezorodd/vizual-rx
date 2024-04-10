@@ -1,3 +1,6 @@
+@use "sass:map";
+@import "../../theme";
+
 :host {
   overflow: auto;
 }
@@ -93,15 +96,13 @@
     opacity: 1;
   }
 
-  .page-option {
-    height: 42px;
-    padding-left: 2.8em;
-
-    ::ng-deep &:not(.mdc-list-item--selected) .star-icon {
-      color: #595959;
-    }
+  .page-container {
+    display: flex;
+    flex-direction: column;
 
     a {
+      height: 42px;
+      padding-left: 2.8em;
       color: inherit;
       text-decoration: inherit;
       font-weight: inherit;
@@ -109,6 +110,18 @@
       gap: 1em;
       justify-content: space-between;
       align-items: center;
+
+      &.selected {
+        color: map.get($primary, "default");
+      }
+
+      &:not(.selected) {
+        font-weight: 400;
+      }
+
+      .star-icon {
+        color: #595959;
+      }
     }
   }
 }
