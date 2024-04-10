@@ -23,13 +23,20 @@ button {
   border: none;
   color: mat.get-theme-color($theme, primary, default);
   flex-grow: 0;
-  cursor: pointer;
   display: flex;
   align-items: center;
 
-  &:hover {
-    color: mat.get-theme-color($theme, primary, darken);
-    background-image: $player-component-background-active;
+  &:not(:disabled) {
+    cursor: pointer;
+
+    &:hover {
+      color: mat.get-theme-color($theme, primary, darken);
+      background-image: $player-component-background-active;
+    }
+  }
+
+  &:disabled {
+    color: mat.get-theme-color($theme, foreground, disabled-text);
   }
 }
 
