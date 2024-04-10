@@ -6,6 +6,7 @@ export const fromEventPatternPage: DocPage = {
   routeUrl: 'operators/from-event-pattern',
   detailsComponent: FromEventPatternDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/fromEventPattern',
+  disableWebWorker: true,
   sampleCode: `import { fromEventPattern, map } from 'rxjs';
 import { observe, createValue } from 'vizual-rx';
 

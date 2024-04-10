@@ -8,6 +8,7 @@ import {VizualRxControllerComponent} from "./vizual-rx-controller/vizual-rx-cont
 import {VizualRxEditorComponent} from "./vizual-rx-editor/vizual-rx-editor.component";
 import {VizualRxViewerComponent} from "./vizual-rx-viewer/vizual-rx-viewer.component";
 import {VizualRxRemote} from "../remote/vizual-rx-remote.model";
+import {VizualRxRemoteEngine} from "../remote/vizual-rx-remote-engine";
 
 @Component({
   selector: 'app-vizual-rx-player',
@@ -41,7 +42,7 @@ export class VizualRxPlayerComponent {
 
   @HostListener('window:blur')
   handleWindowBlur(): void {
-    if (this.remote.playing) {
+    if (this.remote instanceof VizualRxRemoteEngine && this.remote.playing) {
       this.remote.pause();
       this.wasPausedOnBlur = true;
     }
@@ -49,7 +50,7 @@ export class VizualRxPlayerComponent {
 
   @HostListener('window:focus')
   handleWindowFocus(): void {
-    if (this.wasPausedOnBlur) {
+    if (this.remote instanceof VizualRxRemoteEngine && this.wasPausedOnBlur) {
       this.remote.play();
       this.wasPausedOnBlur = false;
     }

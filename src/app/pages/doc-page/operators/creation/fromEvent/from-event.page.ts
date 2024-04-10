@@ -6,6 +6,7 @@ export const fromEventPage: DocPage = {
   routeUrl: 'operators/from-event',
   detailsComponent: FromEventDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/fromEvent',
+  disableWebWorker: true,
   sampleCode: `import {fromEvent, mapTo} from 'rxjs';
 import {observe, createValue} from "vizual-rx";
 

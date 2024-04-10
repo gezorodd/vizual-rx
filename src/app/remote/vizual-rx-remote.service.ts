@@ -7,8 +7,8 @@ export class VizualRxRemoteService {
   constructor(private disabledWebWorkers?: boolean) {
   }
 
-  createRemote(): VizualRxRemote {
-    if (typeof Worker !== 'undefined' && !this.disabledWebWorkers) {
+  createRemote(disabledWebWorker: boolean = false): VizualRxRemote {
+    if (typeof Worker !== 'undefined' && !this.disabledWebWorkers && !disabledWebWorker) {
       return new VizualRxRemoteWorker();
     } else {
       return new VizualRxRemoteEngine();

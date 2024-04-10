@@ -14,6 +14,7 @@ import {
 } from "./pages/overview-page/overview-page.data";
 import {docPages} from "./pages/doc-page/doc-page.data";
 import {DocPageComponent} from "./pages/doc-page/doc-page.component";
+import {playgroundPageData} from "./pages/playground-page/playground.page.data";
 
 export const routes: Routes = [
   ...docPages
@@ -24,14 +25,15 @@ export const routes: Routes = [
         page,
         codes: {
           page: page.sampleCode
-        }
+        },
+        disabledWebWorker: page.disableWebWorker
       },
       resolve: {
         remotes: vizualRxRemotesResolver
       }
     })),
   {
-    path: 'playground',
+    path: playgroundPageData.routeUrl,
     component: PlaygroundPageComponent,
     data: {
       codes: {
