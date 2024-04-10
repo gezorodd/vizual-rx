@@ -7,21 +7,32 @@ export const debounceTimePage: DocPage = {
   detailsComponent: DebounceTimeDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/debounceTime',
   starred: true,
-  sampleCode: `import {debounceTime, fromEvent, map, tap, take} from "rxjs";
-import {observe, createValue, colorAt} from "vizual-rx";
+  sampleCode: `import {concat, of, delay, debounceTime} from "rxjs";
+import {observe, createValue} from "vizual-rx";
 
-let i = 0;
-const source$ = fromEvent(document, 'click')
-    .pipe(
-        map(() => createValue('circle', colorAt(i++))),
-        take(20),
-        tap(observe('source'))
-    );
+const source$ = concat(
+    of(createValue('blue', 'circle')),
+    of(createValue('red', 'circle'))
+        .pipe(delay(500)),
+    of(createValue('green', 'circle'))
+        .pipe(delay(500)),
+    of(createValue('orange', 'circle'))
+        .pipe(delay(2000)),
+    of(createValue('yellow', 'circle'))
+        .pipe(delay(1200)),
+    of(createValue('purple', 'circle'))
+        .pipe(delay(500)),
+    of(createValue('cyan', 'circle'))
+        .pipe(delay(1200))
+);
 
 const example$ = source$
     .pipe(
-        debounceTime(1000)
+        debounceTime(800)
     );
+
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };

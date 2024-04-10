@@ -6,25 +6,30 @@ export const bufferPage: DocPage = {
   routeUrl: 'operators/buffer',
   detailsComponent: BufferDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/buffer',
-  sampleCode: `import { fromEvent, timer, buffer, tap, map, take } from 'rxjs';
+  sampleCode: `import { interval, timer, buffer, map, take } from 'rxjs';
 import { observe, createValue, shapeAt } from 'vizual-rx';
 
-const source$ = timer(0, 500)
+const source1$ = timer(0, 500)
     .pipe(
-        map(i => createValue(shapeAt(i), 'blue')),
-        take(10),
-        tap(observe('source'))
-    );
-const clicks$ = fromEvent(document, 'click')
-    .pipe(
-        map(() => createValue('green', 'circle')),
-        tap(observe('clicks'))
+        map(i => createValue('blue', shapeAt(i))),
+        take(12)
     );
 
-const example$ = source$
+const source2$ = interval(2200)
     .pipe(
-        buffer(clicks$)
+        map(() => createValue('green', 'circle')),
+        take(2)
     );
+
+const example$ = source1$
+    .pipe(
+        buffer(source2$)
+    );
+
+source1$
+    .subscribe(observe('source1'));
+source2$
+    .subscribe(observe('source2'));
 example$
     .subscribe(observe('example'));`
 };
