@@ -13,6 +13,6 @@ export const appConfig: ApplicationConfig = {
     provideAnimationsAsync(),
     ...MonacoEditorModule.forRoot()!.providers!,
     provideHttpClient(),
-    {provide: VizualRxRemoteService, useValue: new VizualRxRemoteService(false)}
+    {provide: VizualRxRemoteService, useValue: new VizualRxRemoteService()}
   ]
 };

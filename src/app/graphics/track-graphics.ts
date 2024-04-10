@@ -1,4 +1,4 @@
-import {interval, merge, of, Subject, takeUntil} from "rxjs";
+import {interval, Subject, takeUntil} from "rxjs";
 import {DynamicObjectGraphics} from "./dynamic-object-graphics";
 import {VizualRxRemote} from "../remote/vizual-rx-remote.model";
 
@@ -25,15 +25,28 @@ export class TrackGraphics {
   init(): void {
     this.trackContainer = this.createTrackContainer();
     this.sceneContainer = this.createSceneContainer();
-
-    this.startUpdateLoop();
     this.removeOutboundDynamicObjectsAtInterval();
+  }
+
+  update(): void {
+    this.dynamicObjects.forEach(dynamicObject => {
+      dynamicObject.update();
+    });
+  }
+
+  destroy(): void {
+    this.destroy$.next();
+    this.destroy$.complete();
+    if (this.updateIntervalId) {
+      clearInterval(this.updateIntervalId);
+    }
   }
 
   addDynamicObject(dynamicObject: DynamicObjectGraphics): void {
     this.dynamicObjects.push(dynamicObject);
     const sceneLayer = this.getSceneLayer(dynamicObject.layerIndex);
     sceneLayer.appendChild(dynamicObject.groupContainer);
+    dynamicObject.update();
   }
 
   removeDynamicObject(dynamicObject: DynamicObjectGraphics): void {
@@ -51,14 +64,6 @@ export class TrackGraphics {
       sceneLayer.removeChild(dynamicObject.groupContainer);
     });
     this.dynamicObjects.splice(0, this.dynamicObjects.length);
-  }
-
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-    if (this.updateIntervalId) {
-      clearInterval(this.updateIntervalId);
-    }
   }
 
   private createTrackContainer(): SVGGElement {
@@ -104,34 +109,6 @@ export class TrackGraphics {
       }
     }
     return sceneLayer;
-  }
-
-  private startUpdateLoop() {
-    merge(of(undefined), this.remote.starting$)
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (this.updateIntervalId) {
-          clearInterval(this.updateIntervalId);
-        }
-        this.updateIntervalId = setInterval(() => {
-          if (this.remote.playing) {
-            this.update();
-          }
-        }, 15);
-      });
-    this.remote.stopping$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(() => {
-        if (this.updateIntervalId) {
-          clearInterval(this.updateIntervalId);
-        }
-      });
-  }
-
-  private update(): void {
-    this.dynamicObjects.forEach(dynamicObject => {
-      dynamicObject.update();
-    });
   }
 
   private removeOutboundDynamicObjectsAtInterval(): void {

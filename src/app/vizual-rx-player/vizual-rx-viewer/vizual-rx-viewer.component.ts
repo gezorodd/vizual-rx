@@ -11,9 +11,8 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import {merge, of, Subject, takeUntil} from "rxjs";
+import {filter, interval, merge, Observable, of, Subject, switchMap, takeUntil, tap} from "rxjs";
 import {AsyncPipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
-import {VizualRxObserver} from "../../core/vizual-rx-observer";
 import {TimeTrackGraphics} from "../../graphics/time/time-track-graphics";
 import {ObserverTrackGraphics} from "../../graphics/observer/observer-track-graphics";
 import {MatIcon} from "@angular/material/icon";
@@ -22,6 +21,7 @@ import {FormsModule} from "@angular/forms";
 import {MatSlider, MatSliderThumb} from "@angular/material/slider";
 import {MatDivider} from "@angular/material/divider";
 import {VizualRxRemote, VizualRxRemoteObserver} from "../../remote/vizual-rx-remote.model";
+import {DynamicObjectGraphics} from "../../graphics/dynamic-object-graphics";
 
 @Component({
   selector: 'app-vizual-rx-viewer',
@@ -52,7 +52,7 @@ export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy
 
   observers: VizualRxRemoteObserver[];
   timeTrackGraphics!: TimeTrackGraphics;
-  observerTrackGraphics: Map<string, ObserverTrackGraphics>;
+  readonly observerTrackGraphics: Map<string, ObserverTrackGraphics>;
 
   private readonly destroy$ = new Subject<void>();
 
@@ -68,6 +68,8 @@ export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy
         this.observers = observers;
         this.changeDetectorRef.detectChanges();
       });
+    this.scheduleGraphicsUpdates()
+      .subscribe();
   }
 
   ngAfterViewInit(): void {
@@ -116,5 +118,24 @@ export class VizualRxViewerComponent implements OnInit, AfterViewInit, OnDestroy
 
   identifyObserver(_: number, item: VizualRxRemoteObserver) {
     return item.id;
+  }
+
+  private scheduleGraphicsUpdates(): Observable<unknown> {
+    return merge(this.remote.starting$, DynamicObjectGraphics.timeScale$)
+      .pipe(
+        switchMap(() =>
+          interval(15)
+            .pipe(
+              takeUntil(this.remote.stopping$)
+            )
+        ),
+        filter(() => this.remote.playing),
+        tap(() => {
+          this.timeTrackGraphics?.update();
+          this.observerTrackGraphics
+            .forEach(observerTrackGraphics => observerTrackGraphics.update());
+        }),
+        takeUntil(this.destroy$)
+      );
   }
 }

@@ -18,9 +18,9 @@ export class TimeTrackGraphics extends TrackGraphics {
 
     this.remote.starting$
       .pipe(
-        tap(() => {
+        tap(time => {
           this.clearDynamicObjects();
-          this.startTime = this.remote.now();
+          this.startTime = time;
           this.lastTickSeconds = undefined;
         }),
         mergeMap(() =>

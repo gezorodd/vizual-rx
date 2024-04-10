@@ -33,4 +33,29 @@ export class VizualRxTime {
     const virtualDiff = this._timeFactor$.value * diff;
     return this.previousVirtualTime + virtualDiff;
   }
+
+  get data(): VizualRxTimeData {
+    return {
+      timeFactor: this.timeFactor,
+      previousTime: this.previousTime,
+      previousVirtualTime: this.previousVirtualTime,
+      exportedAt: new Date().getTime()
+    };
+  }
+
+  set data(value: VizualRxTimeData) {
+    const timeDrift = new Date().getTime() - value.exportedAt;
+    this.previousTime = value.previousTime + timeDrift;
+    this.previousVirtualTime = value.previousVirtualTime;
+    if (value.timeFactor !== this._timeFactor$.value) {
+      this._timeFactor$.next(value.timeFactor);
+    }
+  }
+}
+
+export interface VizualRxTimeData {
+  readonly timeFactor: number;
+  readonly previousTime: number;
+  readonly previousVirtualTime: number;
+  readonly exportedAt: number;
 }

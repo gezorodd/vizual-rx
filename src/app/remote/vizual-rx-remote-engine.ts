@@ -42,16 +42,11 @@ export class VizualRxRemoteEngine implements VizualRxRemote {
     this.engine.destroy();
   }
 
-  get stopping$(): Observable<void> {
-    return this.engine.stopping$;
-  }
-
-  get starting$(): Observable<void> {
-    return this.engine.starting$;
-  }
-
-  get stopped$(): Observable<boolean> {
-    return this.engine.stopped$;
+  get starting$(): Observable<number> {
+    return this.engine.starting$
+      .pipe(
+        map(() => this.now())
+      );
   }
 
   get playing$(): Observable<boolean> {
@@ -60,6 +55,14 @@ export class VizualRxRemoteEngine implements VizualRxRemote {
 
   get playing(): boolean {
     return this.engine.playing;
+  }
+
+  get stopping$(): Observable<void> {
+    return this.engine.stopping$;
+  }
+
+  get stopped$(): Observable<boolean> {
+    return this.engine.stopped$;
   }
 
   set timeFactor(value: number) {

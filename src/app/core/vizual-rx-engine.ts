@@ -22,12 +22,12 @@ export class VizualRxEngine {
   error?: InterpreterError;
 
   readonly scheduler: VizualRxScheduler;
+  readonly time: VizualRxTime;
+
   readonly stopping$: Observable<void>;
   readonly starting$: Observable<void>;
   readonly stopped$: Observable<boolean>;
   readonly playing$: Observable<boolean>;
-
-  private readonly time: VizualRxTime;
   private readonly interpreter: VizualRxInterpreter;
   private readonly state$: BehaviorSubject<PlayerState>;
   private readonly timeFactor$: BehaviorSubject<number>;

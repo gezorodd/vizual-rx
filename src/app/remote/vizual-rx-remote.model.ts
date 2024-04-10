@@ -17,23 +17,23 @@ export interface VizualRxRemote {
 
   prepare(code: string): void;
 
-  get stopping$(): Observable<void>;
+  set code(value: string);
 
-  get starting$(): Observable<void>;
+  get code(): string;
 
-  get stopped$(): Observable<boolean>;
+  get starting$(): Observable<number>;
 
   get playing$(): Observable<boolean>;
 
   get playing(): boolean;
 
+  get stopping$(): Observable<void>;
+
+  get stopped$(): Observable<boolean>;
+
   set timeFactor(value: number);
 
   get timeFactor(): number;
-
-  set code(value: string);
-
-  get code(): string;
 
   get error(): InterpreterError | undefined;
 

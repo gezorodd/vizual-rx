@@ -7,7 +7,7 @@
 <button matRipple *ngIf="!(remote.playing$ | async)" (click)="remote.play()" matTooltip="Play">
   <mat-icon>play_arrow</mat-icon>
 </button>
-<button matRipple (click)="remote.stop()" matTooltip="Stop">
+<button matRipple (click)="remote.stop()" matTooltip="Stop" [disabled]="remote.stopped$ | async">
   <mat-icon>stop</mat-icon>
 </button>
 <div class="slider grow-1">
