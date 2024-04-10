@@ -1,10 +1,33 @@
-import {Component, EventEmitter, OnDestroy, Output} from '@angular/core';
+import {
+  AfterViewInit,
+  ChangeDetectionStrategy,
+  Component,
+  ElementRef,
+  EventEmitter,
+  OnDestroy,
+  Output,
+  QueryList,
+  ViewChildren
+} from '@angular/core';
 import {MatListItem, MatListOption, MatSelectionList, MatSelectionListChange} from "@angular/material/list";
 import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {NavigationEnd, NavigationStart, Router, RouterLink} from "@angular/router";
-import {debounceTime, filter, map, noop, Observable, shareReplay, Subject, takeUntil, tap} from "rxjs";
+import {NavigationStart, Router, RouterLink} from "@angular/router";
+import {
+  debounceTime,
+  filter,
+  from,
+  map,
+  merge,
+  mergeMap,
+  noop,
+  Observable,
+  shareReplay,
+  Subject,
+  takeUntil,
+  tap
+} from "rxjs";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
 import {Page, Section} from "./sidenav.model";
@@ -36,17 +59,20 @@ import {MatTooltip} from "@angular/material/tooltip";
     RouterLink
   ],
   templateUrl: './sidenav.component.html',
-  styleUrl: './sidenav.component.scss'
+  styleUrl: './sidenav.component.scss',
+  changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class SidenavComponent implements OnDestroy {
+export class SidenavComponent implements AfterViewInit, OnDestroy {
 
   @Output() layoutChanged = new EventEmitter<void>;
+  @ViewChildren('sectionChildrenContainer') sectionChildrenContainers?: QueryList<ElementRef<HTMLDivElement>>;
 
   readonly sections: Section[] = [];
   readonly filterChanged$: Subject<string>
   readonly currentPage$: Observable<Page | undefined>;
 
-  private destroy$ = new Subject<void>();
+  private readonly destroy$ = new Subject<void>();
+  private readonly sectionChildrenContainerIdRegex = /^section-(\d+)-children-container$/;
 
   constructor(private router: Router) {
     this.filterChanged$ = new Subject<string>();
@@ -79,6 +105,11 @@ export class SidenavComponent implements OnDestroy {
       .subscribe();
   }
 
+  ngAfterViewInit(): void {
+    this.updateSectionChildrenHeightWhenNeeded()
+      .subscribe();
+  }
+
   ngOnDestroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
@@ -92,21 +123,11 @@ export class SidenavComponent implements OnDestroy {
     }
   }
 
-  getSectionHeight(section: Section, childrenHeight: number): string {
-    if (section.expanding || section.collapsing) {
-      return `${childrenHeight}px`;
-    } else if (section.collapsed) {
-      return '0';
-    } else {
-      return 'auto';
-    }
-  }
-
   toggleSectionCollapsed(section: Section): void {
     section.toggleCollapse(200)
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
-        this.layoutChanged.next();
+        // this.layoutChanged.next();
       });
   }
 
@@ -155,5 +176,64 @@ export class SidenavComponent implements OnDestroy {
       ...sections.filter(section => section.pages.includes(page)),
       ...this.findSectionsContainingPage(page, sections.flatMap(section => section.children))
     ]
+  }
+
+  private updateSectionChildrenHeightWhenNeeded(): Observable<unknown> {
+    const allSections$ = from(
+      this.getAllSections().sort((s1, s2) => s2.level - s1.level)
+    );
+    const allSectionsOnChange$ = allSections$
+      .pipe(
+        mergeMap(section =>
+          merge(section.expanding$, section.collapsing$, section.collapsed$)
+            .pipe(
+              map(() => section)
+            )
+        )
+      );
+    return merge(allSections$, allSectionsOnChange$)
+      .pipe(
+        tap(section => this.updateSectionChildrenHeight(section)),
+        takeUntil(this.destroy$)
+      );
+  }
+
+  private updateSectionChildrenHeight(section: Section): void {
+    console.log('updating height')
+    if (!this.sectionChildrenContainers) {
+      return;
+    }
+
+    const sectionChildrenContainerElement = this.sectionChildrenContainers
+      .map(sectionChildrenContainer => sectionChildrenContainer.nativeElement)
+      .find(sectionChildrenContainerElement => {
+        const result = this.sectionChildrenContainerIdRegex.exec(sectionChildrenContainerElement.id);
+        if (!result || result.length < 2) {
+          return false;
+        }
+        const sectionId = parseInt(result[1]);
+        return sectionId === section.id;
+      });
+    if (!sectionChildrenContainerElement) {
+      return;
+    }
+
+    let targetHeightValue: string;
+    let targetForceHeightProperty: 'minHeight' | 'maxHeight';
+    if (section.expanding || !(section.collapsed || section.collapsing)) {
+      const sectionChildrenElement = sectionChildrenContainerElement.getElementsByClassName('section-children')[0];
+      targetHeightValue = `${sectionChildrenElement.clientHeight}px`;
+      targetForceHeightProperty = 'minHeight';
+    } else {
+      targetHeightValue = '0px';
+      targetForceHeightProperty = 'maxHeight';
+    }
+
+    sectionChildrenContainerElement.style[targetForceHeightProperty] = targetHeightValue;
+    if (section.parent) {
+      this.updateSectionChildrenHeight(section.parent);
+    }
+    sectionChildrenContainerElement.style[targetForceHeightProperty] = 'inherit';
+    sectionChildrenContainerElement.style.height = targetHeightValue;
   }
 }

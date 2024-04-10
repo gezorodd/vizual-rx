@@ -1,28 +1,66 @@
-import {defer, delay, Observable, of, Subject, takeUntil, tap} from "rxjs";
+import {BehaviorSubject, defer, delay, first, merge, Observable, of, Subject, takeUntil, tap} from "rxjs";
 
 export class Section {
+  private static idSeq = 1;
+
+  readonly id: number;
   readonly label: string;
+  readonly parent?: Section;
   readonly children: Section[];
   readonly pages: Page[];
   readonly level: number;
   readonly version?: string;
+  readonly childrenCollapsed$: Observable<unknown>;
 
-  expanding: boolean;
-  collapsing: boolean;
-  collapsed: boolean;
+  private _expanding$: BehaviorSubject<boolean>;
+  private _collapsing$: BehaviorSubject<boolean>;
+  private _collapsed$: BehaviorSubject<boolean>;
+  childrenHeight: number;
 
   private readonly cancelCollapse$: Subject<void>;
 
-  constructor(sectionDefinition: SectionDefinition, level: number = 0) {
+  constructor(sectionDefinition: SectionDefinition, parent?: Section, level: number = 0) {
+    this.id = Section.idSeq++;
     this.label = sectionDefinition.label;
-    this.children = sectionDefinition.children?.map(child => new Section(child, level + 1)) ?? [];
+    this.parent = parent;
+    this.children = sectionDefinition.children?.map(child => new Section(child, this, level + 1)) ?? [];
     this.pages = sectionDefinition.pages ?? [];
     this.level = level;
     this.version = sectionDefinition.version;
-    this.expanding = false;
-    this.collapsing = false;
-    this.collapsed = sectionDefinition.collapsed ?? false;
+    this._expanding$ = new BehaviorSubject<boolean>(false);
+    this._collapsing$ = new BehaviorSubject<boolean>(false);
+    this._collapsed$ = new BehaviorSubject<boolean>(sectionDefinition.collapsed ?? false);
     this.cancelCollapse$ = new Subject<void>();
+    this.childrenHeight = 0;
+    this.childrenCollapsed$ = merge(...this.children.map(child => merge(child.collapsed$, child.collapsing$, child.expanding$)));
+  }
+
+  get expanding$(): Observable<boolean> {
+    return this._expanding$.asObservable();
+  }
+
+  get expanding(): boolean {
+    return this._expanding$.value;
+  }
+
+  get collapsing$(): Observable<boolean> {
+    return this._collapsing$.asObservable();
+  }
+
+  get collapsing(): boolean {
+    return this._collapsing$.value;
+  }
+
+  get collapsed$(): Observable<boolean> {
+    return this._collapsed$.asObservable();
+  }
+
+  get collapsed(): boolean {
+    return this._collapsed$.value;
+  }
+
+  set collapsed(value: boolean) {
+    this._collapsed$.next(value);
   }
 
   get hidden(): boolean {
@@ -31,32 +69,31 @@ export class Section {
 
   toggleCollapse(animationDelay: number): Observable<boolean> {
     return defer(() => {
-      if (this.expanding || this.collapsing) {
+      if (this._expanding$.value || this._collapsing$.value) {
         this.cancelCollapse$.next();
-        this.expanding = false;
-        this.collapsing = false;
-        return of(this.collapsed);
-      } else if (this.collapsed) {
-        this.expanding = true;
+        this._expanding$.next(false);
+        this._collapsing$.next(false);
+        return this._collapsed$.pipe(first());
+      } else if (this._collapsed$.value) {
+        this._expanding$.next(true);
         return of(false)
           .pipe(
             delay(animationDelay),
             takeUntil(this.cancelCollapse$),
             tap(() => {
-              this.collapsed = false;
-              this.expanding = false;
+              this._collapsed$.next(false);
+              this._expanding$.next(false);
             })
           );
       } else {
-        this.collapsing = true;
+        this._collapsing$.next(true);
         return of(true)
           .pipe(
-            delay(0),
+            delay(animationDelay),
             tap(() => {
-              this.collapsed = true;
-              this.collapsing = false;
-            }),
-            delay(animationDelay)
+              this._collapsed$.next(true);
+              this._collapsing$.next(false);
+            })
           );
       }
     });

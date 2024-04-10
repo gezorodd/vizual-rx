@@ -55,7 +55,7 @@
     margin-top: 0.4em;
     margin-bottom: 0.4em;
 
-    &.collapsed {
+    &.collapsing, &.collapsed {
       .section-children-container {
         opacity: 0;
       }
@@ -93,7 +93,7 @@
     opacity: 1;
   }
 
-  mat-list-option {
+  .page-option {
     height: 42px;
     padding-left: 2.8em;
 
@@ -105,14 +105,11 @@
       color: inherit;
       text-decoration: inherit;
       font-weight: inherit;
+      display: flex;
+      gap: 1em;
+      justify-content: space-between;
+      align-items: center;
     }
-  }
-
-  .page-option {
-    display: flex;
-    gap: 1em;
-    justify-content: space-between;
-    align-items: center;
   }
 }
 
