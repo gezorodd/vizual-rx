@@ -1,6 +1,7 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
+  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -13,7 +14,22 @@ import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {NavigationStart, Router, RouterLink} from "@angular/router";
-import {debounceTime, filter, from, map, merge, mergeMap, Observable, shareReplay, Subject, takeUntil, tap} from "rxjs";
+import {
+  combineLatest,
+  concat,
+  debounceTime,
+  filter,
+  from,
+  map,
+  merge,
+  mergeMap,
+  Observable,
+  shareReplay,
+  Subject,
+  takeUntil,
+  tap,
+  timer
+} from "rxjs";
 import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
 import {Page, Section} from "./sidenav.model";
@@ -57,7 +73,7 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly sectionChildrenContainerIdRegex = /^section-(\d+)-children-container$/;
 
-  constructor(private router: Router) {
+  constructor(private router: Router, private changeDetectorRef: ChangeDetectorRef) {
     this.filterChanged$ = new Subject<string>();
     this.sections = sectionDefinitions
       .map(sectionDefinition => new Section(sectionDefinition));
@@ -118,9 +134,11 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
         .filter(section => !section.hidden)
         .forEach(section => section.collapsed = false);
     }
-    setTimeout(() => {
-      this.layoutChanged.next();
-    }, 0);
+
+    concat(this.updateAllSectionChildrenHeight(), timer(0))
+      .subscribe(() => {
+        this.layoutChanged.next();
+      });
   }
 
   private getAllPages(sections: Section[] = this.sections): Page[] {
@@ -153,6 +171,15 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
     ]
   }
 
+  private updateAllSectionChildrenHeight(): Observable<unknown> {
+    return from(
+      this.getAllSections().sort((s1, s2) => s2.level - s1.level)
+    ).pipe(
+      tap(section => this.updateSectionChildrenHeight(section)),
+      takeUntil(this.destroy$)
+    );
+  }
+
   private updateSectionChildrenHeightWhenNeeded(): Observable<unknown> {
     const allSections$ = from(
       this.getAllSections().sort((s1, s2) => s2.level - s1.level)
@@ -160,7 +187,7 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
     const allSectionsOnChange$ = allSections$
       .pipe(
         mergeMap(section =>
-          merge(section.expanding$, section.collapsing$, section.collapsed$)
+          combineLatest([section.expanding$, section.collapsing$, section.collapsed$])
             .pipe(
               map(() => section)
             )
@@ -174,7 +201,6 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
   }
 
   private updateSectionChildrenHeight(section: Section): void {
-    console.log('updating height')
     if (!this.sectionChildrenContainers) {
       return;
     }
@@ -193,22 +219,33 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
       return;
     }
 
-    let targetHeightValue: string;
-    let targetForceHeightProperty: 'minHeight' | 'maxHeight';
-    if (section.expanding || !(section.collapsed || section.collapsing)) {
-      const sectionChildrenElement = sectionChildrenContainerElement.getElementsByClassName('section-children')[0];
-      targetHeightValue = `${sectionChildrenElement.clientHeight}px`;
-      targetForceHeightProperty = 'minHeight';
+    if (section.collapsed && !section.expanding) {
+      sectionChildrenContainerElement.style.display = 'none';
     } else {
-      targetHeightValue = '0px';
-      targetForceHeightProperty = 'maxHeight';
-    }
+      sectionChildrenContainerElement.style.display = 'inherit';
 
-    sectionChildrenContainerElement.style[targetForceHeightProperty] = targetHeightValue;
-    if (section.parent) {
-      this.updateSectionChildrenHeight(section.parent);
+      let targetHeightValue: string;
+      if (section.expanding || section.collapsing) {
+        const sectionChildrenElement = sectionChildrenContainerElement.getElementsByClassName('section-children')[0];
+        targetHeightValue = `${sectionChildrenElement.clientHeight}px`;
+      } else {
+        targetHeightValue = 'auto';
+      }
+
+      sectionChildrenContainerElement.style.minHeight = targetHeightValue;
+      sectionChildrenContainerElement.style.maxHeight = targetHeightValue;
+      if (section.parent) {
+        this.updateSectionChildrenHeight(section.parent);
+      }
+      sectionChildrenContainerElement.style.minHeight = 'inherit';
+      sectionChildrenContainerElement.style.maxHeight = 'inherit';
+      sectionChildrenContainerElement.style.height = targetHeightValue;
+
+      if (section.collapsing) {
+        setTimeout(() => {
+          sectionChildrenContainerElement.style.height = '0px';
+        }, 0);
+      }
     }
-    sectionChildrenContainerElement.style[targetForceHeightProperty] = 'inherit';
-    sectionChildrenContainerElement.style.height = targetHeightValue;
   }
 }

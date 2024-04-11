@@ -90,6 +90,7 @@ export class Section {
         return of(true)
           .pipe(
             delay(animationDelay),
+            takeUntil(this.cancelCollapse$),
             tap(() => {
               this._collapsed$.next(true);
               this._collapsing$.next(false);
