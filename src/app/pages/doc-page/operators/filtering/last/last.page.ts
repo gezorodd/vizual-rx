@@ -6,13 +6,13 @@ export const lastPage: DocPage = {
   routeUrl: 'operators/last',
   detailsComponent: LastDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/last',
-  sampleCode: `import {last, interval, map, take} from "rxjs";
-import {observe, createValue, shapeAt, colorAt} from "vizual-rx";
+  sampleCode: `import {last, timer, map, take} from "rxjs";
+import {observe, createValue, colorAt, shapeAt} from "vizual-rx";
 
-const source$ = interval(500)
+const source$ = timer(0, 500)
     .pipe(
-        map(i => createValue(colorAt(i), shapeAt(i))),
-        take(7)
+        map(i => createValue(colorAt(i % 3), shapeAt(i % 4))),
+        take(8)
     );
 
 const last$ = source$
@@ -20,22 +20,22 @@ const last$ = source$
         last()
     );
 
-const lastCircle$ = source$
+const lastGreen$ = source$
     .pipe(
-        last(value => value.shape === 'circle')
+        last(value => value.color === 'green')
     );
 
-const lastYellowCircle$ = source$
+const lastPurple$ = source$
     .pipe(
-        last(value => value.color === 'yellow' && value.shape === 'circle')
+        last(value => value.color === 'purple')
     );
 
 source$
     .subscribe(observe('source'));
 last$
     .subscribe(observe('last'));
-lastCircle$
-    .subscribe(observe('last circle'));
-lastYellowCircle$
-    .subscribe(observe('last yellow circle'));`
+lastGreen$
+    .subscribe(observe('last green'));
+lastPurple$
+    .subscribe(observe('last purple'));`
 };

@@ -6,27 +6,30 @@ export const samplePage: DocPage = {
   routeUrl: 'operators/sample',
   detailsComponent: SampleDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/sample',
-  sampleCode: `import {interval, take, tap, timer, map, sample} from "rxjs";
-import {observe, createValue, shapeAt} from "vizual-rx";
+  sampleCode: `import {interval, take, timer, map, sample} from "rxjs";
+import {observe, createValue, colorAt} from "vizual-rx";
 
 const source1$ = timer(0, 600)
     .pipe(
-        map(i => createValue(shapeAt(i), 'blue')),
-        take(10),
-        tap(observe('source1'))
+        map(i => createValue(colorAt(i % 5), 'circle')),
+        take(10)
     );
 
-const source2$ = interval(1500)
+const source2$ = interval(1400)
     .pipe(
-        map(() => createValue('green', 'circle')),
-        take(10),
-        tap(observe('source2'))
+        map(() => createValue('purple', 'square')),
+        take(3)
     );
 
 const example$ = source1$
     .pipe(
         sample(source2$)
-    )
+    );
+
+source1$
+    .subscribe(observe('source 1'));
+source2$
+    .subscribe(observe('source 2'));
 example$
     .subscribe(observe('example'));`
 };

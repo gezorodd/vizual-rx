@@ -7,7 +7,7 @@ export const publishReplayPage: DocPage = {
   detailsComponent: PublishReplayDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/publishReplay',
   deprecated: true,
-  sampleCode: `import { defer, of, publishReplay} from 'rxjs';
+  sampleCode: `import { defer, of, timer, publishReplay, mergeMap} from 'rxjs';
 import { observe, createValue } from 'vizual-rx'
 
 const source$ = defer(() =>
@@ -23,8 +23,12 @@ connectable$
 connectable$
     .subscribe(observe('observer 2'));
 
-connectable$.connect();
-
-connectable$
-    .subscribe(observe('late subscriber'));`
+timer(1000)
+    .subscribe(() => connectable$.connect());
+timer(2000)
+    .pipe(
+        mergeMap(() => connectable$)
+    )
+    .subscribe(observe('late subscriber'));
+    `
 };

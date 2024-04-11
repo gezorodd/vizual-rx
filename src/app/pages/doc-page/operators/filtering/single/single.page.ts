@@ -7,11 +7,11 @@ export const singlePage: DocPage = {
   detailsComponent: SingleDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/single',
   sampleCode: `import {single, interval, map, take} from "rxjs";
-import {observe, createValue, shapeAt, colorAt} from "vizual-rx";
+import {observe, createValue, colorAt} from "vizual-rx";
 
 const source$ = interval(500)
     .pipe(
-        map(i => createValue(colorAt(i), shapeAt(i))),
+        map(i => createValue(colorAt(i % 6), 'circle')),
         take(10)
     );
 
@@ -20,22 +20,22 @@ const single$ = source$
         single()
     );
 
-const singleTriangle$ = source$
+const singleRed$ = source$
     .pipe(
-        single(value => value.shape === 'triangle')
+        single(value => value.color === 'red')
     );
 
-const singlePurpleCircle$ = source$
+const singlePurple$ = source$
     .pipe(
-        single(value => value.color === 'purple' && value.shape === 'circle')
+        single(value => value.color === 'purple')
     );
 
 source$
     .subscribe(observe('source'));
 single$
     .subscribe(observe('single'));
-singleTriangle$
-    .subscribe(observe('single triangle'));
-singlePurpleCircle$
-    .subscribe(observe('single purple circle'));`
+singleRed$
+    .subscribe(observe('single red'));
+singlePurple$
+    .subscribe(observe('single purple'));`
 };

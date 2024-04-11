@@ -6,13 +6,13 @@ export const elementAtPage: DocPage = {
   routeUrl: 'operators/element-at',
   detailsComponent: ElementAtDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/elementAt',
-  sampleCode: `import {elementAt, timer, map, take, tap} from "rxjs";
+  sampleCode: `import {elementAt, timer, map, take} from "rxjs";
 import {observe, createValue, colorAt} from "vizual-rx";
 
 const source$ = timer(0, 500)
     .pipe(
         map(i => createValue('circle', colorAt(i))),
-        take(8)
+        take(6)
     );
 
 const example$ = source$

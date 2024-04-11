@@ -7,23 +7,25 @@ export const partitionPage: DocPage = {
   detailsComponent: PartitionDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/partition',
   deprecated: true,
-  sampleCode: `import {timer, take, tap} from "rxjs";
+  sampleCode: `import {timer, map, take} from "rxjs";
 import {partition} from "rxjs/operators";
-import {observe} from "vizual-rx";
+import {observe, createValue, colorAt} from "vizual-rx";
 
-const source1$ = timer(0, 500)
+const source$ = timer(0, 500)
     .pipe(
-        take(10),
-        tap(observe('source1'))
+        map(i => createValue(colorAt(i % 2), 'circle')),
+        take(10)
     );
 
-const [evens$, odds$] = source1$
+const [red$, blue$] = source$
     .pipe(
-        partition(value => value % 2 === 0)
+        partition(value => value.color === 'red')
     );
 
-evens$
-    .subscribe(observe('evens'));
-odds$
-    .subscribe(observe('odds'));`
+source$
+    .subscribe(observe('source'))
+red$
+    .subscribe(observe('red'));
+blue$
+    .subscribe(observe('blue'));\``
 };

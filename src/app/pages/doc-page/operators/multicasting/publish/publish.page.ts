@@ -7,7 +7,7 @@ export const publishPage: DocPage = {
   detailsComponent: PublishDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/publish',
   deprecated: true,
-  sampleCode: `import { defer, of, publish, merge, tap} from 'rxjs';
+  sampleCode: `import { defer, of, publish, merge, delay} from 'rxjs';
 import { observe, createValue } from 'vizual-rx'
 
 const source$ = defer(() =>
@@ -18,11 +18,12 @@ const example$ = source$
     .pipe(
         publish(multicasted$ =>
             merge(
-                multicasted$.pipe(tap(observe('observer 1'))),
-                multicasted$.pipe(tap(observe('observer 2'))),
-                multicasted$.pipe(tap(observe('observer 3')))
+                multicasted$.pipe(delay(500)),
+                multicasted$.pipe(delay(1000)),
+                multicasted$.pipe(delay(1500))
             )
         )
     );
-example$.subscribe();`
+example$
+    .subscribe(observe('example'));`
 };

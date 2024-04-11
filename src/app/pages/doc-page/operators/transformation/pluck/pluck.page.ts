@@ -7,24 +7,22 @@ export const pluckPage: DocPage = {
   detailsComponent: PluckDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/pluck',
   deprecated: true,
-  sampleCode: `import {timer, take, tap, map, pluck} from "rxjs";
+  sampleCode: `import {timer, take, map, pluck} from "rxjs";
 import {observe, createValue, colorAt} from "vizual-rx";
 
-const source1$ = timer(0, 500)
+const source$ = timer(0, 500)
     .pipe(
-        map(i => {
-            const value = createValue(colorAt(i), 'circle');
-            value.id = i + 1;
-            return value;
-        }),
-        take(8),
-        tap(observe('source1'))
+        map(i => createValue(colorAt(i), 'circle')),
+        take(8)
     );
 
-const example$ = source1$
+const example$ = source$
     .pipe(
-        pluck('id')
+        pluck('color')
     );
+
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };

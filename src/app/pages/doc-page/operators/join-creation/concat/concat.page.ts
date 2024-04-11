@@ -7,7 +7,7 @@ export const concatPage: DocPage = {
   detailsComponent: ConcatDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/concat',
   starred: true,
-  sampleCode: `import {concat, interval, map, take, tap} from "rxjs";
+  sampleCode: `import {concat, interval, map, take} from "rxjs";
 import {createValue, observe} from "vizual-rx";
 
 const source1$ = interval(500)
@@ -31,11 +31,11 @@ const source3$ = interval(500)
 const example$ = concat(source1$, source2$, source3$);
 
 source1$
-    .subscribe(observe('source1'));
+    .subscribe(observe('source 1'));
 source2$
-    .subscribe(observe('source2'));
+    .subscribe(observe('source 2'));
 source3$
-    .subscribe(observe('source3'));
+    .subscribe(observe('source 3'));
 example$
     .subscribe(observe('example'));`
 };

@@ -6,20 +6,21 @@ export const mergeScanPage: DocPage = {
   routeUrl: 'operators/merge-scan',
   detailsComponent: MergeScanDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/mergeScan',
-  sampleCode: `import {mergeScan, timer, tap, take, of} from "rxjs";
+  sampleCode: `import {mergeScan, timer, take, of} from "rxjs";
 import {observe} from "vizual-rx";
 
 const source$ = timer(0, 500)
     .pipe(
-        take(8),
-        tap(observe('source'))
+        take(8)
     );
 
 const example$ = source$
     .pipe(
         mergeScan((acc, value) => of(acc + value), 0)
-    )
+    );
 
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };

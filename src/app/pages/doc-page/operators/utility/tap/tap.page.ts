@@ -25,7 +25,7 @@ const source2$ = timer(0, 500)
     );
 
 source1$
-    .subscribe(observe('source1'));
+    .subscribe(observe('source 1'));
 source2$
-    .subscribe(observe('source2'));`
+    .subscribe(observe('source 2'));`
 };

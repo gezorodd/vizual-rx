@@ -27,9 +27,9 @@ const example$ = source1$
     );
 
 source1$
-    .subscribe(observe('source1'));
+    .subscribe(observe('source 1'));
 source2$
-    .subscribe(observe('source2'));
+    .subscribe(observe('source 2'));
 example$
     .subscribe(observe('example'));`
 };

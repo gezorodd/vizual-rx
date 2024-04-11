@@ -9,10 +9,8 @@ export const rangePage: DocPage = {
   sampleCode: `import {range, delayWhen, timer} from "rxjs";
 import {observe} from "vizual-rx";
 
-const example$ = range(5, 4)
-    .pipe(
-        delayWhen((_, i) => timer(i * 500))
-    );
+const example$ = range(5, 4);
 example$
+    .pipe(delayWhen((_, i) => timer(i * 500)))
     .subscribe(observe('example'));`
 };

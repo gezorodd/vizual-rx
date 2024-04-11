@@ -8,11 +8,11 @@ export const distinctUntilKeyChangedPage: DocPage = {
   routeUrl: 'operators/distinct-until-key-changed',
   detailsComponent: DistinctUntilKeyChangedDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/distinctUntilKeyChanged',
-  sampleCode: `import {distinctUntilKeyChanged, interval, map, tap, zip, of} from "rxjs";
+  sampleCode: `import {distinctUntilKeyChanged, timer, map, zip, of} from "rxjs";
 import {observe, createValue} from "vizual-rx";
 
 const source$ = zip(
-    interval(500),
+    timer(0, 500),
     of(
         createValue('blue', 'circle'),
         createValue('red', 'circle'),
@@ -29,14 +29,16 @@ const source$ = zip(
         createValue('red', 'circle')
     )
 ).pipe(
-    map(([_, value]) => value),
-    tap(observe('source'))
+    map(([_, value]) => value)
 );
 
 const example$ = source$
     .pipe(
         distinctUntilKeyChanged('color')
     );
+
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };

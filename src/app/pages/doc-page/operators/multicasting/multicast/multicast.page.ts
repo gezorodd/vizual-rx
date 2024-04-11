@@ -7,7 +7,7 @@ export const multicastPage: DocPage = {
   detailsComponent: MulticastDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/multicast',
   deprecated: true,
-  sampleCode: `import { defer, of, multicast, Subject } from 'rxjs';
+  sampleCode: `import { defer, of, multicast, Subject, timer } from 'rxjs';
 import { observe, createValue } from 'vizual-rx'
 
 const source$ = defer(() =>
@@ -26,5 +26,7 @@ connectable$
 connectable$
     .subscribe(observe('observer 3'));
 
-connectable$.connect();`
+
+timer(1000)
+    .subscribe(() => connectable$.connect());`
 };

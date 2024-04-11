@@ -6,13 +6,12 @@ export const switchScanPage: DocPage = {
   routeUrl: 'operators/switch-scan',
   detailsComponent: SwitchScanDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/switchScan',
-  sampleCode: `import {switchScan, timer, tap, take, map} from "rxjs";
+  sampleCode: `import {switchScan, timer, take, map} from "rxjs";
 import {observe} from "vizual-rx";
 
 const source$ = timer(0, 500)
     .pipe(
-        take(4),
-        tap(observe('source'))
+        take(4)
     );
 
 const example$ = source$
@@ -24,8 +23,10 @@ const example$ = source$
                     take(8)
                 )
         , 0)
-    )
+    );
 
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };

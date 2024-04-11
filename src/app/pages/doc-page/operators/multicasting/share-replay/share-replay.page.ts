@@ -11,9 +11,9 @@ import { observe, createValue } from 'vizual-rx'
 
 const source$ = timer(0, 2000)
     .pipe(
-        map(() => createValue()),
-        tap(observe('source')),
-        take(3)
+        map(() => createValue('circle')),
+        take(3),
+        tap(observe('source'))
     );
 
 const example$ = source$

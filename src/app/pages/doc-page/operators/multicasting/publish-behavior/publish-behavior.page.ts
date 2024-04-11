@@ -12,14 +12,14 @@ import { observe, createValue } from 'vizual-rx'
 
 const source$ = interval(500)
     .pipe(
-        map(() => createValue()),
+        map(() => createValue('circle')),
         tap(observe('source')),
         take(5)
     );
 
 const connectable$ = source$
     .pipe(
-        publishBehavior(createValue('green', 'circle'))
+        publishBehavior(createValue('purple', 'square'))
     );
 connectable$
     .subscribe(observe('observer 1'));

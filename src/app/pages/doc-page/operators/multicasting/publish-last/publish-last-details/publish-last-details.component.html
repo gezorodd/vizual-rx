@@ -1,5 +1,5 @@
 <app-alert-message type="warning">
-  Deprecation Notes: Will be removed in v8. To create a connectable observable with an AsyncSubject under the hood, use
+  <b>Deprecation Notes:</b> Will be removed in v8. To create a connectable observable with an AsyncSubject under the hood, use
   <a [routerLink]="['/operators/connectable']">connectable</a>. <span class="code">source.pipe(publishLast())</span> is
   equivalent to <span class="code">connectable(source, &#123;connector: () => new AsyncSubject(), resetOnDisconnect: false &#125;)</span>.
   If you're using refCount after publishLast, use the share operator instead. <span class="code">source.pipe(publishLast(), refCount())</span>

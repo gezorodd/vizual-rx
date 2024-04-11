@@ -1,5 +1,5 @@
 <app-alert-message type="warning">
-  Deprecation Notes: Will be removed in v8. To create a connectable observable that uses a BehaviorSubject under the
+  <b>Deprecation Notes:</b> Will be removed in v8. To create a connectable observable that uses a BehaviorSubject under the
   hood, use <a [routerLink]="['/operators/connectable']">connectable</a>. <span class="code">source.pipe(publishBehavior(initValue))</span>
   is equivalent to <span class="code">connectable(source, &#123;connector: () => new BehaviorSubject(initValue), resetOnDisconnect: false &#125;)</span>.
   If you're using refCount after publishBehavior, use the share operator instead. <span class="code">source.pipe(publishBehavior(initValue), refCount())</span>

@@ -10,18 +10,18 @@ export const timeoutWithPage: DocPage = {
   sampleCode: `import { of, delay, timeoutWith} from 'rxjs';
 import { observe, createValue } from 'vizual-rx';
 
-const source1$ = of(createValue('blue', 'circle'))
+const source$ = of(createValue('red', 'circle'))
     .pipe(
         delay(2000)
     );
 
-const example$ = source1$
+const example$ = source$
     .pipe(
-        timeoutWith(1000, of(createValue('blue', 'green')))
+        timeoutWith(1000, of(createValue('circle', 'green')))
     );
 
-source1$
-    .subscribe(observe('source1'));
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };

@@ -6,23 +6,16 @@ export const ignoreElementsPage: DocPage = {
   routeUrl: 'operators/ignore-elements',
   detailsComponent: IgnoreElementsDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/ignoreElements',
-  sampleCode: `import {ignoreElements, interval, map, take, tap, mergeMap, throwError, of} from "rxjs";
+  sampleCode: `import {ignoreElements, timer, map, take, mergeMap, throwError, of} from "rxjs";
 import {observe, createValue} from "vizual-rx";
 
-const source1$ = interval(500)
+const source1$ = timer(0, 500)
   .pipe(
     map(() => createValue('circle', 'red')),
-    take(8),
-    tap(observe('source 1'))
+    take(8)
   );
-const example1$ = source1$
-  .pipe(
-    ignoreElements()
-  );
-example1$
-  .subscribe(observe('example 1'));
 
-const source2$ = interval(500)
+const source2$ = timer(0, 500)
   .pipe(
     mergeMap(i => {
       if (i > 3) {
@@ -30,13 +23,25 @@ const source2$ = interval(500)
       } else {
         return of(createValue('circle', 'blue'));
       }
-    }),
-    tap(observe('source 2'))
-  )
+    })
+  );
+
+const example1$ = source1$
+  .pipe(
+    ignoreElements()
+  );
+
 const example2$ = source2$
   .pipe(
     ignoreElements()
   );
+
+source1$
+  .subscribe(observe('source 1'));
+example1$
+  .subscribe(observe('example 1'));
+source2$
+  .subscribe(observe('source 2'));
 example2$
   .subscribe(observe('example 2'));`
 };

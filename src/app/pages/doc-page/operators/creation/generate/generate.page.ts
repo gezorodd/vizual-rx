@@ -9,7 +9,7 @@ export const generatePage: DocPage = {
   sampleCode: `import {generate, delayWhen, timer} from "rxjs";
 import {observe} from "vizual-rx";
 
-const source$ = generate(
+const example$ = generate(
     45,
     n => n != 1,
     n => {
@@ -21,10 +21,7 @@ const source$ = generate(
     }
 );
 
-const example$ = source$
-    .pipe(
-        delayWhen((_, i) => timer(i * 500))
-    );
 example$
+    .pipe(delayWhen((_, i) => timer(i * 500)))
     .subscribe(observe('example'));`
 };

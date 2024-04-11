@@ -8,17 +8,17 @@ export const takeUntilPage: DocPage = {
   documentationUrl: 'https://rxjs.dev/api/operators/takeUntil',
   starred: true,
   sampleCode: `import {takeUntil, map, take, timer} from "rxjs";
-import {observe, createValue, shapeAt} from "vizual-rx";
+import {observe, createValue, colorAt} from "vizual-rx";
 
 const source$ = timer(0, 500)
     .pipe(
-        map(i => createValue('blue', shapeAt(i))),
+        map(i => createValue('circle', colorAt(i % 5))),
         take(8)
     );
 
 const notifier$ = timer(2000)
     .pipe(
-        map(() => createValue('green', 'circle'))
+        map(() => createValue('square', 'purple'))
     );
 
 source$

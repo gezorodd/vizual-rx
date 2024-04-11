@@ -18,8 +18,7 @@ const source$ = timer(0, 500)
                 return createValue('red', shapeAt(i));
             }
         }),
-        take(10),
-        tap(observe('source'))
+        take(10)
     );
 
 const example$ = source$
@@ -32,8 +31,10 @@ const example$ = source$
                 )
         ),
         delayWhen((_, i) => timer(i * 1000))
-    )
+    );
 
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };

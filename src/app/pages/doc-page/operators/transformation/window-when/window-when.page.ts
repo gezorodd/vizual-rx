@@ -12,11 +12,9 @@ import { observe, createValue, shapeAt, colorAt } from 'vizual-rx';
 const source$ = timer(0, 500)
     .pipe(
         map(i => createValue(shapeAt(i), 'blue')),
-        take(20),
-        tap(observe('source'))
+        take(20)
     );
 
-const closing = observe('closing');
 const example$ = source$
     .pipe(
         windowWhen(() =>
@@ -32,6 +30,10 @@ const example$ = source$
             )
         )
     );
+
+source$
+    .subscribe(observe('source'));
+const closing = observe('closing');
 example$
     .subscribe(observe('example'));`
 };

@@ -19,7 +19,7 @@ const source$ = timer(0, 500)
 const example$ = source$
     .pipe(
         map(value => createValue(value.color, 'circle'))
-    )
+    );
 
 source$
     .subscribe(observe('source'));

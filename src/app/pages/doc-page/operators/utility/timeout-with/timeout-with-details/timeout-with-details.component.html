@@ -1,5 +1,5 @@
 <app-alert-message type="warning">
-  Deprecation Notes: Replaced with <a [routerLink]="['/operators/timeout']">timeout</a>. Instead of <span class="code">timeoutWith(100, a$, scheduler)</span>, use
+  <b>Deprecation Notes:</b> Replaced with <a [routerLink]="['/operators/timeout']">timeout</a>. Instead of <span class="code">timeoutWith(100, a$, scheduler)</span>, use
   <span class="code">timeout</span> with the configuration object: <span class="code">timeout(&#123; each: 100, with: () => a$, scheduler &#125;)</span>.
   Instead of <span class="code">timeoutWith(someDate, a$, scheduler)</span>, use <span class="code">timeout</span> with
   the configuration object: <span class="code">timeout(&#123;first: someDate, with: () => a$, scheduler &#125;)</span>. Will be removed in v8.

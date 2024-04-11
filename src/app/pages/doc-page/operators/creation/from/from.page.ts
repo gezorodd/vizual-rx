@@ -17,19 +17,20 @@ const example1$ = from([
 ]).pipe(
     delayWhen((_, i) => timer(i * 500))
 );
-example1$
-    .subscribe(observe('from array'));
 
 const example2$ = from(
     new Promise(resolve => resolve(createValue('blue', 'square')))
 );
-example2$
-    .subscribe(observe('from Promise'));
 
 const example3$ = from('Hello')
     .pipe(
         delayWhen((_, i) => timer(i * 500))
     );
+
+example1$
+    .subscribe(observe('from array'));
+example2$
+    .subscribe(observe('from Promise'));
 example3$
     .subscribe(observe('from string'));`
 };

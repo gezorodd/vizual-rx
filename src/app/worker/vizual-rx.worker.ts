@@ -237,7 +237,7 @@ class VizualRxWorker {
             type: WorkerOutgoingMessageType.OBSERVER_ERROR,
             observerId: observer.id,
             time: this.engine.scheduler.now(),
-            err
+            err: typeof(err) === 'object' ? err.toString() : err
           };
           this.sendMessage(message);
         }),

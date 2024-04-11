@@ -6,27 +6,29 @@ export const throttlePage: DocPage = {
   routeUrl: 'operators/throttle',
   detailsComponent: ThrottleDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/throttle',
-  sampleCode: `import {interval, take, tap, timer, map, throttle} from "rxjs";
-import {observe, createValue, shapeAt} from "vizual-rx";
+  sampleCode: `import {interval, take, timer, map, tap, throttle} from "rxjs";
+import {observe, createValue, colorAt} from "vizual-rx";
 
+const source1 = observe('source 1');
 const source1$ = timer(0, 600)
     .pipe(
-        map(i => createValue(shapeAt(i), 'blue')),
-        take(10),
-        tap(observe('source1'))
+        map(i => createValue(colorAt(i % 5), 'circle')),
+        take(10)
     );
 
-const source2$ = interval(1500)
+const source2$ = interval(1400)
     .pipe(
-        map(() => createValue('green', 'circle')),
-        take(10),
-        tap(observe('source2'))
+        map(() => createValue('purple', 'square')),
+        tap(observe('source 2'))
     );
 
 const example$ = source1$
     .pipe(
         throttle(() => source2$)
-    )
+    );
+
+source1$
+    .subscribe(source1);
 example$
     .subscribe(observe('example'));`
 };

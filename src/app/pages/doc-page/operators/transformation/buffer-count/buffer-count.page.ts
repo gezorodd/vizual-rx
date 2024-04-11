@@ -6,20 +6,22 @@ export const bufferCountPage: DocPage = {
   routeUrl: 'operators/buffer-count',
   detailsComponent: BufferCountDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/bufferCount',
-  sampleCode: `import { timer, bufferCount, tap, map, take } from 'rxjs';
+  sampleCode: `import { timer, bufferCount, map, take } from 'rxjs';
 import { observe, createValue, colorAt } from 'vizual-rx';
 
 const source$ = timer(0, 500)
     .pipe(
         map(i => createValue(colorAt(i), 'circle')),
-        take(8),
-        tap(observe('source'))
+        take(8)
     );
 
 const example$ = source$
     .pipe(
         bufferCount(3)
     );
+
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };

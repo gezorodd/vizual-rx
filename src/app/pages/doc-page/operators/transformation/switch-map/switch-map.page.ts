@@ -16,22 +16,21 @@ const source$ = timer(0, 1100)
         take(4),
         tap(observe('source'))
     );
+const example$ = source$
+    .pipe(
+        switchMap((value, index) =>
+            timer(0, 500)
+                .pipe(
+                    map(() => createValue(value.color, 'circle')),
+                    take(5),
+                    tap(innerObservers[index])
+                )
+        )
+    ),
+
 
 const innerObservers = new Array(4).fill(undefined)
     .map((_, i) => observe('inner ' + i));
-
-const example$ = source$
-    .pipe(
-        switchMap((value, index) => {
-            const inner = timer(0, 500)
-                .pipe(
-                    map(() => createValue(value.color, 'circle')),
-                    take(5)
-                );
-            inner.subscribe(innerObservers[index]);
-            return inner;
-        })
-    )
 
 example$
     .subscribe(observe('example'));`

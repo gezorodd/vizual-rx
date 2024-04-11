@@ -12,7 +12,7 @@ import { observe, createValue } from 'vizual-rx'
 
 const source$ = timer(0, 500)
     .pipe(
-        map(() => createValue()),
+        map(() => createValue('circle')),
         tap(observe('source')),
         take(5)
     );

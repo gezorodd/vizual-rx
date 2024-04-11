@@ -7,28 +7,30 @@ export const mergeMapToPage: DocPage = {
   detailsComponent: MergeMapToDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/mergeMapTo',
   deprecated: true,
-  sampleCode: `import {mergeMapTo, timer, tap, map, take} from "rxjs";
-import {observe, createValue, shapeAt, colorAt} from "vizual-rx";
+  sampleCode: `import {mergeMapTo, timer, map, take} from "rxjs";
+import {observe, createValue, shapeAt} from "vizual-rx";
 
 const source1$ = timer(0, 2000)
     .pipe(
-        map(i => createValue(colorAt(i), 'circle')),
-        take(4),
-        tap(observe('source1'))
+        map(i => createValue('blue', shapeAt(i))),
+        take(3)
     );
 
 const source2$ = timer(0, 500)
     .pipe(
-        map(i => createValue(shapeAt(i), 'yellow')),
-        take(3),
-        tap(observe('source2'))
+        map(i => createValue(shapeAt(i), 'red')),
+        take(3)
     );
 
 const example$ = source1$
     .pipe(
         mergeMapTo(source2$)
-    )
+    );
 
+source1$
+    .subscribe(observe('source 1'));
+source2$
+    .subscribe(observe('source 2'));
 example$
     .subscribe(observe('example'));`
 };

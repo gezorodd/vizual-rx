@@ -6,20 +6,22 @@ export const sampleTimePage: DocPage = {
   routeUrl: 'operators/sample-time',
   detailsComponent: SampleTimeDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/sampleTime',
-  sampleCode: `import {take, tap, timer, map, sampleTime} from "rxjs";
+  sampleCode: `import {take, timer, map, sampleTime} from "rxjs";
 import {observe, createValue, colorAt} from "vizual-rx";
 
 const source$ = timer(0, 600)
     .pipe(
-        map(i => createValue(colorAt(i), 'circle')),
-        take(10),
-        tap(observe('source'))
+        map(i => createValue(colorAt(i % 5), 'circle')),
+        take(10)
     );
 
 const example$ = source$
     .pipe(
-        sampleTime(1500)
-    )
+        sampleTime(1000)
+    );
+
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };

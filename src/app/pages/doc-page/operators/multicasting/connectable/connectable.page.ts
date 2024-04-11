@@ -6,7 +6,7 @@ export const connectablePage: DocPage = {
   routeUrl: 'operators/connectable',
   detailsComponent: ConnectableDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/connectable',
-  sampleCode: `import { defer, of, connectable} from 'rxjs';
+  sampleCode: `import { defer, of, connectable, timer} from 'rxjs';
 import { observe, createValue} from 'vizual-rx'
 
 const source$ = defer(() =>
@@ -19,6 +19,10 @@ connectable$
     .subscribe(observe('observer 1'));
 connectable$
     .subscribe(observe('observer 2'));
+connectable$
+    .subscribe(observe('observer 3'));
 
-connectable$.connect();`
+timer(1000)
+    .subscribe(() => connectable$.connect());
+`
 };

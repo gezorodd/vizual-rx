@@ -22,9 +22,9 @@ const boundSomeFunction = bindNodeCallback(someFunction);
 
 const example1$ = boundSomeFunction('green', 'circle')
 example1$
-    .subscribe(observe('example1'));
+    .subscribe(observe('example 1'));
 
 const example2$ = boundSomeFunction('green', 'square')
 example2$
-    .subscribe(observe('example2'));`
+    .subscribe(observe('example 2'));`
 };

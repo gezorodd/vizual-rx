@@ -7,7 +7,7 @@ export const catchErrorPage: DocPage = {
   detailsComponent: CatchErrorDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/catchError',
   sampleCode: `import { timer, map, catchError, take } from 'rxjs';
-import { observe, createValue, colorAt, shapeAt } from 'vizual-rx'
+import { observe, createValue, colorAt } from 'vizual-rx'
 
 const source$ = timer(0, 500)
     .pipe(
@@ -19,19 +19,20 @@ const source$ = timer(0, 500)
             }
         })
     );
-source$
-    .subscribe(observe('source'));
 
 const example$ = source$
     .pipe(
         catchError(errorColor =>
             timer(0, 500)
                 .pipe(
-                    map(j => createValue(errorColor, shapeAt(j))),
+                    map(j => createValue(errorColor, 'square')),
                     take(3)
                 )
         )
     );
+
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };

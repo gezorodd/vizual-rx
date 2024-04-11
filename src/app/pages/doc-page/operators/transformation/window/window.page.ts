@@ -6,20 +6,19 @@ export const windowPage: DocPage = {
   routeUrl: 'operators/window',
   detailsComponent: WindowDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/window',
-  sampleCode: `import {window, timer, tap, take, map, mergeMap, interval} from "rxjs";
+  sampleCode: `import {window, timer, take, map, mergeMap, interval} from "rxjs";
 import {observe, createValue, shapeAt, colorAt} from "vizual-rx";
 
 const source1$ = timer(0, 500)
     .pipe(
         map(i => createValue(shapeAt(i), 'blue')),
-        take(12),
-        tap(observe('source1'))
+        take(12)
     );
 
 const source2$ = interval(1200)
     .pipe(
         map(() => createValue('purple', 'circle')),
-        tap(observe('source2'))
+        take(3)
     )
 
 const example$ = source1$
@@ -30,8 +29,12 @@ const example$ = source1$
                 map(v => createValue(v.shape, colorAt(index)))
             )
         )
-    )
+    );
 
+source1$
+    .subscribe(observe('source 1'));
+source2$
+    .subscribe(observe('source 2'));
 example$
     .subscribe(observe('example'));`
 };

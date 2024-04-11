@@ -18,7 +18,7 @@ const source$ = timer(0, 500)
 const example$ = source$
     .pipe(
         timeInterval(),
-        map(v => v.interval)
+        map(v => Math.floor(v.interval))
     );
 
 source$

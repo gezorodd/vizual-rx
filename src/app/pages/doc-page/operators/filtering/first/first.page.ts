@@ -7,13 +7,13 @@ export const firstPage: DocPage = {
   detailsComponent: FirstDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/first',
   starred: true,
-  sampleCode: `import {first, interval, map, take} from "rxjs";
-import {observe, createValue, shapeAt, colorAt} from "vizual-rx";
+  sampleCode: `import {first, timer, map, take} from "rxjs";
+import {observe, createValue, colorAt, shapeAt} from "vizual-rx";
 
-const source$ = interval(500)
+const source$ = timer(0, 500)
     .pipe(
-        map(i => createValue(colorAt(i), shapeAt(i))),
-        take(10)
+        map(i => createValue(colorAt(i % 3), shapeAt(i % 4))),
+        take(8)
     );
 
 const fist$ = source$
@@ -21,22 +21,22 @@ const fist$ = source$
         first()
     );
 
-const firstTriangle$ = source$
+const firstGreen$ = source$
     .pipe(
-        first(value => value.shape === 'triangle')
+        first(value => value.color === 'green')
     );
 
-const firstYellowCircle$ = source$
+const firstPurple$ = source$
     .pipe(
-        first(value => value.color === 'yellow' && value.shape === 'circle')
+        first(value => value.color === 'purple')
     );
 
 source$
     .subscribe(observe('source'));
 fist$
     .subscribe(observe('first'));
-firstTriangle$
-    .subscribe(observe('first triangle'));
-firstYellowCircle$
-    .subscribe(observe('first yellow circle'));`
+firstGreen$
+    .subscribe(observe('first green'));
+firstPurple$
+    .subscribe(observe('first purple'));`
 };

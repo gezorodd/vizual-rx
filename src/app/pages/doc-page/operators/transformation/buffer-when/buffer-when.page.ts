@@ -9,10 +9,10 @@ export const bufferWhenPage: DocPage = {
   sampleCode: `import { timer, bufferWhen, tap, map, take } from 'rxjs';
 import { observe, createValue, shapeAt } from 'vizual-rx';
 
-const source$ = timer(0, 500)
+const source$ = timer(0, 1000)
     .pipe(
         map(i => createValue(shapeAt(i), 'blue')),
-        take(20),
+        take(10),
         tap(observe('source'))
     );
 
@@ -20,7 +20,7 @@ const closing = observe('closing');
 const example$ = source$
     .pipe(
         bufferWhen(() =>
-            timer(1000 + Math.floor(Math.random() * 2000))
+            timer(1000 + Math.floor(Math.random() * 3) * 1000)
                 .pipe(
                     map(() => createValue('green', 'circle')),
                     tap(closing)

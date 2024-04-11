@@ -9,7 +9,7 @@ export const throwErrorPage: DocPage = {
   sampleCode: `import {throwError} from "rxjs";
 import {observe} from "vizual-rx";
 
-const example$ = throwError('Oops, something wrong happened');
+const example$ = throwError('Oops, something went wrong');
 example$
     .subscribe(observe('example'));`
 };

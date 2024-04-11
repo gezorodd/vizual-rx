@@ -6,17 +6,16 @@ export const windowCountPage: DocPage = {
   routeUrl: 'operators/window-count',
   detailsComponent: WindowCountDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/windowCount',
-  sampleCode: `import {windowCount, timer, tap, take, map, mergeMap} from "rxjs";
+  sampleCode: `import {windowCount, timer, take, map, mergeMap} from "rxjs";
 import {observe, createValue, shapeAt, colorAt} from "vizual-rx";
 
-const source1$ = timer(0, 500)
+const source$ = timer(0, 500)
     .pipe(
         map(i => createValue(shapeAt(i), 'blue')),
-        take(12),
-        tap(observe('source1'))
+        take(12)
     );
 
-const example$ = source1$
+const example$ = source$
     .pipe(
         windowCount(2),
         mergeMap((win$, index) =>
@@ -24,8 +23,10 @@ const example$ = source1$
                 map(v => createValue(v.shape, colorAt(index)))
             )
         )
-    )
+    );
 
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };

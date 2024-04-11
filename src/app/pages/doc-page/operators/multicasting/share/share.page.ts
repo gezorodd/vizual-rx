@@ -7,11 +7,11 @@ export const sharePage: DocPage = {
   detailsComponent: ShareDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/share',
   sampleCode: `import { timer, map, tap, take, share, mergeMap} from 'rxjs';
-import { observe, createValue } from 'vizual-rx'
+import { observe, createValue} from 'vizual-rx'
 
 const source$ = timer(0, 500)
     .pipe(
-        map(() => createValue()),
+        map(() => createValue('circle')),
         tap(observe('source')),
         take(10)
     );

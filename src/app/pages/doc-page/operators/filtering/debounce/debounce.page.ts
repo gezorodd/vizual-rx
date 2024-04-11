@@ -10,24 +10,24 @@ export const debouncePage: DocPage = {
 import {observe, createValue} from "vizual-rx";
 
 const source$ = concat(
-    of(0),
-    of(1)
+    of(createValue('blue', 'circle')),
+    of(createValue('red', 'circle'))
         .pipe(delay(500)),
-    of(2)
+    of(createValue('blue', 'circle'))
         .pipe(delay(500)),
-    of(3)
+    of(createValue('red', 'circle'))
         .pipe(delay(2000)),
-    of(4)
+    of(createValue('blue', 'circle'))
         .pipe(delay(1200)),
-    of(5)
+    of(createValue('red', 'circle'))
         .pipe(delay(500)),
-    of(6)
+    of(createValue('blue', 'circle'))
         .pipe(delay(1200))
 );
 
 const example$ = source$
     .pipe(
-        debounce(i => timer(500 + (i % 2) * 500 ))
+        debounce(value => timer(500 + (value.color === 'red' ? 500 : 0) ))
     );
 
 source$

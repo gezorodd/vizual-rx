@@ -6,7 +6,7 @@ export const connectPage: DocPage = {
   routeUrl: 'operators/connect',
   detailsComponent: ConnectDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/connect',
-  sampleCode: `import { defer, of, connect, merge, tap, map, bufferCount} from 'rxjs';
+  sampleCode: `import { defer, of, connect, merge, tap, map, delay} from 'rxjs';
 import { observe, createValue, colorAt, shapeAt } from 'vizual-rx'
 
 const source$ = defer(() => {
@@ -23,15 +23,16 @@ const example$ = source$
             merge(
                 shared$
                     .pipe(
-                        map(v => createValue(v.color, 'diamond'))
+                        map(v => createValue(v.color, 'diamond')),
+                        delay(500)
                     ),
                 shared$
                     .pipe(
-                        map(v => createValue(v.shape, 'purple'))
+                        map(v => createValue(v.shape, 'purple')),
+                        delay(1000)
                     )
             )
-        ),
-        bufferCount(2)
+        )
     );
 example$
     .subscribe(observe('example'));`

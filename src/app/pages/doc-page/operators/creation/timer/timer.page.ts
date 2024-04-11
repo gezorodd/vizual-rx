@@ -7,21 +7,22 @@ export const timerPage: DocPage = {
   detailsComponent: TimerDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/timer',
   starred: true,
-  sampleCode: `import {timer, mapTo, take} from "rxjs";
+  sampleCode: `import {timer, map, take} from "rxjs";
 import {observe, createValue} from "vizual-rx";
 
 const example1$ = timer(1000)
     .pipe(
-        mapTo(createValue('blue', 'circle'))
+        map(() => createValue('blue', 'circle'))
     );
-example1$
-    .subscribe(observe('example 1'));
 
 const example2$ = timer(1000, 500)
     .pipe(
-        mapTo(createValue('red', 'circle')),
+        map(() => createValue('red', 'circle')),
         take(5)
     );
+
+example1$
+    .subscribe(observe('example 1'));
 example2$
     .subscribe(observe('example 2'));`
 };

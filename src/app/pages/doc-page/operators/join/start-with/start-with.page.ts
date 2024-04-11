@@ -6,14 +6,13 @@ export const startWithPage: DocPage = {
   routeUrl: 'operators/start-with',
   detailsComponent: StartWithDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/startWith',
-  sampleCode: `import {startWith, interval, tap, map, take} from "rxjs";
+  sampleCode: `import {startWith, interval, map, take} from "rxjs";
 import {observe, createValue, colorAt} from "vizual-rx";
 
 const source$ = interval(500)
     .pipe(
         map(i => createValue(colorAt(i), 'circle')),
-        take(4),
-        tap(observe('source'))
+        take(4)
     );
 
 const example$ = source$
@@ -21,6 +20,8 @@ const example$ = source$
         startWith(createValue('purple', 'circle'))
     )
 
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };

@@ -6,20 +6,22 @@ export const bufferTimePage: DocPage = {
   routeUrl: 'operators/buffer-time',
   detailsComponent: BufferTImeDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/bufferTime',
-  sampleCode: `import { timer, bufferTime, tap, map, take } from 'rxjs';
+  sampleCode: `import { timer, bufferTime, map, take } from 'rxjs';
 import { observe, createValue, colorAt } from 'vizual-rx';
 
 const source$ = timer(0, 500)
     .pipe(
         map(i => createValue(colorAt(i), 'circle')),
-        take(12),
-        tap(observe('source'))
+        take(12)
     );
 
 const example$ = source$
     .pipe(
         bufferTime(2000)
     );
+
+source$
+    .subscribe(observe('source'));
 example$
     .subscribe(observe('example'));`
 };

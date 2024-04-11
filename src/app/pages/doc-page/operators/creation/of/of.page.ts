@@ -14,9 +14,8 @@ const example$ = of(
     createValue('red', 'circle'),
     createValue('blue', 'circle'),
     createValue('green', 'circle')
-).pipe(
-    delayWhen((_, i) => timer(i * 500))
 );
 example$
+    .pipe(delayWhen((_, i) => timer(i * 500)))
     .subscribe(observe('example'));`
 };
