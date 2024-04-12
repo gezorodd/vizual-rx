@@ -20,7 +20,7 @@ const example$ = timer(0, 500)
                 .pipe(
                     map(i => createValue(colorAt(val), shapeAt(i))),
                     take(3 + (val * 2)),
-                    tap(innerObservers[val as number])
+                    tap(innerObservers[val])
                 )
         ),
         combineLatestAll()

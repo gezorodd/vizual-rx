@@ -60,7 +60,7 @@ export class VizualRxEditorService {
     this.typescriptConfig.setDiagnosticsOptions({
       noSemanticValidation: false,
       noSyntaxValidation: false,
-      diagnosticCodesToIgnore: [2322, 2362, 2345, 2339, 2365, 6387, 2363]
+      // diagnosticCodesToIgnore: [2322, 2362, 2345, 2339, 2365, 6387, 2363]
     });
   }
 
