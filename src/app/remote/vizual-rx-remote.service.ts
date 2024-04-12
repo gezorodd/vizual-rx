@@ -4,14 +4,22 @@ import {VizualRxRemoteWorker} from "./vizual-rx-remote-worker";
 
 export class VizualRxRemoteService {
 
-  constructor(private disabledWebWorkers?: boolean) {
+  constructor(private disableWebWorker: boolean = false) {
   }
 
-  createRemote(disabledWebWorker: boolean = false): VizualRxRemote {
-    if (typeof Worker !== 'undefined' && !this.disabledWebWorkers && !disabledWebWorker) {
+  createRemote(disableWebWorker: boolean = false): VizualRxRemote {
+    if (this.isWebWorkerSupported() && !this.isWebWorkerDisabled() && !disableWebWorker) {
       return new VizualRxRemoteWorker();
     } else {
       return new VizualRxRemoteEngine();
     }
+  }
+
+  isWebWorkerSupported(): boolean {
+    return typeof Worker !== 'undefined';
+  }
+
+  isWebWorkerDisabled(): boolean {
+    return this.disableWebWorker;
   }
 }

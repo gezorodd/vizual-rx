@@ -35,6 +35,7 @@ export class TrackGraphics {
   }
 
   destroy(): void {
+    this.trackContainer.remove();
     this.destroy$.next();
     this.destroy$.complete();
     if (this.updateIntervalId) {

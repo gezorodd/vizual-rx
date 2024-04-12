@@ -1,4 +1,4 @@
-import {Component, EventEmitter, HostListener, Input, Output} from '@angular/core';
+import {Component, EventEmitter, HostListener, Input, OnDestroy, Output} from '@angular/core';
 import {AlertMessageComponent} from "../ui/alert-message/alert-message.component";
 import {MatAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
@@ -9,6 +9,7 @@ import {VizualRxEditorComponent} from "./vizual-rx-editor/vizual-rx-editor.compo
 import {VizualRxViewerComponent} from "./vizual-rx-viewer/vizual-rx-viewer.component";
 import {VizualRxRemote} from "../remote/vizual-rx-remote.model";
 import {VizualRxRemoteEngine} from "../remote/vizual-rx-remote-engine";
+import {VizualRxRemoteWorker} from "../remote/vizual-rx-remote-worker";
 
 @Component({
   selector: 'app-vizual-rx-player',
@@ -27,7 +28,7 @@ import {VizualRxRemoteEngine} from "../remote/vizual-rx-remote-engine";
   templateUrl: './vizual-rx-player.component.html',
   styleUrl: './vizual-rx-player.component.scss'
 })
-export class VizualRxPlayerComponent {
+export class VizualRxPlayerComponent implements OnDestroy {
 
   @Input({required: true}) remote!: VizualRxRemote;
   @Input() disableMouseWheel?: boolean;
@@ -38,6 +39,10 @@ export class VizualRxPlayerComponent {
 
   constructor() {
     this.wasPausedOnBlur = false;
+  }
+
+  ngOnDestroy(): void {
+    this.remote.destroy();
   }
 
   @HostListener('window:blur')
@@ -54,5 +59,17 @@ export class VizualRxPlayerComponent {
       this.remote.play();
       this.wasPausedOnBlur = false;
     }
+  }
+
+  switchRemote(): void {
+    let newRemote: VizualRxRemote;
+    if (this.remote instanceof VizualRxRemoteWorker) {
+      newRemote = new VizualRxRemoteEngine();
+    } else {
+      newRemote = new VizualRxRemoteWorker();
+    }
+    newRemote.code = this.remote.code;
+    this.remote.destroy();
+    this.remote = newRemote;
   }
 }

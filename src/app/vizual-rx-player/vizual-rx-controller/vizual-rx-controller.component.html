@@ -10,7 +10,12 @@
 <button matRipple (click)="remote.stop()" matTooltip="Stop" [disabled]="remote.stopped$ | async">
   <mat-icon>stop</mat-icon>
 </button>
-<div class="slider grow-1">
+<div class="grow-1"></div>
+<button *ngIf="!isWebWorkerDisabled" matRipple (click)="switchRemote.next()" [matTooltip]="switchRemoteTooltip"
+        [disabled]="!isWebWorkerSupported">
+  <mat-icon>{{ isWebWorkerRemote ? 'layers' : 'layers_clear' }}</mat-icon>
+</button>
+<div class="slider">
   <label>Time Speed</label>
   <mat-slider min="0" max="2" step="0.1" [showTickMarks]="true" [discrete]="true">
     <input matSliderThumb [(ngModel)]="remote.timeFactor" [matTooltip]="remote.timeFactor.toString()">

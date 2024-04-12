@@ -47,8 +47,8 @@ button {
   padding: 0 1em;
   justify-content: end;
   color: $player-component-color;
+}
 
-  &.grow-1 {
-    flex-grow: 1;
-  }
+.grow-1 {
+  flex-grow: 1;
 }

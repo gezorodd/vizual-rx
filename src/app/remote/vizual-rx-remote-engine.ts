@@ -94,13 +94,13 @@ export class VizualRxRemoteEngine implements VizualRxRemote {
     return this.engine.observers$
       .pipe(
         map(observers =>
-          observers.map(observer => new VizualRxObserverAdapter(scheduler, observer))
+          observers.map(observer => new VizualRxObserverAdapterEng(scheduler, observer))
         )
       );
   }
 }
 
-class VizualRxObserverAdapter implements VizualRxRemoteObserver {
+class VizualRxObserverAdapterEng implements VizualRxRemoteObserver {
   readonly id: string;
   readonly label: string;
 

@@ -7,7 +7,7 @@ import {VizualRxRemote} from "../remote/vizual-rx-remote.model";
 import {VizualRxRemoteService} from "../remote/vizual-rx-remote.service";
 
 export const vizualRxRemotesResolver: ResolveFn<Map<string, VizualRxRemote>> = (route, state) => {
-  const disabledWebWorker = route.data['disabledWebWorker'] as boolean;
+  const disableWebWorker = route.data['disableWebWorker'] as boolean;
   const codes = route.data['codes'] as VizualRxCodeMap;
   if (!codes || Object.keys(codes).length === 0) {
     return of(new Map());
@@ -31,7 +31,7 @@ export const vizualRxRemotesResolver: ResolveFn<Map<string, VizualRxRemote>> = (
         Object.keys(codeStringMap)
           .forEach(name => {
             const code = codeStringMap[name];
-            const remote = remoteService.createRemote(disabledWebWorker);
+            const remote = remoteService.createRemote(disableWebWorker);
             remote.prepare(code);
             remotes.set(name, remote);
           })

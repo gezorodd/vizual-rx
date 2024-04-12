@@ -26,7 +26,7 @@ export const routes: Routes = [
         codes: {
           page: page.sampleCode
         },
-        disabledWebWorker: page.disableWebWorker
+        disableWebWorker: page.disableWebWorker
       },
       resolve: {
         remotes: vizualRxRemotesResolver
