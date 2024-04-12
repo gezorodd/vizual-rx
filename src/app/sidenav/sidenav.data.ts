@@ -122,6 +122,10 @@ import {countPage} from "../pages/doc-page/operators/aggregate/count/count.page"
 import {minPage} from "../pages/doc-page/operators/aggregate/min/min.page";
 import {maxPage} from "../pages/doc-page/operators/aggregate/max/max.page";
 import {reducePage} from "../pages/doc-page/operators/aggregate/reduce/reduce.page";
+import {subjectPage} from "../pages/doc-page/subjects/subject/subject.page";
+import {behaviorSubjectPage} from "../pages/doc-page/subjects/behavior-subject/behavior-subject.page";
+import {replaySubjectPage} from "../pages/doc-page/subjects/replay-subject/replay-subject.page";
+import {asyncSubjectPage} from "../pages/doc-page/subjects/async-subject/async-subject.page";
 
 export const sectionDefinitions: SectionDefinition[] = [
   {
@@ -137,177 +141,192 @@ export const sectionDefinitions: SectionDefinition[] = [
     version: 'v7.8.0',
     children: [
       {
-        label: 'Creation Operators',
+        label: 'Subjects',
         collapsed: true,
         pages: [
-          ajaxPage,
-          bindCallbackPage,
-          bindNodeCallbackPage,
-          deferPage,
-          emptyPage,
-          fromPage,
-          fromEventPage,
-          fromEventPatternPage,
-          generatePage,
-          intervalPage,
-          ofPage,
-          rangePage,
-          throwErrorPage,
-          timerPage,
-          iifPage
+          subjectPage,
+          behaviorSubjectPage,
+          replaySubjectPage,
+          asyncSubjectPage
         ]
       },
       {
-        label: 'Join Creation Operators',
-        collapsed: true,
-        pages: [
-          combineLatestPage,
-          concatPage,
-          forkJoinPage,
-          mergePage,
-          partitionPage,
-          racePage,
-          zipPage
-        ]
-      },
-      {
-        label: 'Transformation Operators',
-        collapsed: true,
-        pages: [
-          bufferPage,
-          bufferCountPage,
-          bufferTimePage,
-          bufferTogglePage,
-          bufferWhenPage,
-          concatMapPage,
-          concatMapToPage,
-          exhaustPage,
-          exhaustMapPage,
-          expandPage,
-          groupByPage,
-          mapPage,
-          mapToPage,
-          mergeMapPage,
-          mergeMapToPage,
-          mergeScanPage,
-          pairwisePage,
-          partitionOperatorPage,
-          pluckPage,
-          scanPage,
-          switchScanPage,
-          switchMapPage,
-          switchMapToPage,
-          windowPage,
-          windowCountPage,
-          windowTimePage,
-          windowTogglePage,
-          windowWhenPage
-        ]
-      },
-      {
-        label: 'Filtering Operators',
-        collapsed: true,
-        pages: [
-          auditPage,
-          auditTimePage,
-          debouncePage,
-          debounceTimePage,
-          distinctPage,
-          distinctUntilChangedPage,
-          distinctUntilKeyChangedPage,
-          elementAtPage,
-          filterPage,
-          firstPage,
-          ignoreElementsPage,
-          lastPage,
-          samplePage,
-          sampleTimePage,
-          singlePage,
-          skipPage,
-          skipLastPage,
-          skipUntilPage,
-          skipWhilePage,
-          takePage,
-          takeLastPage,
-          takeUntilPage,
-          takeWhilePage,
-          throttlePage,
-          throttleTimePage
-        ]
-      },
-      {
-        label: 'Join Operators',
-        collapsed: true,
-        pages: [
-          combineAllPage,
-          combineLatestAllPage,
-          concatAllPage,
-          exhaustAllPage,
-          mergeAllPage,
-          switchAllPage,
-          startWithPage,
-          withLatestFromPage
-        ]
-      },
-      {
-        label: 'Multicasting Operators',
-        collapsed: true,
-        pages: [
-          connectPage,
-          connectablePage,
-          multicastPage,
-          publishPage,
-          publishBehaviorPage,
-          publishLastPage,
-          publishReplayPage,
-          sharePage,
-          shareReplayPage
-        ]
-      },
-      {
-        label: 'Error Handling Operators',
-        collapsed: true,
-        pages: [
-          catchErrorPage,
-          retryPage,
-          retryWhenPage
-        ]
-      },
-      {
-        label: 'Utility Operators',
-        collapsed: true,
-        pages: [
-          tapPage,
-          delayPage,
-          delayWhenPage,
-          dematerializePage,
-          materializePage,
-          timeIntervalPage,
-          timestampPage,
-          timeoutPage,
-          timeoutWithPage,
-          toArrayPage
-        ]
-      },
-      {
-        label: 'Conditional Operators',
-        collapsed: true,
-        pages: [
-          defaultIfEmptyPage,
-          everyPage,
-          findPage,
-          findIndexPage,
-          isEmptyPage
-        ]
-      },
-      {
-        label: 'Aggregate Operators',
-        collapsed: true,
-        pages: [
-          countPage,
-          maxPage,
-          minPage,
-          reducePage
+        label: 'Operators',
+        children: [
+          {
+            label: 'Creation Operators',
+            collapsed: true,
+            pages: [
+              ajaxPage,
+              bindCallbackPage,
+              bindNodeCallbackPage,
+              deferPage,
+              emptyPage,
+              fromPage,
+              fromEventPage,
+              fromEventPatternPage,
+              generatePage,
+              intervalPage,
+              ofPage,
+              rangePage,
+              throwErrorPage,
+              timerPage,
+              iifPage
+            ]
+          },
+          {
+            label: 'Join Creation Operators',
+            collapsed: true,
+            pages: [
+              combineLatestPage,
+              concatPage,
+              forkJoinPage,
+              mergePage,
+              partitionPage,
+              racePage,
+              zipPage
+            ]
+          },
+          {
+            label: 'Transformation Operators',
+            collapsed: true,
+            pages: [
+              bufferPage,
+              bufferCountPage,
+              bufferTimePage,
+              bufferTogglePage,
+              bufferWhenPage,
+              concatMapPage,
+              concatMapToPage,
+              exhaustPage,
+              exhaustMapPage,
+              expandPage,
+              groupByPage,
+              mapPage,
+              mapToPage,
+              mergeMapPage,
+              mergeMapToPage,
+              mergeScanPage,
+              pairwisePage,
+              partitionOperatorPage,
+              pluckPage,
+              scanPage,
+              switchScanPage,
+              switchMapPage,
+              switchMapToPage,
+              windowPage,
+              windowCountPage,
+              windowTimePage,
+              windowTogglePage,
+              windowWhenPage
+            ]
+          },
+          {
+            label: 'Filtering Operators',
+            collapsed: true,
+            pages: [
+              auditPage,
+              auditTimePage,
+              debouncePage,
+              debounceTimePage,
+              distinctPage,
+              distinctUntilChangedPage,
+              distinctUntilKeyChangedPage,
+              elementAtPage,
+              filterPage,
+              firstPage,
+              ignoreElementsPage,
+              lastPage,
+              samplePage,
+              sampleTimePage,
+              singlePage,
+              skipPage,
+              skipLastPage,
+              skipUntilPage,
+              skipWhilePage,
+              takePage,
+              takeLastPage,
+              takeUntilPage,
+              takeWhilePage,
+              throttlePage,
+              throttleTimePage
+            ]
+          },
+          {
+            label: 'Join Operators',
+            collapsed: true,
+            pages: [
+              combineAllPage,
+              combineLatestAllPage,
+              concatAllPage,
+              exhaustAllPage,
+              mergeAllPage,
+              switchAllPage,
+              startWithPage,
+              withLatestFromPage
+            ]
+          },
+          {
+            label: 'Multicasting Operators',
+            collapsed: true,
+            pages: [
+              connectPage,
+              connectablePage,
+              multicastPage,
+              publishPage,
+              publishBehaviorPage,
+              publishLastPage,
+              publishReplayPage,
+              sharePage,
+              shareReplayPage
+            ]
+          },
+          {
+            label: 'Error Handling Operators',
+            collapsed: true,
+            pages: [
+              catchErrorPage,
+              retryPage,
+              retryWhenPage
+            ]
+          },
+          {
+            label: 'Utility Operators',
+            collapsed: true,
+            pages: [
+              tapPage,
+              delayPage,
+              delayWhenPage,
+              dematerializePage,
+              materializePage,
+              timeIntervalPage,
+              timestampPage,
+              timeoutPage,
+              timeoutWithPage,
+              toArrayPage
+            ]
+          },
+          {
+            label: 'Conditional Operators',
+            collapsed: true,
+            pages: [
+              defaultIfEmptyPage,
+              everyPage,
+              findPage,
+              findIndexPage,
+              isEmptyPage
+            ]
+          },
+          {
+            label: 'Aggregate Operators',
+            collapsed: true,
+            pages: [
+              countPage,
+              maxPage,
+              minPage,
+              reducePage
+            ]
+          }
         ]
       }
     ]

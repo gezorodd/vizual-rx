@@ -114,8 +114,17 @@ import {countPage} from "./operators/aggregate/count/count.page";
 import {minPage} from "./operators/aggregate/min/min.page";
 import {maxPage} from "./operators/aggregate/max/max.page";
 import {reducePage} from "./operators/aggregate/reduce/reduce.page";
+import {subjectPage} from "./subjects/subject/subject.page";
+import {behaviorSubjectPage} from "./subjects/behavior-subject/behavior-subject.page";
+import {replaySubjectPage} from "./subjects/replay-subject/replay-subject.page";
+import {asyncSubjectPage} from "./subjects/async-subject/async-subject.page";
 
 export const docPages = [
+  // Subjects
+  subjectPage,
+  behaviorSubjectPage,
+  replaySubjectPage,
+  asyncSubjectPage,
   // Creation Operators
   ajaxPage,
   bindCallbackPage,

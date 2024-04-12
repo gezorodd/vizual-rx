@@ -5,7 +5,7 @@
   height: 100%;
   display: flex;
 
-  ::ng-deep {
+  .mat-mdc-card-content ::ng-deep {
     p {
       border-left: 5px map.get($primary, "default") solid;
       padding-left: 0.5em;

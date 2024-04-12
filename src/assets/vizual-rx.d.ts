@@ -1,5 +1,15 @@
 import {Observer} from "rxjs";
-import {VizualRxValueColor, VizualRxValueShape} from "../app/core/vizual-rx-value";
+
+export type VizualRxValueShape = 'circle' | 'square' | 'triangle' | 'diamond' | 'pentagon';
+
+export type VizualRxValueColor = 'red' | 'blue' | 'green' | 'orange' | 'yellow' | 'purple' | 'cyan' | 'pink';
+
+export type VizualRxValueAttribute = VizualRxValueShape | VizualRxValueColor;
+
+export declare class VizualRxValue {
+  shape: VizualRxValueShape;
+  color: VizualRxValueColor;
+}
 
 export declare function observe(name?: string): Observer<any>
 
