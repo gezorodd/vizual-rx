@@ -5,6 +5,7 @@
   display: flex;
   border: $player-component-border;
   border-radius: $player-component-border-radius;
+  overflow: auto;
 
   .error-panel {
     height: 100%;

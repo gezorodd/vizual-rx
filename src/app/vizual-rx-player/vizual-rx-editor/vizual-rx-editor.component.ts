@@ -51,7 +51,8 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
     },
     theme: 'vs',
     minimap: {enabled: false},
-    scrollBeyondLastLine: false
+    scrollBeyondLastLine: false,
+    fixedOverflowWidgets: true
   };
 
   private editor?: monaco.editor.IStandaloneCodeEditor;
