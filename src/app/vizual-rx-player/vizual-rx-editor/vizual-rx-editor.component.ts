@@ -27,6 +27,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
 import {AppService} from "../../app.service";
 import {not} from "rxjs/internal/util/not";
+import {v4 as uuid} from 'uuid';
 
 @Component({
   selector: 'app-vizual-rx-editor',
@@ -46,7 +47,7 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
   editorOptions: any = {
     model: {
       language: 'typescript',
-      uri: monaco.Uri.parse(`${Math.random() * 9999999}`)
+      uri: monaco.Uri.parse(`${uuid()}`)
     },
     theme: 'vs',
     minimap: {enabled: false},

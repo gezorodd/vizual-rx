@@ -5,15 +5,12 @@
   display: flex;
   border: $player-component-border;
   border-radius: $player-component-border-radius;
-  overflow: hidden;
 
-  ::ng-deep {
-    .error-panel {
-      height: 100%;
-      margin: 0;
-      padding: 0;
-      border-radius: 0;
-    }
+  .error-panel {
+    height: 100%;
+    margin: 0;
+    padding: 0;
+    border-radius: 0;
   }
 }
 
