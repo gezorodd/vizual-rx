@@ -37,7 +37,7 @@
 							},
               {
                 "glob": "**/*",
-                "input": "node_modules/rxjs",
+                "input": "node_modules/rxjs/dist/types",
                 "output": "/assets/rxjs/"
               }
 						],
@@ -62,7 +62,7 @@
 								{
 									"type": "anyComponentStyle",
 									"maximumWarning": "500kb",
-									"maximumError": "1mb" 
+									"maximumError": "1mb"
 								}
 							],
 							"outputHashing": "all"

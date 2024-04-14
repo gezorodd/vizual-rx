@@ -27,5 +27,5 @@ source$
 red$
     .subscribe(observe('red'));
 blue$
-    .subscribe(observe('blue'));\``
+    .subscribe(observe('blue'));`
 };

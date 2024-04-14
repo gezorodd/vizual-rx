@@ -7,7 +7,7 @@ import {NgxMonacoEditorConfig} from "ngx-monaco-editor-v2/lib/config";
 
 export const vizualRxEditorReadyResolver: ResolveFn<boolean> = () => {
   const editorService = inject(VizualRxEditorService);
-  return forkJoin([editorService.getOrDownloadSourceAssets(), loadMonaco()])
+  return forkJoin([editorService.getExtraLibs(), loadMonaco()])
     .pipe(
       map(() => true)
     );

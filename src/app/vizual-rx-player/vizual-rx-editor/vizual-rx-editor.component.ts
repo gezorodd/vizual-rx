@@ -63,10 +63,9 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
 
   ngOnInit(): void {
     this.vizualRxEditorService.configureMonaco()
-      .pipe(
-        takeUntil(this.destroy$)
-      )
+      .pipe(takeUntil(this.destroy$))
       .subscribe();
+
     if (this.disableMouseWheel) {
       this.editorOptions.scrollbar = {
         handleMouseWheel: false

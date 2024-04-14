@@ -1,8 +1,8 @@
 import {Injectable} from '@angular/core';
 import {HttpClient} from "@angular/common/http";
-import {combineLatest, forkJoin, map, merge, Observable, shareReplay, Subject, tap} from "rxjs";
+import {from, mergeAll, mergeMap, Observable, of, reduce, shareReplay, startWith, Subject, tap} from "rxjs";
 import * as monaco from "monaco-editor";
-import {rxjsFilePaths} from "./rxjs-file-paths";
+import path from "path-browserify";
 
 @Injectable({
   providedIn: 'root'
@@ -10,20 +10,20 @@ import {rxjsFilePaths} from "./rxjs-file-paths";
 export class VizualRxEditorService {
 
   private readonly monacoReady$: Subject<void>;
-  private readonly assetContentMap: Map<string, Observable<string>>;
+  private readonly exportedFileRegex = /export .* from '([^']*)';/;
+  private readonly rootLibFiles = [
+    'vizual-rx/index.d.ts',
+    'rxjs/index.d.ts',
+    'rxjs/ajax/index.d.ts',
+    'rxjs/fetch/index.d.ts',
+    'rxjs/webSocket/index.d.ts',
+    'rxjs/operators/index.d.ts'
+  ];
+
+  private extraLibs$?: Observable<ExtraLib[]>;
 
   constructor(private http: HttpClient) {
     this.monacoReady$ = new Subject<void>();
-    this.assetContentMap = new Map();
-  }
-
-  getOrDownloadSourceAssets(): Observable<any> {
-    const allAssetPaths = [
-      'assets/vizual-rx.d.ts',
-      ...rxjsFilePaths
-        .map(rxjsFileRelativePath => `assets/rxjs/dist/types/${rxjsFileRelativePath}`)
-    ];
-    return forkJoin(allAssetPaths.map(assetPath => this.getAssetContent(assetPath)));
   }
 
   notifyMonacoReady(): void {
@@ -31,14 +31,28 @@ export class VizualRxEditorService {
     this.monacoReady$.complete();
   }
 
-  configureMonaco(): Observable<void> {
-    const initMonacoOptions = this.monacoReady$
-      .pipe(tap(() => {
-        this.initMonacoCompilerOptions();
-        this.initMonacoDiagnosticsOptions();
-      }));
+  configureMonaco(): Observable<unknown> {
+    return this.monacoReady$
+      .pipe(
+        tap(() => {
+          this.initMonacoCompilerOptions();
+          this.initMonacoDiagnosticsOptions();
+        }),
+        mergeMap(() => this.addExtraLibs())
+      );
+  }
 
-    return merge(initMonacoOptions, this.addExtraLibs());
+  getExtraLibs(): Observable<ExtraLib[]> {
+    if (!this.extraLibs$) {
+      this.extraLibs$ = from(this.rootLibFiles)
+        .pipe(
+          mergeMap(filePath => this.getExtraLib(filePath)),
+          reduce((acc, current) => [...acc, ...current], [] as ExtraLib[]),
+          shareReplay(1)
+        )
+      ;
+    }
+    return this.extraLibs$;
   }
 
   private get typescriptConfig(): monaco.languages.typescript.LanguageServiceDefaults {
@@ -59,48 +73,60 @@ export class VizualRxEditorService {
   private initMonacoDiagnosticsOptions() {
     this.typescriptConfig.setDiagnosticsOptions({
       noSemanticValidation: false,
-      noSyntaxValidation: false,
-      // diagnosticCodesToIgnore: [2322, 2362, 2345, 2339, 2365, 6387, 2363]
+      noSyntaxValidation: false
     });
   }
 
-  private addExtraLibs(): Observable<any> {
-    const addRxjsFiles = rxjsFilePaths
-      .map(rxjsFileRelativePath => {
-        const assetPath = `assets/rxjs/dist/types/${rxjsFileRelativePath}`;
-        const filePath = `file:///node_modules/@types/rxjs/${rxjsFileRelativePath}`;
-        return this.addExtraLib(assetPath, filePath);
-      });
-    const addVizualRxFile = this.addExtraLib(
-      'assets/vizual-rx.d.ts',
-      'file:///node_modules/@types/vizual-rx/index.d.ts'
-    );
-
-    const addAllFiles = [addVizualRxFile, ...addRxjsFiles];
-    return merge(...addAllFiles);
+  private addExtraLibs(): Observable<unknown> {
+    return this.getExtraLibs()
+      .pipe(
+        tap(extraLibs => {
+          extraLibs.forEach(extraLib => {
+            this.typescriptConfig.addExtraLib(extraLib.content, extraLib.filePath);
+          });
+        })
+      );
   }
 
-  private addExtraLib(assetPath: string, filePath: string): Observable<void> {
-    return combineLatest([
-      this.monacoReady$,
-      this.getAssetContent(assetPath)
-    ]).pipe(
-      tap(([_, assetContent]) => {
-        this.typescriptConfig.addExtraLib(assetContent, filePath);
-      }),
-      map(() => undefined)
-    );
-  }
+  private getExtraLib(filePath: string, followExports: boolean = true): Observable<ExtraLib[]> {
+    const assetPath = `assets/${filePath}`;
+    const libPath = `file:///node_modules/@types/${filePath}`;
+    const directoryPath = path.parse(filePath).dir;
 
-  private getAssetContent(assetPath: string): Observable<string> {
-    let assetContent$ = this.assetContentMap.get(assetPath);
-    if (!assetContent$) {
-      assetContent$ = this.http.get<string>(assetPath, {responseType: 'text' as 'json'})
-        .pipe(
-          shareReplay(1),
-        );
-      this.assetContentMap.set(assetPath, assetContent$);
-    }
-    return assetContent$;
+    return this.http.get<string>(assetPath, {responseType: 'text' as 'json'})
+      .pipe(
+        mergeMap(content => {
+          const rootExtraLib = new ExtraLib(content, libPath);
+          if (followExports) {
+            const followExtraLibArray = [];
+            let result: RegExpExecArray | null;
+            let str = content;
+            while (result = this.exportedFileRegex.exec(str)) {
+              const followFilePath = path.join(directoryPath, result[1]) + '.d.ts';
+              followExtraLibArray.push(this.getExtraLib(followFilePath, false));
+              str = str.substring(result.index + 1);
+            }
+
+            return from(followExtraLibArray)
+              .pipe(
+                startWith(of([rootExtraLib])),
+                mergeAll(),
+                reduce((acc, current) => [...acc, ...current], [] as ExtraLib[])
+              );
+          } else {
+            return of([rootExtraLib]);
+          }
+        })
+      );
+  }
+}
+
+class ExtraLib {
+  readonly content: string;
+  readonly filePath: string;
+
+  constructor(content: string, filePath: string) {
+    this.content = content;
+    this.filePath = filePath;
   }
 }

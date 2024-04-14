@@ -157,7 +157,6 @@ export class VizualRxViewerComponent implements OnChanges, AfterViewInit, OnDest
     newElements.forEach(newSvg => {
       const observer = this.observers.find(observer => observer.id === newSvg.id);
       if (observer) {
-        console.log('create obs track')
         const observerTrackGraphics = new ObserverTrackGraphics(remote, observer, newSvg);
         observerTrackGraphics.init();
         this.observerTrackGraphics.set(observer.id, observerTrackGraphics);
