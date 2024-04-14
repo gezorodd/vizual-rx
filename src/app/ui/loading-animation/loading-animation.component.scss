@@ -1,0 +1,48 @@
+$bar-width: 20px;
+$bar-min-height: 20px;
+$bar-max-height: 100px;
+$animation-duration: 1s;
+
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+.container {
+  width: 150px;
+  height: $bar-max-height;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+
+.bar {
+  width: #{$bar-width};
+  height: #{$bar-max-height};
+  background-color: #16b68b;
+  border-radius: #{calc($bar-width * 0.5)};
+  animation: #{$animation-duration} ease 0s infinite normal both running bar-size;
+
+  @for $i from 1 through 4 {
+    &:nth-child(#{$i + 1}) {
+      animation-delay: #{calc($animation-duration * 0.1 * $i)};
+    }
+  }
+}
+
+@keyframes bar-size {
+  0%, 100% {
+    height: #{$bar-min-height};
+  }
+  20%, 80% {
+    opacity: 1;
+  }
+  40%, 60% {
+    opacity: 0;
+  }
+  50% {
+    height: #{$bar-max-height};
+  }
+}

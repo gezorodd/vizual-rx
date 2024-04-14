@@ -19,10 +19,12 @@
   </mat-drawer>
   <div class="outer-page-container">
     <div class="inner-page-container">
-      <router-outlet></router-outlet>
-      <div *ngIf="!(initialized$ | async)" class="initialize-spinner-container">
-        <mat-spinner [diameter]="200" [strokeWidth]="5"></mat-spinner>
-      </div>
+      <ng-container *ngIf="(initialized$ | async); else loading">
+        <router-outlet></router-outlet>
+      </ng-container>
+      <ng-template #loading>
+        <app-loading-animation></app-loading-animation>
+      </ng-template>
     </div>
   </div>
 </mat-drawer-container>

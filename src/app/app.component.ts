@@ -13,12 +13,12 @@ import {AppService} from "./app.service";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {MatTooltip} from "@angular/material/tooltip";
-import {MatProgressSpinner} from "@angular/material/progress-spinner";
+import {LoadingAnimationComponent} from "./ui/loading-animation/loading-animation.component";
 
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule, VizualRxViewerComponent, VizualRxEditorComponent, SidenavComponent, MatToolbar, MatIcon, MatIconButton, MatDrawerContainer, MatDrawer, AsyncPipe, MatProgressBar, MatTooltip, MatProgressSpinner, NgIf],
+  imports: [RouterOutlet, FormsModule, VizualRxViewerComponent, VizualRxEditorComponent, SidenavComponent, MatToolbar, MatIcon, MatIconButton, MatDrawerContainer, MatDrawer, AsyncPipe, MatProgressBar, MatTooltip, NgIf, LoadingAnimationComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

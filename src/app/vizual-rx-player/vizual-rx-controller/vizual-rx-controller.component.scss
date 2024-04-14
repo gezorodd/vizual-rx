@@ -47,6 +47,10 @@ button {
   padding: 0 1em;
   justify-content: end;
   color: $player-component-color;
+
+  label {
+    white-space: nowrap;
+  }
 }
 
 .grow-1 {
