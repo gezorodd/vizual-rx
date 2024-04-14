@@ -6,6 +6,7 @@ export const shareReplayPage: DocPage = {
   routeUrl: 'operators/share-replay',
   detailsComponent: ShareReplayDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/shareReplay',
+  starred: true,
   sampleCode: `import { timer, map, tap, take, shareReplay, mergeMap} from 'rxjs';
 import { observe, createValue } from 'vizual-rx'
 

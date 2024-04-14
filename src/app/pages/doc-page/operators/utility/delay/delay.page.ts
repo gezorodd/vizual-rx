@@ -6,6 +6,7 @@ export const delayPage: DocPage = {
   routeUrl: 'operators/delay',
   detailsComponent: DelayDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/delay',
+  starred: true,
   sampleCode: `import { timer, map, take, delay } from 'rxjs';
 import { observe, createValue, colorAt } from 'vizual-rx';
 

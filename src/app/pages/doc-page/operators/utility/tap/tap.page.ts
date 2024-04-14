@@ -6,6 +6,7 @@ export const tapPage: DocPage = {
   routeUrl: 'operators/tao',
   detailsComponent: TapDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/tap',
+  starred: true,
   sampleCode: `import { timer, tap, map, take } from 'rxjs';
 import { observe, createValue, colorAt } from 'vizual-rx';
 

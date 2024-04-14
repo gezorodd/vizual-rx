@@ -6,6 +6,7 @@ export const sharePage: DocPage = {
   routeUrl: 'operators/share',
   detailsComponent: ShareDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/share',
+  starred: true,
   sampleCode: `import { timer, map, tap, take, share, mergeMap} from 'rxjs';
 import { observe, createValue} from 'vizual-rx'
 

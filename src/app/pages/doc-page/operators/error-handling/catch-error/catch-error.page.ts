@@ -6,6 +6,7 @@ export const catchErrorPage: DocPage = {
   routeUrl: 'operators/catch-error',
   detailsComponent: CatchErrorDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/catchError',
+  starred: true,
   sampleCode: `import { timer, map, catchError, take } from 'rxjs';
 import { observe, createValue, colorAt } from 'vizual-rx'
 
