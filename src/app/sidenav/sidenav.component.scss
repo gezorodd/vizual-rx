@@ -63,7 +63,7 @@
         opacity: 0;
       }
       & > .section-label > button > .mat-icon {
-        transform: rotate(90deg);
+        transform: rotate(-90deg);
       }
 
       &.expanding {

@@ -13,7 +13,7 @@
            [ngClass]="{'collapsing': section.collapsing, 'expanding': section.expanding, 'collapsed': section.collapsed}">
         <div class="section-label">
           <button mat-button (click)="toggleSectionCollapsed(section)">
-            <mat-icon [fontSet]="'material-symbols-rounded'">chevron_right</mat-icon>
+            <mat-icon [fontSet]="'material-symbols-rounded'">keyboard_arrow_down</mat-icon>
           </button>
           <span>{{ section.label }}</span>
           <span *ngIf="section.version as version" class="version">{{ version }}</span>
