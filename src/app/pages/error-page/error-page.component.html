@@ -1,0 +1,12 @@
+<div class="container">
+  <ng-container *ngIf="isNotFound; else defaultError">
+    <h1>404</h1>
+    <p>Page Not Found</p>
+  </ng-container>
+  <ng-template #defaultError>
+    <h1>Oops!</h1>
+    <p>An error occurred, try again later</p>
+  </ng-template>
+  <button mat-flat-button color="primary" [routerLink]="['']">Back to Home</button>
+</div>
+

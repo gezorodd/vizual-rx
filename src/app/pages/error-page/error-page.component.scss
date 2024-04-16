@@ -1,0 +1,25 @@
+:host {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 100%;
+}
+
+h1 {
+  font-size: 120px;
+  font-weight: 600;
+}
+
+p {
+  font-size: 30px;
+}
+
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 3em;
+  justify-content: space-evenly;
+  height: 50%;
+  max-height: 250px;
+}

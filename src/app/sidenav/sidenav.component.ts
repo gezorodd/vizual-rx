@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   ChangeDetectionStrategy,
-  ChangeDetectorRef,
   Component,
   ElementRef,
   EventEmitter,
@@ -13,7 +12,7 @@ import {
 import {MatFormField, MatLabel, MatSuffix} from "@angular/material/form-field";
 import {MatIcon} from "@angular/material/icon";
 import {MatInput} from "@angular/material/input";
-import {NavigationStart, Router, RouterLink} from "@angular/router";
+import {NavigationEnd, Router, RouterLink} from "@angular/router";
 import {
   combineLatest,
   concat,
@@ -73,7 +72,7 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
   private readonly destroy$ = new Subject<void>();
   private readonly sectionChildrenContainerIdRegex = /^section-(\d+)-children-container$/;
 
-  constructor(private router: Router, private changeDetectorRef: ChangeDetectorRef) {
+  constructor(private router: Router) {
     this.filterChanged$ = new Subject<string>();
     this.sections = sectionDefinitions
       .map(sectionDefinition => new Section(sectionDefinition));
@@ -81,11 +80,11 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
     const allPages = this.getAllPages();
     this.currentPage$ = this.router.events
       .pipe(
-        filter(event => event instanceof NavigationStart),
+        filter(event => event instanceof NavigationEnd),
         map(event => {
-          const navigationStart = event as NavigationStart;
-          const url = navigationStart.url;
-          const currentPage = allPages.find(page => url === `/${page.routeUrl}`);
+          const navigationEnd = event as NavigationEnd;
+          const url = navigationEnd.urlAfterRedirects ?? navigationEnd.url;
+          const currentPage = allPages.find(page => url.startsWith(`/${page.routeUrl}`));
           if (currentPage) {
             this.findSectionsContainingPage(currentPage)
               .forEach(section => section.collapsed = false);

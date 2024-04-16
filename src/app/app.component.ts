@@ -1,5 +1,12 @@
 import {Component} from '@angular/core';
-import {NavigationEnd, NavigationSkipped, NavigationStart, Router, RouterOutlet} from '@angular/router';
+import {
+  NavigationEnd,
+  NavigationError,
+  NavigationSkipped,
+  NavigationStart,
+  Router,
+  RouterOutlet
+} from '@angular/router';
 import {FormsModule} from "@angular/forms";
 import {VizualRxViewerComponent} from "./vizual-rx-player/vizual-rx-viewer/vizual-rx-viewer.component";
 import {VizualRxEditorComponent} from "./vizual-rx-player/vizual-rx-editor/vizual-rx-editor.component";
@@ -35,14 +42,15 @@ export class AppComponent {
         map(event => {
           if (event instanceof NavigationStart) {
             return true;
-          } else if (event instanceof NavigationEnd || event instanceof NavigationSkipped) {
+          } else if (event instanceof NavigationEnd || event instanceof NavigationSkipped || event instanceof NavigationError) {
             return false;
           }
           return undefined;
         }),
         filter(loading => loading !== undefined),
         map(loading => !!loading)
-      );
+      )
+    ;
     this.initialized$ = this.loading$
       .pipe(
         map(loading => !loading),
@@ -51,11 +59,15 @@ export class AppComponent {
       );
   }
 
-  toggleSidenav(): void {
+  toggleSidenav()
+    :
+    void {
     this.sidenavOpenedState$.next(!this.sidenavOpenedState$.value);
   }
 
-  sidenavOpenedChanged(): void {
+  sidenavOpenedChanged()
+    :
+    void {
     this.appService.sidenavOpenedChanged$.next();
   }
 }

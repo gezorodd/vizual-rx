@@ -1,5 +1,10 @@
 import {Routes} from '@angular/router';
-import {vizualRxRemotesResolver} from "./vizual-rx-player/vizual-rx-remotes.resolver";
+import {
+  fromProvider,
+  fromScriptRouteParam,
+  fromValue,
+  vizualRxRemoteResolver
+} from "./remote/vizual-rx-remote.resolver";
 import {PlaygroundPageComponent} from "./pages/playground-page/playground-page.component";
 import {PlaygroundPageService} from "./pages/playground-page/playground-page.service";
 import {OverviewPageComponent} from "./pages/overview-page/overview-page.component";
@@ -15,6 +20,7 @@ import {
 import {docPages} from "./pages/doc-page/doc-page.data";
 import {DocPageComponent} from "./pages/doc-page/doc-page.component";
 import {playgroundPageData} from "./pages/playground-page/playground.page.data";
+import {ErrorPageComponent} from "./pages/error-page/error-page.component";
 
 export const routes: Routes = [
   ...docPages
@@ -24,12 +30,12 @@ export const routes: Routes = [
       data: {
         page,
         codes: {
-          page: page.sampleCode
+          page: fromValue(page.sampleCode)
         },
         disableWebWorker: page.disableWebWorker
       },
       resolve: {
-        remotes: vizualRxRemotesResolver
+        remotes: vizualRxRemoteResolver
       }
     })),
   {
@@ -37,13 +43,25 @@ export const routes: Routes = [
     component: PlaygroundPageComponent,
     data: {
       codes: {
-        playground: [PlaygroundPageService, function (this: PlaygroundPageService) {
+        playground: fromProvider(PlaygroundPageService, function (this: PlaygroundPageService) {
           return this.code
-        }]
+        })
       }
     },
     resolve: {
-      remotes: vizualRxRemotesResolver
+      remotes: vizualRxRemoteResolver
+    }
+  },
+  {
+    path: `${playgroundPageData.routeUrl}/:scriptId`,
+    component: PlaygroundPageComponent,
+    data: {
+      codes: {
+        playground: fromScriptRouteParam('scriptId')
+      }
+    },
+    resolve: {
+      remotes: vizualRxRemoteResolver
     }
   },
   {
@@ -51,21 +69,32 @@ export const routes: Routes = [
     component: OverviewPageComponent,
     data: {
       codes: {
-        basicExample: basicExampleCode,
-        createValueExample: createValueExampleCode,
-        colorAndShapeAtExample: colorAndShapeAtExampleCode,
-        arrayExample: arrayExampleCode,
-        miscExample: miscExampleCode,
-        pipeExample: pipeExampleCode
+        basicExample: fromValue(basicExampleCode),
+        createValueExample: fromValue(createValueExampleCode),
+        colorAndShapeAtExample: fromValue(colorAndShapeAtExampleCode),
+        arrayExample: fromValue(arrayExampleCode),
+        miscExample: fromValue(miscExampleCode),
+        pipeExample: fromValue(pipeExampleCode)
       }
     },
     resolve: {
-      remotes: vizualRxRemotesResolver
+      remotes: vizualRxRemoteResolver
     }
   },
   {
     path: '',
     redirectTo: overviewPage.routeUrl,
     pathMatch: "full"
-  }
+  },
+  {
+    path: 'error',
+    component: ErrorPageComponent
+  },
+  {
+    path: '**',
+    component: ErrorPageComponent,
+    data: {
+      error: 404
+    }
+  },
 ];

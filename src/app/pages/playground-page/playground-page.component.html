@@ -1,3 +1,21 @@
-<h1>VizualRx Playground</h1>
+<h1>
+  <span>VizualRx Playground</span>
+  <div class="share-container" #shareContainer>
+    <ng-container [ngSwitch]="shareState">
+      <a *ngSwitchCase="'not-shared'" mat-button matTooltip="Share" (click)="shareScript()">
+        <mat-icon>share</mat-icon>
+      </a>
+      <mat-icon *ngSwitchCase="'sharing'" [fontSet]="'material-symbols-outlined'" class="loading-icon">
+        progress_activity
+      </mat-icon>
+      <ng-container *ngSwitchCase="'shared'">
+        <input type="text" readonly [value]="shareUrl" class="share-url-input">
+        <a mat-button matTooltip="Copy to Clipboard" (click)="copyShareUrl()">
+          <mat-icon>content_copy</mat-icon>
+        </a>
+      </ng-container>
+    </ng-container>
+  </div>
+</h1>
 <app-vizual-rx-player *ngIf="remote" class="player" [remote]="remote"
                       (codeChange)="code = $event"></app-vizual-rx-player>

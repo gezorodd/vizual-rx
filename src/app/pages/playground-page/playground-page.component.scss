@@ -1,3 +1,6 @@
+@use "sass:map";
+@import "../../../theme";
+
 :host {
   height: 100%;
   display: flex;
@@ -7,3 +10,57 @@
 .player {
   flex-grow: 1;
 }
+
+h1 {
+  display: flex;
+  align-items: center;
+  gap: 0.5em;
+  line-height: 36px;
+}
+
+.share-container {
+  display: flex;
+  gap: 0.3em;
+  transition: width 0.2s ease-out;
+  overflow: hidden;
+
+  a {
+    min-width: inherit;
+    padding: 0.2em;
+
+    & > mat-icon {
+      margin: 0;
+      width: 1em;
+      height: 1em;
+      font-size: 22px;
+      color: #4b4b4b;
+    }
+  }
+
+  @keyframes loading-icon {
+    0% {
+      transform: rotate(0);
+    }
+    100% {
+      transform: rotate(360deg);
+    }
+  }
+
+  .loading-icon {
+    animation: loading-icon;
+    animation-iteration-count: infinite;
+    animation-duration: 1s;
+    animation-timing-function: linear;
+  }
+
+  .share-url-input {
+    line-height: 20px;
+    font-size: 14px;
+    outline-color: map.get($primary, "default");
+    width: 320px;
+    border: 1px solid gray;
+    border-radius: 5px;
+    padding: 0.2em 0.5em;
+  }
+}
+
