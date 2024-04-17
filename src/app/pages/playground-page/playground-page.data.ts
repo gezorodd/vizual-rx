@@ -1,58 +1,32 @@
-export const playGroundCode = `import {delay, of, expand, map, share, race, first,
-    skip, distinctUntilChanged, find, takeUntil} from "rxjs";
-import {observe, createValue} from "vizual-rx";
+export const playGroundCode = `import {mergeMap, switchMap, exhaustMap, concatMap, timer, map,
+    take, Observable} from "rxjs";
+import {observe, createValue, colorAt, VizualRxValue} from "vizual-rx";
 
-const randomEmit$ = of(0)
+const source$ = timer(0, 500)
     .pipe(
-        expand(value => {
-            const newValue = Math.random() > 0.5 ? value + 1 : value;
-            const dueTime = 500 + Math.floor(Math.random() * 500);
-            return of(newValue)
-                .pipe(delay(dueTime));
-        }),
-        skip(1),
-        distinctUntilChanged()
+        map(i => createValue(colorAt(i), 'square')),
+        take(4)
     );
 
-const add$ = randomEmit$
-    .pipe(
-        map(() => createValue('green', 'circle')),
-        share()
-    );
+source$
+    .subscribe(observe('source'));
+source$
+    .pipe(mergeMap(value => inner(value)))
+    .subscribe(observe('mergeMap'));
+source$
+    .pipe(switchMap(value => inner(value)))
+    .subscribe(observe('switchMap'));
+source$
+    .pipe(exhaustMap(value => inner(value)))
+    .subscribe(observe('exhaustMap'));
+source$
+    .pipe(concatMap(value => inner(value)))
+    .subscribe(observe('concatMap'));
 
-const remove$ = randomEmit$
-    .pipe(
-        map(() => createValue('red', 'circle')),
-        share()
-    );
-
-const counter$ = of(0)
-    .pipe(
-        expand(counter =>
-            race(
-                add$
-                    .pipe(map(() => counter + 1)),
-                remove$
-                    .pipe(map(() => counter - 1))
-            ).pipe(first())
-        )
-    );
-
-const finished$ = counter$
-    .pipe(
-        find(value => Math.abs(value) >= 3),
-        map(() => createValue('purple', 'diamond')),
-        delay(0)
-    );
-
-add$
-    .pipe(takeUntil(finished$))
-    .subscribe(observe('add'));
-remove$
-    .pipe(takeUntil(finished$))
-    .subscribe(observe('remove'));
-counter$
-    .pipe(takeUntil(finished$))
-    .subscribe(observe('counter'));
-finished$
-    .subscribe(observe('finished'));`;
+function inner(value: VizualRxValue): Observable<VizualRxValue> {
+    return timer(0, 500)
+        .pipe(
+            map(() => createValue(value.color, 'circle')),
+            take(3)
+        );
+}`;
