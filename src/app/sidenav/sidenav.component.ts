@@ -84,7 +84,7 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
         map(event => {
           const navigationEnd = event as NavigationEnd;
           const url = navigationEnd.urlAfterRedirects ?? navigationEnd.url;
-          const currentPage = allPages.find(page => url.startsWith(`/${page.routeUrl}`));
+          const currentPage = allPages.find(page => url.match(`^/${page.routeUrl}(/.*)?$`));
           if (currentPage) {
             this.findSectionsContainingPage(currentPage)
               .forEach(section => section.collapsed = false);
