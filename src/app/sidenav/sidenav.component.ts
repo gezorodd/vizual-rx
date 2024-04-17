@@ -21,7 +21,7 @@ import {
   from,
   map,
   merge,
-  mergeMap,
+  mergeMap, noop,
   Observable,
   shareReplay,
   Subject,
@@ -132,6 +132,13 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
       this.getAllSections()
         .filter(section => !section.hidden)
         .forEach(section => section.collapsed = false);
+
+      const exactMatchPage = this.getAllPages()
+        .find(page => page.title.toLowerCase() === input.toLowerCase());
+      if (exactMatchPage) {
+        this.router.navigate([exactMatchPage.routeUrl])
+          .then(noop);
+      }
     }
 
     concat(this.updateAllSectionChildrenHeight(), timer(0))
