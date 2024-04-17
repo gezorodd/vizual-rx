@@ -10,7 +10,7 @@ export const concatMapPage: DocPage = {
   sampleCode: `import {concatMap, timer, tap, map, take} from "rxjs";
 import {observe, createValue, colorAt} from "vizual-rx";
 
-const source$ = timer(0, 1100)
+const source$ = timer(0, 1000)
     .pipe(
         map(i => createValue(colorAt(i), 'square')),
         take(4)

@@ -10,7 +10,7 @@ export const mergeMapToPage: DocPage = {
   sampleCode: `import {mergeMapTo, timer, map, take} from "rxjs";
 import {observe, createValue, shapeAt} from "vizual-rx";
 
-const source1$ = timer(0, 2000)
+const source1$ = timer(0, 1000)
     .pipe(
         map(i => createValue('blue', shapeAt(i))),
         take(3)

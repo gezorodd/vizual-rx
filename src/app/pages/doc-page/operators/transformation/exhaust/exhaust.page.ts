@@ -10,7 +10,7 @@ export const exhaustPage: DocPage = {
   sampleCode: `import {exhaust, timer, map, tap, take} from "rxjs";
 import {observe, createValue, colorAt} from "vizual-rx";
 
-const source$ = timer(0, 1100)
+const source$ = timer(0, 1000)
     .pipe(
         map(i => createValue(colorAt(i), 'square')),
         take(4)

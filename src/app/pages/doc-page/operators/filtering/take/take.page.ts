@@ -10,7 +10,7 @@ export const takePage: DocPage = {
   sampleCode: `import {map, take, range, delayWhen, timer} from "rxjs";
 import {observe, createValue, colorAt} from "vizual-rx";
 
-const source$ = range(0, 8)
+const source$ = range(0, 6)
     .pipe(
         delayWhen((_, i) => timer(i * 500)),
         map(i => createValue('circle', colorAt(i)))

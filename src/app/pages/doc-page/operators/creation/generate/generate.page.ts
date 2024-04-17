@@ -6,22 +6,15 @@ export const generatePage: DocPage = {
   routeUrl: 'operators/generate',
   detailsComponent: GenerateDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/generate',
-  sampleCode: `import {generate, delayWhen, timer} from "rxjs";
+  sampleCode: `import {generate} from "rxjs";
 import {observe} from "vizual-rx";
 
-const example$ = generate(
-    45,
-    n => n != 1,
-    n => {
-        if (n % 2 == 0) {
-            return n / 2;
-        } else {
-            return n * 3 + 1;
-        }
-    }
-);
+const example$ = generate({
+    initialState: 1,
+    condition: num => num < 1000,
+    iterate: num => num * 10
+});
 
 example$
-    .pipe(delayWhen((_, i) => timer(i * 500)))
     .subscribe(observe('example'));`
 };

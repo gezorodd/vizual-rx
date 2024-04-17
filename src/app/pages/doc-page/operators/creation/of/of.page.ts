@@ -7,7 +7,7 @@ export const ofPage: DocPage = {
   detailsComponent: OfDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/of',
   starred: true,
-  sampleCode: `import {of, delayWhen, timer} from "rxjs";
+  sampleCode: `import {of} from "rxjs";
 import {observe, createValue} from "vizual-rx";
 
 const example$ = of(
@@ -16,6 +16,5 @@ const example$ = of(
     createValue('green', 'circle')
 );
 example$
-    .pipe(delayWhen((_, i) => timer(i * 500)))
     .subscribe(observe('example'));`
 };

@@ -17,11 +17,13 @@ const source1$ = interval(2000)
 
 const source2$ = interval(500)
     .pipe(
+        take(10),
         map(i => createValue('blue', shapeAt(i)))
     );
 
 const source3$ = timer(3000, 2000)
     .pipe(
+        take(3),
         map(i => createValue('green', shapeAt(i)))
     );
 

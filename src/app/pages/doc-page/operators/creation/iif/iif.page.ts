@@ -20,7 +20,7 @@ const source3$ = of(createValue('red', 'circle'));
 const example$ = source1$
     .pipe(
         mergeMap(i =>
-            iif(() => i % 2, source2$, source3$)
+            iif(() => i % 2 === 0, source2$, source3$)
         )
     );
 

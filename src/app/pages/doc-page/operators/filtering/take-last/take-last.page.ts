@@ -6,7 +6,7 @@ export const takeLastPage: DocPage = {
   routeUrl: 'operators/take-last',
   detailsComponent: TakeLastDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/takeLast',
-  sampleCode: `import {takeLast, timer, map, take, delayWhen} from "rxjs";
+  sampleCode: `import {takeLast, timer, map, take} from "rxjs";
 import {observe, createValue, colorAt} from "vizual-rx";
 
 const source$ = timer(0, 500)
@@ -17,8 +17,7 @@ const source$ = timer(0, 500)
 
 const example$ = source$
     .pipe(
-        takeLast(3),
-        delayWhen((_, i) => timer(i * 100))
+        takeLast(3)
     );
 
 source$

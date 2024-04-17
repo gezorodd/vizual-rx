@@ -7,25 +7,20 @@ export const fromPage: DocPage = {
   detailsComponent: FromDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/from',
   starred: true,
-  sampleCode: `import {from, delayWhen, timer} from "rxjs";
+  sampleCode: `import {from} from "rxjs";
 import {observe, createValue} from "vizual-rx";
 
 const example1$ = from([
     createValue('red', 'circle'),
     createValue('blue', 'circle'),
     createValue('green', 'circle')
-]).pipe(
-    delayWhen((_, i) => timer(i * 500))
-);
+]);
 
 const example2$ = from(
     new Promise(resolve => resolve(createValue('blue', 'square')))
 );
 
-const example3$ = from('Hello')
-    .pipe(
-        delayWhen((_, i) => timer(i * 500))
-    );
+const example3$ = from('Hello');
 
 example1$
     .subscribe(observe('from array'));
