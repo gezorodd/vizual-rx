@@ -1,14 +1,14 @@
 import {interval, Subject, takeUntil} from "rxjs";
 import {DynamicObjectGraphics} from "./dynamic-object-graphics";
 import {VizualRxRemote} from "../remote/vizual-rx-remote.model";
+import {LayeredContainer} from "./layered-container";
 
 export class TrackGraphics {
   protected readonly remote: VizualRxRemote;
   protected readonly svg: SVGSVGElement;
   protected readonly dynamicObjects: DynamicObjectGraphics[];
   protected trackContainer!: SVGGElement;
-  protected sceneContainer!: SVGGElement;
-  protected sceneLayers: Map<number, SVGGElement>;
+  protected scene!: LayeredContainer;
   protected readonly destroy$ = new Subject<void>();
   private readonly className: string;
   private updateIntervalId?: ReturnType<typeof setInterval>;
@@ -18,13 +18,12 @@ export class TrackGraphics {
     this.svg = svg;
     this.dynamicObjects = [];
     this.className = className;
-    this.sceneLayers = new Map<number, SVGGElement>();
   }
 
 
   init(): void {
     this.trackContainer = this.createTrackContainer();
-    this.sceneContainer = this.createSceneContainer();
+    this.scene = this.createScene();
     this.removeOutboundDynamicObjectsAtInterval();
   }
 
@@ -45,14 +44,12 @@ export class TrackGraphics {
 
   addDynamicObject(dynamicObject: DynamicObjectGraphics): void {
     this.dynamicObjects.push(dynamicObject);
-    const sceneLayer = this.getSceneLayer(dynamicObject.layerIndex);
-    sceneLayer.appendChild(dynamicObject.groupContainer);
+    this.scene.addObject(dynamicObject);
     dynamicObject.update();
   }
 
   removeDynamicObject(dynamicObject: DynamicObjectGraphics): void {
-    const sceneLayer = this.getSceneLayer(dynamicObject.layerIndex);
-    sceneLayer.removeChild(dynamicObject.groupContainer);
+    this.scene.removeObject(dynamicObject);
     const index = this.dynamicObjects.indexOf(dynamicObject);
     if (index !== -1) {
       this.dynamicObjects.splice(index, 1);
@@ -60,10 +57,7 @@ export class TrackGraphics {
   }
 
   clearDynamicObjects(): void {
-    this.dynamicObjects.forEach(dynamicObject => {
-      const sceneLayer = this.getSceneLayer(dynamicObject.layerIndex);
-      sceneLayer.removeChild(dynamicObject.groupContainer);
-    });
+    this.dynamicObjects.forEach(dynamicObject => this.scene.removeObject(dynamicObject));
     this.dynamicObjects.splice(0, this.dynamicObjects.length);
   }
 
@@ -75,7 +69,7 @@ export class TrackGraphics {
     return trackContainer;
   }
 
-  private createSceneContainer(): SVGGElement {
+  private createScene(): LayeredContainer {
     const sceneContainer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
     sceneContainer.classList.add('scene-container');
     this.trackContainer.appendChild(sceneContainer);
@@ -85,31 +79,7 @@ export class TrackGraphics {
     startLine.setAttribute('y2', '50');
     startLine.classList.add('start-line')
     sceneContainer.appendChild(startLine);
-    return sceneContainer;
-  }
-
-  private getSceneLayer(index: number): SVGGElement {
-    let sceneLayer = this.sceneLayers.get(index);
-    if (!sceneLayer) {
-      sceneLayer = document.createElementNS('http://www.w3.org/2000/svg', 'g');
-      this.sceneLayers.set(index, sceneLayer);
-
-      const indexedSortedHighestFirst = [...this.sceneLayers.keys()].sort().reverse();
-      if (indexedSortedHighestFirst.length === 0 || indexedSortedHighestFirst[0] < index) {
-        this.sceneContainer.appendChild(sceneLayer);
-      } else {
-        let insertBefore: SVGGElement | undefined;
-        for (let otherIndex of indexedSortedHighestFirst) {
-          if (index < otherIndex) {
-            insertBefore = this.sceneLayers.get(otherIndex);
-          } else {
-            break;
-          }
-        }
-        this.sceneContainer.insertBefore(sceneLayer, insertBefore!);
-      }
-    }
-    return sceneLayer;
+    return new LayeredContainer(sceneContainer);
   }
 
   private removeOutboundDynamicObjectsAtInterval(): void {

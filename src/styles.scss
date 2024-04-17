@@ -158,11 +158,11 @@ svg.observer-track, svg.time-track {
       }
 
       & > .color-cyan {
-        fill:  $player-observer-value-color-cyan;
+        fill: $player-observer-value-color-cyan;
       }
 
       & > .color-pink {
-        fill:  $player-observer-value-color-pink;
+        fill: $player-observer-value-color-pink;
       }
 
       & > .array-symbol {
@@ -183,5 +183,15 @@ svg.observer-track, svg.time-track {
       animation-duration: 0.3s;
       animation-timing-function: ease-in;
     }
+  }
+
+  .no-animation {
+    * {
+      animation: none !important;
+    }
+  }
+
+  text {
+    cursor: default;
   }
 }

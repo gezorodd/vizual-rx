@@ -7,7 +7,7 @@ export class ObserverErrorGraphics extends DynamicObjectGraphics {
   private readonly err: any;
 
   constructor(remote: VizualRxRemote, notification: VizualRxRemoteErrorNotification) {
-    super(remote, notification.time, -1);
+    super(remote, notification.time);
     this.err = notification.err;
   }
 

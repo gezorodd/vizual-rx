@@ -4,9 +4,12 @@ import {catchError, EMPTY, merge, takeUntil, tap} from "rxjs";
 import {ObserverCompleteGraphics} from "./observer-complete-graphics";
 import {ObserverErrorGraphics} from "./observer-error-graphics";
 import {VizualRxRemote, VizualRxRemoteObserver} from "../../remote/vizual-rx-remote.model";
+import {DynamicObjectGraphics} from "../dynamic-object-graphics";
+import {ObserverStackGraphics} from "./observer-stack-graphics";
 
 export class ObserverTrackGraphics extends TrackGraphics {
   private readonly observer: VizualRxRemoteObserver;
+  private lastAddedStackableObject?: DynamicObjectGraphics;
 
   constructor(remote: VizualRxRemote, observer: VizualRxRemoteObserver, svg: SVGSVGElement) {
     super(remote, svg, 'observer-track');
@@ -32,7 +35,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
     const line = document.createElementNS('http://www.w3.org/2000/svg', 'line');
     line.classList.add('center-line');
     line.setAttribute('x2', `${this.svg.clientWidth}`);
-    this.trackContainer.insertBefore(line, this.sceneContainer);
+    this.trackContainer.insertBefore(line, this.scene.root);
   }
 
   private createErrorColorFilter() {
@@ -84,5 +87,38 @@ export class ObserverTrackGraphics extends TrackGraphics {
           this.addDynamicObject(erroredGraphics);
         })
       )
+  }
+
+  override addDynamicObject(dynamicObject: DynamicObjectGraphics) {
+    if (this.shouldStackObject(dynamicObject)) {
+      let observerStackGraphics: ObserverStackGraphics;
+      if (this.lastAddedStackableObject instanceof ObserverStackGraphics) {
+        observerStackGraphics = this.lastAddedStackableObject;
+      } else {
+        observerStackGraphics = new ObserverStackGraphics(this.remote, dynamicObject.time);
+        super.addDynamicObject(observerStackGraphics);
+        this.removeDynamicObject(this.lastAddedStackableObject!);
+        observerStackGraphics.addItem(this.lastAddedStackableObject!);
+        this.lastAddedStackableObject = observerStackGraphics;
+      }
+      observerStackGraphics.addItem(dynamicObject);
+      observerStackGraphics.update();
+    } else {
+      super.addDynamicObject(dynamicObject);
+      this.lastAddedStackableObject = dynamicObject;
+    }
+  }
+
+  private shouldStackObject(dynamicObject: DynamicObjectGraphics): boolean {
+    if (!this.isStackable(dynamicObject) || !this.lastAddedStackableObject) {
+      return false;
+    }
+    const diff = Math.abs(dynamicObject.time - this.lastAddedStackableObject.time);
+    return diff < 50;
+  }
+
+  private isStackable(dynamicObject: DynamicObjectGraphics): boolean {
+    return dynamicObject instanceof ObserverValueGraphics || dynamicObject instanceof ObserverErrorGraphics ||
+      dynamicObject instanceof ObserverStackGraphics;
   }
 }
