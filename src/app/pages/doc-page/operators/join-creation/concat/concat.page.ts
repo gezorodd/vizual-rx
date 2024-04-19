@@ -8,23 +8,23 @@ export const concatPage: DocPage = {
   documentationUrl: 'https://rxjs.dev/api/index/function/concat',
   starred: true,
   sampleCode: `import {concat, interval, map, take} from "rxjs";
-import {createValue, observe} from "vizual-rx";
+import {createValue, observe, shapeAt} from "vizual-rx";
 
 const source1$ = interval(500)
     .pipe(
-        map(() => createValue('red')),
+        map(i => createValue('red', shapeAt(i))),
         take(3)
     );
 
 const source2$ = interval(500)
     .pipe(
-        map(() => createValue('blue')),
+        map(i => createValue('blue', shapeAt(i))),
         take(3)
     );
 
 const source3$ = interval(500)
     .pipe(
-        map(() => createValue('green')),
+        map(i => createValue('green', shapeAt(i))),
         take(3)
     );
 

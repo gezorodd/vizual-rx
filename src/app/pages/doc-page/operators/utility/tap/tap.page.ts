@@ -3,14 +3,14 @@ import {TapDetailsComponent} from "./tap-details/tap-details.component";
 
 export const tapPage: DocPage = {
   title: 'tap',
-  routeUrl: 'operators/tao',
+  routeUrl: 'operators/tap',
   detailsComponent: TapDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/tap',
   starred: true,
   sampleCode: `import { timer, tap, map, take } from 'rxjs';
-import { observe, createValue, colorAt } from 'vizual-rx';
+import { observe, createValue, colorAt, VizualRxValueColor } from 'vizual-rx';
 
-let color = 'purple';
+let color: VizualRxValueColor = 'purple';
 
 const source1$ = timer(600, 1200)
     .pipe(

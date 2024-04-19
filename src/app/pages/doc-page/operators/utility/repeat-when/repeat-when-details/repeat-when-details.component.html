@@ -1,0 +1,11 @@
+<app-alert-message type="warning">
+  <b>Deprecation Notes:</b> Will be removed in v9 or v10. Use <a [routerLink]="['/operators/repeat']">repeat</a>'s delay
+  option instead. Instead of <span class="code">repeatWhen(() => notify$)</span>, use: <span class="code">repeat(&#123; delay: () => notify$ &#125;)</span>.
+</app-alert-message>
+<p>
+  Returns an Observable that mirrors the source Observable with the exception of a <span class="code">complete</span>.
+  If the source Observable calls <span class="code">complete</span>, this method will emit to the Observable returned
+  from <span class="code">notifier</span>. If that Observable calls <span class="code">complete</span> or <span
+  class="code">error</span>, then this method will call <span class="code">complete</span> or <span
+  class="code">error</span> on the child subscription. Otherwise this method will resubscribe to the source Observable.
+</p>

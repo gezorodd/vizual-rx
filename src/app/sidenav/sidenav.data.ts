@@ -19,7 +19,7 @@ import {combineAllPage} from "../pages/doc-page/operators/join/combine-all/combi
 import {combineLatestPage} from "../pages/doc-page/operators/join-creation/combine-latest/combine-latest.page";
 import {defaultIfEmptyPage} from "../pages/doc-page/operators/conditional/default-if-empty/default-if-empty.page";
 import {concatPage} from "../pages/doc-page/operators/join-creation/concat/concat.page";
-import {forkJoinPage} from "../pages/doc-page/operators/join-creation/forkJoin/fork-join.page";
+import {forkJoinPage} from "../pages/doc-page/operators/join-creation/fork-join/fork-join.page";
 import {mergePage} from "../pages/doc-page/operators/join-creation/merge/merge.page";
 import {partitionPage} from "../pages/doc-page/operators/join-creation/partition/partition.page";
 import {racePage} from "../pages/doc-page/operators/join-creation/race/race.page";
@@ -126,6 +126,28 @@ import {subjectPage} from "../pages/doc-page/subjects/subject/subject.page";
 import {behaviorSubjectPage} from "../pages/doc-page/subjects/behavior-subject/behavior-subject.page";
 import {replaySubjectPage} from "../pages/doc-page/subjects/replay-subject/replay-subject.page";
 import {asyncSubjectPage} from "../pages/doc-page/subjects/async-subject/async-subject.page";
+import {animationFramesPage} from "../pages/doc-page/functions/animation-frames/animation-frames.page";
+import {concatWithPage} from "../pages/doc-page/operators/join/concat-with/concat-with.page";
+import {endWithPage} from "../pages/doc-page/operators/join/end-with/end-with.page";
+import {finalizePage} from "../pages/doc-page/operators/utility/finalize/finalize.page";
+import {firstValueFromPage} from "../pages/doc-page/functions/first-value-from/first-value-from.page";
+import {lastValueFromPage} from "../pages/doc-page/functions/last-value-from/last-value-from.page";
+import {mergeWithPage} from "../pages/doc-page/operators/join/merge-with/merge-with.page";
+import {neverPage} from "../pages/doc-page/operators/creation/never/never.page";
+import {
+  onErrorResumeNextPage
+} from "../pages/doc-page/operators/join-creation/on-error-resume-next/on-error-resume-next.page";
+import {
+  onErrorResumeNextWithPage
+} from "../pages/doc-page/operators/join/on-error-resume-next-with/on-error-resume-next-with.page";
+import {pipePage} from "../pages/doc-page/functions/pipe/pipe.page";
+import {raceWithPage} from "../pages/doc-page/operators/join/race-with/race-with.page";
+import {repeatPage} from "../pages/doc-page/operators/utility/repeat/repeat.page";
+import {repeatWhenPage} from "../pages/doc-page/operators/utility/repeat-when/repeat-when.page";
+import {sequenceEqualPage} from "../pages/doc-page/operators/conditional/sequence-equal/sequence-equal.page";
+import {throwIfEmptyPage} from "../pages/doc-page/operators/utility/throw-if-empty/throw-if-empty.page";
+import {usingPage} from "../pages/doc-page/functions/using/using.page";
+import {zipWithPage} from "../pages/doc-page/operators/join/zip-with/zip-with.page";
 
 export const sectionDefinitions: SectionDefinition[] = [
   {
@@ -151,6 +173,17 @@ export const sectionDefinitions: SectionDefinition[] = [
         ]
       },
       {
+        label: 'Functions',
+        collapsed: true,
+        pages: [
+          animationFramesPage,
+          firstValueFromPage,
+          lastValueFromPage,
+          pipePage,
+          usingPage
+        ]
+      },
+      {
         label: 'Operators',
         children: [
           {
@@ -167,6 +200,7 @@ export const sectionDefinitions: SectionDefinition[] = [
               fromEventPatternPage,
               generatePage,
               intervalPage,
+              neverPage,
               ofPage,
               rangePage,
               throwErrorPage,
@@ -182,6 +216,7 @@ export const sectionDefinitions: SectionDefinition[] = [
               concatPage,
               forkJoinPage,
               mergePage,
+              onErrorResumeNextPage,
               partitionPage,
               racePage,
               zipPage
@@ -259,11 +294,17 @@ export const sectionDefinitions: SectionDefinition[] = [
               combineAllPage,
               combineLatestAllPage,
               concatAllPage,
+              concatWithPage,
+              endWithPage,
               exhaustAllPage,
               mergeAllPage,
+              mergeWithPage,
+              onErrorResumeNextWithPage,
+              raceWithPage,
               switchAllPage,
               startWithPage,
-              withLatestFromPage
+              withLatestFromPage,
+              zipWithPage
             ]
           },
           {
@@ -298,7 +339,11 @@ export const sectionDefinitions: SectionDefinition[] = [
               delayPage,
               delayWhenPage,
               dematerializePage,
+              finalizePage,
               materializePage,
+              repeatPage,
+              repeatWhenPage,
+              throwIfEmptyPage,
               timeIntervalPage,
               timestampPage,
               timeoutPage,
@@ -314,7 +359,8 @@ export const sectionDefinitions: SectionDefinition[] = [
               everyPage,
               findPage,
               findIndexPage,
-              isEmptyPage
+              isEmptyPage,
+              sequenceEqualPage
             ]
           },
           {

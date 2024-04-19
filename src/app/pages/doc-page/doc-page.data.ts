@@ -17,7 +17,7 @@ import {combineAllPage} from "./operators/join/combine-all/combine-all.page";
 import {combineLatestPage} from "./operators/join-creation/combine-latest/combine-latest.page";
 import {defaultIfEmptyPage} from "./operators/conditional/default-if-empty/default-if-empty.page";
 import {concatPage} from "./operators/join-creation/concat/concat.page";
-import {forkJoinPage} from "./operators/join-creation/forkJoin/fork-join.page";
+import {forkJoinPage} from "./operators/join-creation/fork-join/fork-join.page";
 import {mergePage} from "./operators/join-creation/merge/merge.page";
 import {partitionPage} from "./operators/join-creation/partition/partition.page";
 import {racePage} from "./operators/join-creation/race/race.page";
@@ -118,6 +118,24 @@ import {subjectPage} from "./subjects/subject/subject.page";
 import {behaviorSubjectPage} from "./subjects/behavior-subject/behavior-subject.page";
 import {replaySubjectPage} from "./subjects/replay-subject/replay-subject.page";
 import {asyncSubjectPage} from "./subjects/async-subject/async-subject.page";
+import {animationFramesPage} from "./functions/animation-frames/animation-frames.page";
+import {concatWithPage} from "./operators/join/concat-with/concat-with.page";
+import {endWithPage} from "./operators/join/end-with/end-with.page";
+import {finalizePage} from "./operators/utility/finalize/finalize.page";
+import {firstValueFromPage} from "./functions/first-value-from/first-value-from.page";
+import {lastValueFromPage} from "./functions/last-value-from/last-value-from.page";
+import {mergeWithPage} from "./operators/join/merge-with/merge-with.page";
+import {neverPage} from "./operators/creation/never/never.page";
+import {onErrorResumeNextPage} from "./operators/join-creation/on-error-resume-next/on-error-resume-next.page";
+import {onErrorResumeNextWithPage} from "./operators/join/on-error-resume-next-with/on-error-resume-next-with.page";
+import {pipePage} from "./functions/pipe/pipe.page";
+import {raceWithPage} from "./operators/join/race-with/race-with.page";
+import {repeatPage} from "./operators/utility/repeat/repeat.page";
+import {repeatWhenPage} from "./operators/utility/repeat-when/repeat-when.page";
+import {sequenceEqualPage} from "./operators/conditional/sequence-equal/sequence-equal.page";
+import {throwIfEmptyPage} from "./operators/utility/throw-if-empty/throw-if-empty.page";
+import {usingPage} from "./functions/using/using.page";
+import {zipWithPage} from "./operators/join/zip-with/zip-with.page";
 
 export const docPages = [
   // Subjects
@@ -136,6 +154,7 @@ export const docPages = [
   fromEventPatternPage,
   generatePage,
   intervalPage,
+  neverPage,
   ofPage,
   rangePage,
   throwErrorPage,
@@ -146,6 +165,7 @@ export const docPages = [
   concatPage,
   forkJoinPage,
   mergePage,
+  onErrorResumeNextPage,
   partitionPage,
   racePage,
   zipPage,
@@ -208,11 +228,17 @@ export const docPages = [
   combineAllPage,
   combineLatestAllPage,
   concatAllPage,
+  concatWithPage,
+  endWithPage,
   exhaustAllPage,
   mergeAllPage,
+  mergeWithPage,
+  onErrorResumeNextWithPage,
+  raceWithPage,
   switchAllPage,
   startWithPage,
   withLatestFromPage,
+  zipWithPage,
   // Multicasting
   connectPage,
   connectablePage,
@@ -232,7 +258,11 @@ export const docPages = [
   delayPage,
   delayWhenPage,
   dematerializePage,
+  finalizePage,
   materializePage,
+  repeatPage,
+  repeatWhenPage,
+  throwIfEmptyPage,
   timeIntervalPage,
   timestampPage,
   timeoutPage,
@@ -244,9 +274,16 @@ export const docPages = [
   findPage,
   findIndexPage,
   isEmptyPage,
+  sequenceEqualPage,
   // Aggregate
   countPage,
   maxPage,
   minPage,
-  reducePage
+  reducePage,
+  // Functions
+  animationFramesPage,
+  firstValueFromPage,
+  lastValueFromPage,
+  pipePage,
+  usingPage
 ];
