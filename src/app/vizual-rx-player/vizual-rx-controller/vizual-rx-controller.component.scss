@@ -1,4 +1,4 @@
-@use "../../../../node_modules/@angular/material/index" as mat;
+@use "sass:map";
 @import "../../../theme";
 
 :host {
@@ -21,7 +21,7 @@
 button {
   background: none;
   border: none;
-  color: mat.get-theme-color($theme, primary, default);
+  color: map.get($primary, "default");
   flex-grow: 0;
   display: flex;
   align-items: center;
@@ -30,13 +30,13 @@ button {
     cursor: pointer;
 
     &:hover {
-      color: mat.get-theme-color($theme, primary, darken);
+      color: map.get($primary, "default");
       background-image: $player-component-background-active;
     }
   }
 
   &:disabled {
-    color: mat.get-theme-color($theme, foreground, disabled-text);
+    color: map.get(map.get($theme, "foreground"), "disabled-text");
   }
 }
 

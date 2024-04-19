@@ -1,3 +1,6 @@
+@use "sass:map";
+@import "../../../theme";
+
 $bar-width: 20px;
 $bar-min-height: 20px;
 $bar-max-height: 100px;
@@ -21,7 +24,7 @@ $animation-duration: 1s;
 .bar {
   width: #{$bar-width};
   height: #{$bar-max-height};
-  background-color: #16b68b;
+  background-color: map.get($primary, "default");
   border-radius: #{calc($bar-width * 0.5)};
   animation: #{$animation-duration} ease 0s infinite normal both running bar-size;
 
