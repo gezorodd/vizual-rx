@@ -1,4 +1,5 @@
 import {
+  animationFrames,
   auditTime,
   bindCallback,
   bufferTime,
@@ -12,13 +13,11 @@ import {
   generate,
   interval,
   Observable,
-  observeOn,
   of,
   sampleTime,
   Scheduler,
   shareReplay,
   Subject,
-  subscribeOn,
   Subscription,
   throttleTime,
   timeInterval,
@@ -61,6 +60,7 @@ export class VizualRxProxies {
       generate: o(generate),
       defer: o(defer),
       empty: o(s(empty)),
+      animationFrames: o(animationFrames)
     };
     this.rxjsAjaxProxies = {
       ajax: o(ajax)
