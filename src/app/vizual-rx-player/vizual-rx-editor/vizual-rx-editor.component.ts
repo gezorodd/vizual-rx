@@ -28,6 +28,7 @@ import {MatInput} from "@angular/material/input";
 import {AppService} from "../../app.service";
 import {not} from "rxjs/internal/util/not";
 import {v4 as uuid} from 'uuid';
+import {KeyCode, KeyMod} from '../../../../dist/vizual-rx/browser/assets/monaco/esm/vs/editor/editor.api';
 
 @Component({
   selector: 'app-vizual-rx-editor',
@@ -42,6 +43,9 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
   @Input() updateLayoutLightMode?: boolean;
 
   @Output() codeChange = new EventEmitter<string>();
+  @Output() ctrlEnter = new EventEmitter<void>();
+  @Output() ctrlSpace = new EventEmitter<void>();
+  @Output() ctrlK = new EventEmitter<void>();
   private _code: string = '';
 
   editorOptions: any = {
@@ -101,6 +105,8 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
       const value = iTextModel.getValue();
       this.codeChange.next(value);
     });
+
+    this.configureKeyBindings(this.editor);
     this.vizualRxEditorService.notifyMonacoReady();
   }
 
@@ -139,5 +145,20 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$),
         tap(() => this.editor?.layout())
       );
+  }
+
+  private configureKeyBindings(editor: monaco.editor.IStandaloneCodeEditor): void {
+    editor.onDidFocusEditorWidget(() => {
+      editor.addCommand(KeyMod.CtrlCmd | KeyCode.Enter, () => {
+        console.log('space')
+        this.ctrlEnter.next();
+      });
+      editor.addCommand(KeyMod.CtrlCmd | KeyCode.Space, () => {
+        this.ctrlSpace.next();
+      });
+      editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyK, () => {
+        this.ctrlK.next();
+      });
+    });
   }
 }
