@@ -4,7 +4,10 @@ import {VizualRxRemoteWorker} from "./vizual-rx-remote-worker";
 
 export class VizualRxRemoteService {
 
+  defaultTimeFactor: number;
+
   constructor(private disableWebWorker: boolean = false) {
+    this.defaultTimeFactor = 1;
   }
 
   createRemote(disableWebWorker: boolean = false): VizualRxRemote {

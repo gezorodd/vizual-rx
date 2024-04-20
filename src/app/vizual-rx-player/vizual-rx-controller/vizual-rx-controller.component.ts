@@ -47,6 +47,15 @@ export class VizualRxControllerComponent implements OnChanges {
     this.switchRemoteTooltip = this.getRemoteSwitchTooltip();
   }
 
+  get timeFactor(): number {
+    return this.remote.timeFactor;
+  }
+
+  set timeFactor(value: number) {
+    this.vizualRxRemoteService.defaultTimeFactor = value;
+    this.remote.timeFactor = value;
+  }
+
   get timeScale(): number {
     return DynamicObjectGraphics.timeScale$.value;
   }

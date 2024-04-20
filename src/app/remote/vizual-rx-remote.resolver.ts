@@ -39,6 +39,7 @@ export const vizualRxRemoteResolver: ResolveFn<Map<string, VizualRxRemote>> = (r
             const code = resolvedCodes[name];
             const remote = remoteService.createRemote(disableWebWorker);
             remote.prepare(code);
+            remote.timeFactor = remoteService.defaultTimeFactor;
             remotes.set(name, remote);
           })
         return remotes;

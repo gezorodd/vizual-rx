@@ -69,6 +69,7 @@ export class VizualRxPlayerComponent implements OnDestroy {
       newRemote = new VizualRxRemoteWorker();
     }
     newRemote.code = this.remote.code;
+    newRemote.timeFactor = this.remote.timeFactor;
     this.remote.destroy();
     this.remote = newRemote;
   }
