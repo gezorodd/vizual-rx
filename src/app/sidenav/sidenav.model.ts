@@ -18,6 +18,7 @@ export class Section {
   childrenHeight: number;
 
   private readonly cancelCollapse$: Subject<void>;
+  private readonly animationDuration = 200;
 
   constructor(sectionDefinition: SectionDefinition, parent?: Section, level: number = 0) {
     this.id = Section.idSeq++;
@@ -63,11 +64,11 @@ export class Section {
     this._collapsed$.next(value);
   }
 
-  get hidden(): boolean {
-    return this.children.every(child => child.hidden) && this.pages.every(page => page.hidden);
+  get filtered(): boolean {
+    return this.children.every(child => child.filtered) && this.pages.every(page => (page.filtered || page.hidden));
   }
 
-  toggleCollapse(animationDelay: number): Observable<boolean> {
+  toggleCollapse(): Observable<boolean> {
     return defer(() => {
       if (this._expanding$.value || this._collapsing$.value) {
         this.cancelCollapse$.next();
@@ -78,7 +79,7 @@ export class Section {
         this._expanding$.next(true);
         return of(false)
           .pipe(
-            delay(animationDelay),
+            delay(this.animationDuration),
             takeUntil(this.cancelCollapse$),
             tap(() => {
               this._collapsed$.next(false);
@@ -89,7 +90,7 @@ export class Section {
         this._collapsing$.next(true);
         return of(true)
           .pipe(
-            delay(animationDelay),
+            delay(this.animationDuration),
             takeUntil(this.cancelCollapse$),
             tap(() => {
               this._collapsed$.next(true);
@@ -114,5 +115,6 @@ export interface Page {
   routeUrl: string;
   deprecated?: boolean;
   starred?: boolean;
+  filtered?: boolean;
   hidden?: boolean;
 }

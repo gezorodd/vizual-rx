@@ -17,10 +17,12 @@ import {
   combineLatest,
   concat,
   debounceTime,
+  EMPTY,
   filter,
   from,
   map,
   merge,
+  mergeAll,
   mergeMap,
   noop,
   Observable,
@@ -34,8 +36,10 @@ import {FormsModule} from "@angular/forms";
 import {AsyncPipe, NgClass, NgForOf, NgIf, NgTemplateOutlet} from "@angular/common";
 import {Page, Section} from "./sidenav.model";
 import {sectionDefinitions} from "./sidenav.data";
-import {MatAnchor, MatButton} from "@angular/material/button";
+import {MatAnchor, MatButton, MatIconButton} from "@angular/material/button";
 import {MatTooltip} from "@angular/material/tooltip";
+import {MatMenu, MatMenuItem, MatMenuTrigger} from "@angular/material/menu";
+import {MatCheckbox} from "@angular/material/checkbox";
 
 @Component({
   selector: 'app-sidenav',
@@ -55,7 +59,12 @@ import {MatTooltip} from "@angular/material/tooltip";
     NgIf,
     MatButton,
     NgClass,
-    RouterLink
+    RouterLink,
+    MatMenu,
+    MatMenuTrigger,
+    MatIconButton,
+    MatMenuItem,
+    MatCheckbox
   ],
   templateUrl: './sidenav.component.html',
   styleUrl: './sidenav.component.scss',
@@ -71,10 +80,12 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
   readonly filterChanged$: Subject<string>
   readonly currentPage$: Observable<Page | undefined>;
 
+  private _pageVisibilityMode: PageVisibilityMode;
   private readonly destroy$ = new Subject<void>();
   private readonly sectionChildrenContainerIdRegex = /^section-(\d+)-children-container$/;
 
   constructor(private router: Router) {
+    this._pageVisibilityMode = 'show-all';
     this.filterChanged$ = new Subject<string>();
     this.sections = sectionDefinitions
       .map(sectionDefinition => new Section(sectionDefinition));
@@ -121,23 +132,89 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
   }
 
   toggleSectionCollapsed(section: Section): void {
-    section.toggleCollapse(200)
+    section.toggleCollapse()
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => {
         this.layoutChanged.next();
       });
   }
 
+  expandAll(): void {
+    const allSectionExpansion$ = from(
+      this.getAllSections()
+        .map(section => {
+          if (section.collapsed || section.collapsing) {
+            return section.toggleCollapse();
+          } else {
+            return EMPTY;
+          }
+        })
+    ).pipe(
+      mergeAll()
+    )
+    allSectionExpansion$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.layoutChanged.next();
+      });
+  }
+
+  collapseAll(): void {
+    const allSectionCollapsing$ = from(
+      this.getAllSections()
+        .map(section => {
+          if (!section.collapsed || section.expanding) {
+            return section.toggleCollapse();
+          } else {
+            return EMPTY;
+          }
+        })
+    ).pipe(
+      mergeAll()
+    )
+    allSectionCollapsing$
+      .pipe(takeUntil(this.destroy$))
+      .subscribe(() => {
+        this.layoutChanged.next();
+      });
+  }
+
+  get pageVisibilityMode(): PageVisibilityMode {
+    return this._pageVisibilityMode;
+  }
+
+  set pageVisibilityMode(value: PageVisibilityMode) {
+    this._pageVisibilityMode = value;
+    this.getAllPages()
+      .forEach(page => {
+        switch (value) {
+          case "show-all":
+            page.hidden = false;
+            break;
+          case "hide-deprecated":
+            page.hidden = page.deprecated;
+            break;
+          case "only-show-starred":
+            page.hidden = !page.starred;
+            break;
+        }
+      });
+  }
+
+  isPageVisible(page: Page): boolean {
+    return !page.hidden && !page.filtered;
+  }
+
   private applyFilter(input: string): void {
     if (!input) {
       this.getAllPages()
-        .forEach(page => page.hidden = false);
+        .forEach(page => page.filtered = false);
     } else {
       const inputLower = input.toLowerCase();
       this.getAllPages()
-        .forEach(page => page.hidden = !page.title.toLowerCase().includes(inputLower));
+        .forEach(page => page.filtered = !page.title.toLowerCase().includes(inputLower));
       this.getAllSections()
-        .filter(section => !section.hidden)
+        .filter(section => !section.filtered)
         .forEach(section => section.collapsed = false);
 
       const exactMatchPage = this.getAllPages()
@@ -285,3 +362,5 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
     );
   }
 }
+
+declare type PageVisibilityMode = 'show-all' | 'hide-deprecated' | 'only-show-starred';
