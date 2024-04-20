@@ -25,7 +25,7 @@
             </ng-container>
             <div *ngIf="section.pages.length" class="page-container">
               <ng-container *ngFor="let page of section.pages">
-                <a *ngIf="!page.hidden" [routerLink]="[page.routeUrl]" [class.selected]="(currentPage$ | async) === page">
+                <a #pageLink *ngIf="!page.hidden" [routerLink]="[page.routeUrl]" [class.selected]="(currentPage$ | async) === page">
                   <span [class.deprecated]="page.deprecated">{{ page.title }}</span>
                   <mat-icon *ngIf="page.starred" [fontSet]="'material-symbols-rounded'" class="star-icon">star
                   </mat-icon>
