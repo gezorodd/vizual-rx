@@ -17,7 +17,7 @@ const source$ = timer(0, 600)
 
 const example$ = source$
     .pipe(
-        audit(value => timer(value.color === 'yellow' ? 2000 : 1000))
+        audit(value => timer(value.color === 'orange' ? 2000 : 1000))
     );
 
 source$

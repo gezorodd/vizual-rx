@@ -10,22 +10,22 @@ export const mergePage: DocPage = {
   sampleCode: `import {map, timer, take, merge} from "rxjs";
 import {createValue, observe} from "vizual-rx";
 
-const source1$ = timer(0, 1000)
+const source1$ = timer(0, 500)
     .pipe(
-        map(() => createValue('red')),
-        take(3)
-    );
-
-const source2$ = timer(1500, 1000)
-    .pipe(
-        map(() => createValue('blue')),
+        map(() => createValue('red', 'circle')),
         take(5)
     );
 
-const source3$ = timer(3000, 1000)
+const source2$ = timer(1000, 1000)
     .pipe(
-        map(() => createValue('green')),
-        take(2)
+        map(() => createValue('blue', 'circle')),
+        take(3)
+    );
+
+const source3$ = timer(1500, 500)
+    .pipe(
+        map(() => createValue('green', 'circle')),
+        take(3)
     );
 
 const example$ = merge(source1$, source2$, source3$);

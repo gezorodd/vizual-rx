@@ -16,13 +16,13 @@ const source$ = concat(
         .pipe(delay(500)),
     of(createValue('green', 'circle'))
         .pipe(delay(500)),
-    of(createValue('orange', 'circle'))
-        .pipe(delay(2000)),
     of(createValue('yellow', 'circle'))
+        .pipe(delay(2000)),
+    of(createValue('orange', 'circle'))
         .pipe(delay(1200)),
     of(createValue('purple', 'circle'))
         .pipe(delay(500)),
-    of(createValue('cyan', 'circle'))
+    of(createValue('teal', 'circle'))
         .pipe(delay(1200))
 );
 

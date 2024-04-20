@@ -145,24 +145,24 @@ svg.observer-track, svg.time-track {
         fill: $player-observer-value-color-blue;
       }
 
-      & > .color-orange {
-        fill: $player-observer-value-color-orange;
-      }
-
       & > .color-yellow {
         fill: $player-observer-value-color-yellow;
+      }
+
+      & > .color-orange {
+        fill: $player-observer-value-color-orange;
       }
 
       & > .color-purple {
         fill: $player-observer-value-color-purple;
       }
 
-      & > .color-cyan {
-        fill: $player-observer-value-color-cyan;
+      & > .color-teal {
+        fill: $player-observer-value-color-teal;
       }
 
-      & > .color-pink {
-        fill: $player-observer-value-color-pink;
+      & > .color-indigo {
+        fill: $player-observer-value-color-indigo;
       }
 
       & > .array-symbol {

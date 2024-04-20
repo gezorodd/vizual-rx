@@ -7,12 +7,12 @@ export const filterPage: DocPage = {
   detailsComponent: FilterDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/filter',
   starred: true,
-  sampleCode: `import {filter, timer, map, take, tap} from "rxjs";
+  sampleCode: `import {filter, timer, map, take} from "rxjs";
 import {observe, createValue, shapeAt, colorAt} from "vizual-rx";
 
 const source$ = timer(0, 500)
     .pipe(
-        map(i => createValue(colorAt(i % 4), shapeAt(i))),
+        map(i => createValue(colorAt(i), shapeAt(i))),
         take(15)
     );
 

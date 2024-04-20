@@ -11,13 +11,13 @@ import {observe, createValue, colorAt} from "vizual-rx";
 
 const source$ = timer(0, 500)
     .pipe(
-        map(i => createValue('circle', colorAt(i % 4))),
+        map(i => createValue('circle', colorAt(i))),
         take(10)
     );
 
 const example$ = source$
     .pipe(
-        skipWhile(value => value.color !== 'orange')
+        skipWhile(value => value.color !== 'yellow')
     );
 
 source$

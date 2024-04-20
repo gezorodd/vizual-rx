@@ -36,9 +36,9 @@ export class VizualRxValue {
 
 export type VizualRxValueShape = 'circle' | 'square' | 'triangle' | 'diamond' | 'pentagon';
 
-export type VizualRxValueColor = 'red' | 'blue' | 'green' | 'orange' | 'yellow' | 'purple' | 'cyan' | 'pink';
+export type VizualRxValueColor = 'red' | 'blue' | 'green' | 'yellow' | 'orange' | 'purple' | 'teal' | 'indigo';
 
 export type VizualRxValueAttribute = VizualRxValueShape | VizualRxValueColor;
 
 export const SHAPES: VizualRxValueShape[] = ['circle', 'square', 'triangle', 'diamond', 'pentagon'];
-export const COLORS: VizualRxValueColor[] = ['red', 'blue', 'green', 'orange', 'yellow', 'purple', 'cyan', 'pink'];
+export const COLORS: VizualRxValueColor[] = ['red', 'blue', 'green', 'yellow', 'orange', 'purple', 'teal', 'indigo'];

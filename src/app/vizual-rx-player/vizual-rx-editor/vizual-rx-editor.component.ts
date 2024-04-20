@@ -149,7 +149,6 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
   private configureKeyBindings(editor: monaco.editor.IStandaloneCodeEditor): void {
     editor.onDidFocusEditorWidget(() => {
       editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
-        console.log('space')
         this.ctrlEnter.next();
       });
       editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Space, () => {

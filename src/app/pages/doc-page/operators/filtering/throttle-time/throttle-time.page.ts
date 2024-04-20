@@ -11,7 +11,7 @@ import {observe, createValue, colorAt} from "vizual-rx";
 
 const source$ = timer(0, 600)
     .pipe(
-        map(i => createValue(colorAt(i % 5), 'circle')),
+        map(i => createValue(colorAt(i), 'circle')),
         take(10),
         tap(observe('source'))
     );

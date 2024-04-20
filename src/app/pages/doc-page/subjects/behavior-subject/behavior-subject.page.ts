@@ -9,7 +9,7 @@ export const behaviorSubjectPage: DocPage = {
   sampleCode: `import { BehaviorSubject, interval, timer, take, mergeMap, tap, map } from 'rxjs';
 import { observe, VizualRxValue, createValue, colorAt } from 'vizual-rx';
 
-const initialValue = createValue('yellow', 'square');
+const initialValue = createValue('orange', 'square');
 const subject = new BehaviorSubject<VizualRxValue>(initialValue);
 
 subject
