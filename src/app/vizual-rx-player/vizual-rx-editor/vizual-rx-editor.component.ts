@@ -28,7 +28,6 @@ import {MatInput} from "@angular/material/input";
 import {AppService} from "../../app.service";
 import {not} from "rxjs/internal/util/not";
 import {v4 as uuid} from 'uuid';
-import {KeyCode, KeyMod} from '../../../../dist/vizual-rx/browser/assets/monaco/esm/vs/editor/editor.api';
 
 @Component({
   selector: 'app-vizual-rx-editor',
@@ -149,14 +148,14 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
 
   private configureKeyBindings(editor: monaco.editor.IStandaloneCodeEditor): void {
     editor.onDidFocusEditorWidget(() => {
-      editor.addCommand(KeyMod.CtrlCmd | KeyCode.Enter, () => {
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
         console.log('space')
         this.ctrlEnter.next();
       });
-      editor.addCommand(KeyMod.CtrlCmd | KeyCode.Space, () => {
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Space, () => {
         this.ctrlSpace.next();
       });
-      editor.addCommand(KeyMod.CtrlCmd | KeyCode.KeyK, () => {
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK, () => {
         this.ctrlK.next();
       });
     });
