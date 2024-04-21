@@ -16,6 +16,7 @@ import {
   of,
   sampleTime,
   Scheduler,
+  SchedulerLike,
   shareReplay,
   Subject,
   Subscription,
@@ -26,17 +27,16 @@ import {
   timer
 } from "rxjs";
 import {ajax} from "rxjs/internal/ajax/ajax";
-import {VizualRxScheduler} from "./vizual-rx-scheduler";
 
 export class VizualRxProxies {
   readonly rxjsProxies: { [key: string]: any };
   readonly rxjsAjaxProxies: { [key: string]: any };
 
   private readonly _subscriptionCreated$ = new Subject<Subscription>();
-  private readonly vizualRxScheduler: VizualRxScheduler;
+  private readonly scheduler: SchedulerLike;
 
-  constructor(scheduler: VizualRxScheduler) {
-    this.vizualRxScheduler = scheduler;
+  constructor(scheduler: SchedulerLike) {
+    this.scheduler = scheduler;
     const o = this.watchObservableFactory.bind(this);
     const s = this.injectScheduler.bind(this);
     this.rxjsProxies = {
@@ -60,7 +60,7 @@ export class VizualRxProxies {
       generate: o(generate),
       defer: o(defer),
       empty: o(s(empty)),
-      animationFrames: o(animationFrames)
+      animationFrames: this.injectTimestampProvider(o(animationFrames))
     };
     this.rxjsAjaxProxies = {
       ajax: o(ajax)
@@ -76,14 +76,14 @@ export class VizualRxProxies {
     return new Proxy(func, {
       apply(target: T, thisArg: any, argArray: any[]): any {
         if (typeof argArray[0] === 'object') {
-          argArray[0] = {...arguments[0], scheduler: self.vizualRxScheduler};
+          argArray[0] = {...arguments[0], scheduler: self.scheduler};
           return target.apply(thisArg, argArray as Parameters<T>);
         }
         const position = arguments.length - positionRelativeToEnd - 1;
         if (argArray.length > positionRelativeToEnd && argArray[position] instanceof Scheduler) {
-          argArray[position] = self.vizualRxScheduler;
+          argArray[position] = self.scheduler;
         } else {
-          argArray.push(self.vizualRxScheduler);
+          argArray.push(self.scheduler);
         }
         return target.apply(thisArg, argArray as Parameters<T>);
       }
@@ -145,6 +145,15 @@ export class VizualRxProxies {
             return self.watchObservable(target.apply(thisArg, argArray));
           }
         });
+      }
+    });
+  }
+
+  private injectTimestampProvider(func: typeof animationFrames): typeof animationFrames {
+    const self = this;
+    return new Proxy(func, {
+      apply(target: typeof animationFrames, thisArg: ThisParameterType<typeof animationFrames>) {
+        return target.apply(thisArg, [self.scheduler]);
       }
     });
   }
