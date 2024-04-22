@@ -6,9 +6,10 @@ import {MatIcon} from "@angular/material/icon";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {MatRipple} from "@angular/material/core";
 import {MatTooltip} from "@angular/material/tooltip";
-import {VizualRxRemote} from "../../remote/vizual-rx-remote.model";
-import {VizualRxRemoteWorker} from "../../remote/vizual-rx-remote-worker";
-import {VizualRxRemoteService} from "../../remote/vizual-rx-remote.service";
+import {VizualRxEngine} from "../../core/vizual-rx-engine";
+import {VizualRxScaledTime} from "../../core/vizual-rx-scaled-time";
+import {VizualRxScaledTimeEngine} from "../../core/vizual-rx-scaled-time-engine";
+import {VizualRxVirtualTimeEngine} from "../../core/vizual-rx-virtual-time-engine";
 
 @Component({
   selector: 'app-vizual-rx-controller',
@@ -29,30 +30,29 @@ import {VizualRxRemoteService} from "../../remote/vizual-rx-remote.service";
 })
 export class VizualRxControllerComponent implements OnChanges {
 
-  @Input({required: true}) remote!: VizualRxRemote;
+  @Input({required: true}) remote!: VizualRxEngine;
   @Output() switchRemote = new EventEmitter<void>();
 
-  isWebWorkerDisabled: boolean;
-  isWebWorkerSupported: boolean;
-  isWebWorkerRemote: boolean = false;
+  isVirtualTimeEngine: boolean = false;
   switchRemoteTooltip: string = '';
 
-  constructor(private vizualRxRemoteService: VizualRxRemoteService) {
-    this.isWebWorkerDisabled = vizualRxRemoteService.isWebWorkerDisabled();
-    this.isWebWorkerSupported = vizualRxRemoteService.isWebWorkerSupported();
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
-    this.isWebWorkerRemote = this.remote instanceof VizualRxRemoteWorker;
+    this.isVirtualTimeEngine = this.remote instanceof VizualRxVirtualTimeEngine;
     this.switchRemoteTooltip = this.getRemoteSwitchTooltip();
   }
 
   get timeFactor(): number {
+    if (!Number.isFinite(this.remote.timeFactor)) {
+      return this.remote.maxTimeFactor + 0.1;
+    }
     return this.remote.timeFactor;
   }
 
   set timeFactor(value: number) {
-    this.vizualRxRemoteService.defaultTimeFactor = value;
+    if (value > this.remote.maxTimeFactor) {
+      value = Number.POSITIVE_INFINITY;
+    }
+    VizualRxScaledTime.defaultTimeFactor = value;
     this.remote.timeFactor = value;
   }
 
@@ -64,13 +64,19 @@ export class VizualRxControllerComponent implements OnChanges {
     DynamicObjectGraphics.timeScale$.next(value);
   }
 
+  get maxTimeFactor(): number {
+    let maxTimeFactor = this.remote.maxTimeFactor;
+    if (this.remote.enableInfiniteTimeFactor) {
+      maxTimeFactor += 0.1;
+    }
+    return maxTimeFactor;
+  }
+
   private getRemoteSwitchTooltip(): string {
-    if (!this.vizualRxRemoteService.isWebWorkerSupported()) {
-      return 'Web Workers are not supported by your browser';
+    if (this.remote instanceof VizualRxScaledTimeEngine) {
+      return 'Enable Virtual Time';
+    } else {
+      return 'Disable Virtual Time';
     }
-    if (this.remote instanceof VizualRxRemoteWorker) {
-      return 'Disable Web Worker'
-    }
-    return 'Enable Web Worker';
   }
 }

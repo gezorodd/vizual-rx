@@ -1,10 +1,10 @@
 import {distinctUntilChanged, SchedulerAction, Subscription, tap} from "rxjs";
-import {VizualRxScheduler} from "./vizual-rx-scheduler";
+import {VizualRxScaledTimeScheduler} from "./vizual-rx-scaled-time-scheduler";
 
 /**
  * This is a copy of the rxjs AsyncAction, adapted to scale time with VizualRxTime timeFactor.
  */
-export class VizualRxAction<T> extends Subscription {
+export class VizualRxScaledTimeAction<T> extends Subscription {
 
   public id: TimerHandle | undefined;
   public state?: T;
@@ -17,10 +17,10 @@ export class VizualRxAction<T> extends Subscription {
   private previousTime?: number;
   private previousTimeFactor?: number;
 
-  constructor(protected scheduler: VizualRxScheduler, protected work: (this: SchedulerAction<T>, state?: T) => void) {
+  constructor(protected scheduler: VizualRxScaledTimeScheduler, protected work: (this: SchedulerAction<T>, state?: T) => void) {
     super();
     this.remainingTimeRatio = 1;
-    const subscription = scheduler.vizualRxTime.timeFactor$
+    const subscription = scheduler.scaledTime.timeFactor$
       .pipe(
         distinctUntilChanged(),
         tap(() => {
@@ -91,8 +91,8 @@ export class VizualRxAction<T> extends Subscription {
     return this;
   }
 
-  protected requestAsyncId(scheduler: VizualRxScheduler, _id?: TimerHandle, delay: number = 0): TimerHandle | undefined {
-    this.previousTimeFactor = this.scheduler.vizualRxTime.timeFactor;
+  protected requestAsyncId(scheduler: VizualRxScaledTimeScheduler, _id?: TimerHandle, delay: number = 0): TimerHandle | undefined {
+    this.previousTimeFactor = this.scheduler.scaledTime.timeFactor;
     this.previousTime = new Date().getTime();
     const timeout = delay / this.previousTimeFactor;
     if (!Number.isFinite(timeout)) {
@@ -104,7 +104,7 @@ export class VizualRxAction<T> extends Subscription {
     return setInterval(scheduler.flush.bind(scheduler, this), timeout);
   }
 
-  protected recycleAsyncId(_scheduler: VizualRxScheduler, id?: TimerHandle, delay: number | null = 0, fromTimeFactorChange: boolean = false): TimerHandle | undefined {
+  protected recycleAsyncId(_scheduler: VizualRxScaledTimeScheduler, id?: TimerHandle, delay: number | null = 0, fromTimeFactorChange: boolean = false): TimerHandle | undefined {
     // If this action is rescheduled with the same delay time, don't clear the interval id.
     if (delay != null && this.delay === delay && !this.pending && !fromTimeFactorChange) {
       return id;

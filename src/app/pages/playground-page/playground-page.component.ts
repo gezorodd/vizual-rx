@@ -7,9 +7,9 @@ import {NgComponentOutlet, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
 import {MatAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
-import {VizualRxRemote} from "../../remote/vizual-rx-remote.model";
 import {ScriptService} from "../../script/script.service";
 import {MatInput} from "@angular/material/input";
+import {VizualRxEngine} from "../../core/vizual-rx-engine";
 
 @Component({
   selector: 'app-playground-page',
@@ -30,7 +30,7 @@ import {MatInput} from "@angular/material/input";
 })
 export class PlaygroundPageComponent implements OnInit, OnDestroy {
 
-  remote?: VizualRxRemote;
+  remote?: VizualRxEngine;
   shareState: ShareState;
   shareUrl?: string;
 

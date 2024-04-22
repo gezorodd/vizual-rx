@@ -1,5 +1,4 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
-import {VizualRxRemote} from "../../remote/vizual-rx-remote.model";
 import {LayeredContainer} from "../layered-container";
 
 export class ObserverStackGraphics extends DynamicObjectGraphics {
@@ -7,8 +6,8 @@ export class ObserverStackGraphics extends DynamicObjectGraphics {
   private layeredContainer?: LayeredContainer;
   private hoveredItem?: DynamicObjectGraphics;
 
-  constructor(remote: VizualRxRemote, time: number) {
-    super(remote, time);
+  constructor(time: number) {
+    super(time);
     this.items = [];
   }
 
@@ -27,8 +26,8 @@ export class ObserverStackGraphics extends DynamicObjectGraphics {
     item.groupContainer.style.transform = `translate(0, 0)`;
   }
 
-  override update() {
-    super.update();
+  override update(now: number) {
+    super.update(now);
 
     const gap = 50 / this.items.length;
     for (let i = 0; i < this.items.length; i++) {

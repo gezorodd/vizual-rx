@@ -1,202 +1,68 @@
-import {InterpreterError, VizualRxInterpreter} from "./vizual-rx-interpreter";
-import {
-  BehaviorSubject,
-  filter,
-  interval,
-  map,
-  mergeMap,
-  Observable,
-  pairwise,
-  Subject,
-  Subscription,
-  takeUntil,
-  tap,
-} from "rxjs";
-import {VizualRxTime} from "./vizual-rx-time";
-import {VizualRxObserver} from "./vizual-rx-observer";
-import {VizualRxScheduler} from "./vizual-rx-scheduler";
+import {InterpreterError} from "./vizual-rx-interpreter";
+import {Observable} from "rxjs";
 
-export class VizualRxEngine {
-  code: string;
-  subscriptions: Subscription[];
-  error?: InterpreterError;
+export interface VizualRxEngine {
 
-  readonly scheduler: VizualRxScheduler;
-  readonly time: VizualRxTime;
+  play(): void;
 
-  readonly stopping$: Observable<void>;
-  readonly starting$: Observable<void>;
-  readonly stopped$: Observable<boolean>;
-  readonly playing$: Observable<boolean>;
-  private readonly interpreter: VizualRxInterpreter;
-  private readonly state$: BehaviorSubject<PlayerState>;
-  private readonly timeFactor$: BehaviorSubject<number>;
-  private readonly destroy$ = new Subject<void>();
-  private readonly _observers$ = new BehaviorSubject<VizualRxObserver[]>([]);
+  pause(): void;
 
-  constructor(code = '') {
-    this.code = code;
-    this.subscriptions = [];
-    this.state$ = new BehaviorSubject<PlayerState>(PlayerState.STOPPED);
-    this.timeFactor$ = new BehaviorSubject<number>(1);
+  stop(): void;
 
-    this.stopped$ = this.getStopped();
-    this.playing$ = this.getPlaying();
-    this.stopping$ = this.getStopping();
-    this.starting$ = this.getStarting();
+  replay(): void;
 
-    this.time = new VizualRxTime();
-    this.scheduler = new VizualRxScheduler(this.time);
-    this.interpreter = new VizualRxInterpreter(this.scheduler);
-    this.interpreter.observerAdded$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(observer => {
-        this._observers$.next([...this._observers$.value, observer]);
-      });
-    this.interpreter.subscriptionCreated$
-      .pipe(takeUntil(this.destroy$))
-      .subscribe(subscription => this.subscriptions.push(subscription));
+  now(): number;
 
-    this.stopEngineWhenAllSubscriptionsAreClosed()
-      .pipe(takeUntil(this.destroy$))
-      .subscribe();
-  }
+  destroy(): void;
 
-  get playing(): boolean {
-    return this.state$.value === PlayerState.PLAYING;
-  }
+  prepare(code: string): void;
 
-  prepare(code: string): void {
-    this.code = code;
-    this.interpreter.compile(code);
-  }
+  set code(value: string);
 
-  play(): void {
-    const state = this.state$.value;
-    if (state === PlayerState.PLAYING) {
-      return;
-    }
+  get code(): string;
 
-    this.time.timeFactor = this.timeFactor$.value;
-    if (state === PlayerState.STOPPED) {
-      this._observers$.next([]);
-      this.subscriptions = [];
-      this.runCode();
-    }
-    this._observers$.value.forEach(observer => observer.paused = false);
-    this.state$.next(PlayerState.PLAYING);
-  }
+  get starting$(): Observable<number>;
 
-  pause(): void {
-    if (this.state$.value !== PlayerState.PLAYING) {
-      return;
-    }
-    this.time.timeFactor = 0;
-    this._observers$.value.forEach(observer => observer.paused = true);
-    this.state$.next(PlayerState.PAUSED);
-  }
+  get playing$(): Observable<boolean>;
 
-  stop(): void {
-    if (this.state$.value === PlayerState.STOPPED) {
-      return;
-    }
-    this.subscriptions
-      .filter(subscription => !subscription.closed)
-      .forEach(subscription => subscription.unsubscribe());
-    this.time.timeFactor = 0;
-    this.state$.next(PlayerState.STOPPED);
-  }
+  get playing(): boolean;
 
-  replay(): void {
-    this.stop();
-    this.play();
-  }
+  get stopping$(): Observable<void>;
 
-  get timeFactor(): number {
-    return this.timeFactor$.value;
-  }
+  get stopped$(): Observable<boolean>;
 
-  set timeFactor(factor: number) {
-    this.timeFactor$.next(factor);
-    if (this.playing) {
-      this.time.timeFactor = factor;
-    }
-  }
+  set timeFactor(value: number);
 
-  get observers$(): Observable<VizualRxObserver[]> {
-    return this._observers$.asObservable();
-  }
+  get timeFactor(): number;
 
-  destroy(): void {
-    this.destroy$.next();
-    this.destroy$.complete();
-  }
+  get error(): InterpreterError | undefined;
 
-  private runCode(): void {
-    this.error = undefined;
-    try {
-      this.interpreter.run(this.code);
-    } catch (e) {
-      if (e instanceof InterpreterError) {
-        this.error = e;
-      }
-      throw e;
-    }
-  }
+  get observers$(): Observable<VizualRxRemoteObserver[]>;
 
-  private stopEngineWhenAllSubscriptionsAreClosed() {
-    return this.starting$
-      .pipe(
-        mergeMap(() => {
-          return interval(15)
-            .pipe(
-              filter(() => this.subscriptions.every(subscription => subscription.closed)),
-              tap(() => this.stop()),
-              takeUntil(this.stopping$)
-            );
-        })
-      );
-  }
+  get maxTimeFactor(): number;
 
-  private getStopped() {
-    return this.state$
-      .pipe(
-        map(state => state === PlayerState.STOPPED)
-      );
-  }
-
-  private getStarting() {
-    return this.state$
-      .pipe(
-        pairwise(),
-        filter(states => states[0] === PlayerState.STOPPED && states[1] === PlayerState.PLAYING),
-        map(() => undefined)
-      );
-  }
-
-  private getStopping() {
-    return this.state$
-      .pipe(
-        pairwise(),
-        filter(states => {
-          const wasPlayingOrPaused = states[0] === PlayerState.PLAYING || states[0] === PlayerState.PAUSED;
-          const isStopped = states[1] === PlayerState.STOPPED;
-          return wasPlayingOrPaused && isStopped;
-        }),
-        map(() => undefined)
-      );
-  }
-
-  private getPlaying() {
-    return this.state$
-      .pipe(
-        map(state => state === PlayerState.PLAYING)
-      );
-  }
+  get enableInfiniteTimeFactor(): boolean;
 }
 
-export enum PlayerState {
-  STOPPED,
-  PAUSED,
-  PLAYING
+export interface VizualRxRemoteObserver {
+  readonly id: string;
+  readonly label: string;
+
+  get next$(): Observable<VizualRxRemoteNextNotification>;
+
+  get error$(): Observable<VizualRxRemoteErrorNotification>;
+
+  get complete$(): Observable<VizualRxRemoteNotification>;
+}
+
+export interface VizualRxRemoteNotification {
+  time: number;
+}
+
+export interface VizualRxRemoteNextNotification extends VizualRxRemoteNotification {
+  value: any;
+}
+
+export interface VizualRxRemoteErrorNotification extends VizualRxRemoteNotification {
+  err: any;
 }

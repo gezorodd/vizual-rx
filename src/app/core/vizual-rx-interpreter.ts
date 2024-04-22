@@ -1,5 +1,5 @@
 import * as rxjs from "rxjs";
-import {Observable, Subject, Subscription} from "rxjs";
+import {Observable, SchedulerLike, Subject, Subscription} from "rxjs";
 import * as rxjsAjax from "rxjs/ajax";
 import * as rxjsOperators from "rxjs/operators";
 import * as ts from "typescript";
@@ -8,7 +8,6 @@ import {SourceMapConsumer} from "source-map-js";
 import {VizualRxObserver} from "./vizual-rx-observer";
 import {VizualRxProxies} from "./vizual-rx-proxies";
 import {VizualRxApi} from "./vizual-rx-api";
-import {VizualRxScheduler} from "./vizual-rx-scheduler";
 
 export class VizualRxInterpreter {
   private readonly _observerAdded$ = new Subject<VizualRxObserver>();
@@ -17,7 +16,7 @@ export class VizualRxInterpreter {
 
   private compilationResult?: CompilationResult;
 
-  constructor(scheduler: VizualRxScheduler) {
+  constructor(scheduler: SchedulerLike) {
     this.vizualRxProxies = new VizualRxProxies(scheduler);
     this.vizualRxApi = new VizualRxApi(this._observerAdded$);
   }

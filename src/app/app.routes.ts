@@ -3,8 +3,8 @@ import {
   fromProvider,
   fromScriptRouteParam,
   fromValue,
-  vizualRxRemoteResolver
-} from "./remote/vizual-rx-remote.resolver";
+  vizualRxEnginesResolver
+} from "./core/vizual-rx-engines.resolver";
 import {PlaygroundPageComponent} from "./pages/playground-page/playground-page.component";
 import {PlaygroundPageService} from "./pages/playground-page/playground-page.service";
 import {OverviewPageComponent} from "./pages/overview-page/overview-page.component";
@@ -32,10 +32,10 @@ export const routes: Routes = [
         codes: {
           page: fromValue(page.sampleCode)
         },
-        disableWebWorker: page.disableWebWorker
+        disableVirtualTime: page.disableVirtualTime
       },
       resolve: {
-        remotes: vizualRxRemoteResolver
+        remotes: vizualRxEnginesResolver
       }
     })),
   {
@@ -49,7 +49,7 @@ export const routes: Routes = [
       }
     },
     resolve: {
-      remotes: vizualRxRemoteResolver
+      remotes: vizualRxEnginesResolver
     }
   },
   {
@@ -61,7 +61,7 @@ export const routes: Routes = [
       }
     },
     resolve: {
-      remotes: vizualRxRemoteResolver
+      remotes: vizualRxEnginesResolver
     }
   },
   {
@@ -78,7 +78,7 @@ export const routes: Routes = [
       }
     },
     resolve: {
-      remotes: vizualRxRemoteResolver
+      remotes: vizualRxEnginesResolver
     }
   },
   {

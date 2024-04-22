@@ -7,9 +7,9 @@ import {NgComponentOutlet, NgIf} from "@angular/common";
 import {VizualRxControllerComponent} from "./vizual-rx-controller/vizual-rx-controller.component";
 import {VizualRxEditorComponent} from "./vizual-rx-editor/vizual-rx-editor.component";
 import {VizualRxViewerComponent} from "./vizual-rx-viewer/vizual-rx-viewer.component";
-import {VizualRxRemote} from "../remote/vizual-rx-remote.model";
-import {VizualRxRemoteEngine} from "../remote/vizual-rx-remote-engine";
-import {VizualRxRemoteWorker} from "../remote/vizual-rx-remote-worker";
+import {VizualRxEngine} from "../core/vizual-rx-engine";
+import {VizualRxVirtualTimeEngine} from "../core/vizual-rx-virtual-time-engine";
+import {VizualRxScaledTimeEngine} from "../core/vizual-rx-scaled-time-engine";
 
 @Component({
   selector: 'app-vizual-rx-player',
@@ -30,7 +30,7 @@ import {VizualRxRemoteWorker} from "../remote/vizual-rx-remote-worker";
 })
 export class VizualRxPlayerComponent implements OnDestroy {
 
-  @Input({required: true}) remote!: VizualRxRemote;
+  @Input({required: true}) remote!: VizualRxEngine;
   @Input() disableMouseWheel?: boolean;
   @Input() updateLayoutLightMode?: boolean;
 
@@ -47,7 +47,7 @@ export class VizualRxPlayerComponent implements OnDestroy {
 
   @HostListener('window:blur')
   handleWindowBlur(): void {
-    if (this.remote instanceof VizualRxRemoteEngine && this.remote.playing) {
+    if (this.remote instanceof VizualRxScaledTimeEngine && this.remote.playing) {
       this.remote.pause();
       this.wasPausedOnBlur = true;
     }
@@ -55,18 +55,18 @@ export class VizualRxPlayerComponent implements OnDestroy {
 
   @HostListener('window:focus')
   handleWindowFocus(): void {
-    if (this.remote instanceof VizualRxRemoteEngine && this.wasPausedOnBlur) {
+    if (this.remote instanceof VizualRxScaledTimeEngine && this.wasPausedOnBlur) {
       this.remote.play();
       this.wasPausedOnBlur = false;
     }
   }
 
   switchRemote(): void {
-    let newRemote: VizualRxRemote;
-    if (this.remote instanceof VizualRxRemoteWorker) {
-      newRemote = new VizualRxRemoteEngine();
+    let newRemote: VizualRxEngine;
+    if (this.remote instanceof VizualRxVirtualTimeEngine) {
+      newRemote = new VizualRxScaledTimeEngine();
     } else {
-      newRemote = new VizualRxRemoteWorker();
+      newRemote = new VizualRxVirtualTimeEngine();
     }
     newRemote.code = this.remote.code;
     newRemote.timeFactor = this.remote.timeFactor;

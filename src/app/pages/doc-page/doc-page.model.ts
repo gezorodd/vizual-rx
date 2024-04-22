@@ -5,5 +5,5 @@ export interface DocPage extends Page {
   detailsComponent: Type<any>;
   sampleCode: string;
   documentationUrl?: string;
-  disableWebWorker?: boolean;
+  disableVirtualTime?: boolean;
 }

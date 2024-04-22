@@ -11,7 +11,20 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import {filter, interval, map, merge, Observable, of, ReplaySubject, Subject, switchMap, takeUntil, tap} from "rxjs";
+import {
+  delayWhen,
+  filter, identity,
+  interval,
+  merge,
+  mergeMap,
+  Observable,
+  of,
+  ReplaySubject,
+  Subject,
+  switchMap,
+  takeUntil,
+  tap, timer, windowToggle
+} from "rxjs";
 import {AsyncPipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {TimeTrackGraphics} from "../../graphics/time/time-track-graphics";
 import {ObserverTrackGraphics} from "../../graphics/observer/observer-track-graphics";
@@ -20,8 +33,8 @@ import {MatButton, MatMiniFabButton} from "@angular/material/button";
 import {FormsModule} from "@angular/forms";
 import {MatSlider, MatSliderThumb} from "@angular/material/slider";
 import {MatDivider} from "@angular/material/divider";
-import {VizualRxRemote, VizualRxRemoteObserver} from "../../remote/vizual-rx-remote.model";
 import {DynamicObjectGraphics} from "../../graphics/dynamic-object-graphics";
+import {VizualRxEngine, VizualRxRemoteObserver} from "../../core/vizual-rx-engine";
 
 @Component({
   selector: 'app-vizual-rx-viewer',
@@ -45,7 +58,7 @@ import {DynamicObjectGraphics} from "../../graphics/dynamic-object-graphics";
 })
 export class VizualRxViewerComponent implements OnChanges, AfterViewInit, OnDestroy {
 
-  @Input({required: true}) remote!: VizualRxRemote;
+  @Input({required: true}) remote!: VizualRxEngine;
 
   @ViewChild('timeTrack') timeTrack!: ElementRef<SVGSVGElement>;
   @ViewChildren('observerTrack') observerTracks!: QueryList<ElementRef<SVGSVGElement>>;
@@ -54,7 +67,7 @@ export class VizualRxViewerComponent implements OnChanges, AfterViewInit, OnDest
   timeTrackGraphics?: TimeTrackGraphics;
   readonly observerTrackGraphics: Map<string, ObserverTrackGraphics>;
 
-  private readonly remote$ = new ReplaySubject<VizualRxRemote>();
+  private readonly remote$ = new ReplaySubject<VizualRxEngine>();
   private readonly viewInit$ = new ReplaySubject<void>();
   private readonly destroy$ = new Subject<void>();
 
@@ -65,7 +78,7 @@ export class VizualRxViewerComponent implements OnChanges, AfterViewInit, OnDest
     merge(
       this.getObserversFromRemote(),
       this.mergeGraphicsFromRemoteAndView(),
-      this.updateGraphicsFromRemoteEvents()
+      this.updateGraphics()
     ).pipe(
       takeUntil(this.destroy$)
     ).subscribe();
@@ -104,27 +117,41 @@ export class VizualRxViewerComponent implements OnChanges, AfterViewInit, OnDest
       );
   }
 
-  private updateGraphicsFromRemoteEvents(): Observable<unknown> {
-    return this.remote$
+  private updateGraphics(): Observable<unknown> {
+    const playingInterval$ = this.remote$
       .pipe(
         switchMap(remote =>
-          merge(remote.starting$, DynamicObjectGraphics.timeScale$)
-            .pipe(map(() => remote))
-        ),
-        switchMap(remote =>
-          interval(15)
+          timer(0, 15)
             .pipe(
-              map(() => remote),
-              takeUntil(remote.stopping$)
+              windowToggle(
+                remote.playing$,
+                () => remote.playing$
+                  .pipe(
+                    filter(playing => !playing),
+                    mergeMap(() => timer(200))
+                  )
+              ),
+              mergeMap(win$ => win$)
             )
-        ),
-        filter(remote => remote.playing),
-        tap(() => {
-          this.timeTrackGraphics?.update();
-          this.observerTrackGraphics
-            .forEach(observerTrackGraphics => observerTrackGraphics.update());
-        })
-      )
+        )
+      );
+    const timeScaleChanged$ = this.remote$
+      .pipe(
+        switchMap(() =>
+          DynamicObjectGraphics.timeScale$
+        )
+      );
+    return merge(
+      playingInterval$,
+      timeScaleChanged$
+    ).pipe(
+      tap(remote => {
+        const now = this.remote.now();
+        this.timeTrackGraphics?.update(now);
+        this.observerTrackGraphics
+          .forEach(observerTrackGraphics => observerTrackGraphics.update(now));
+      })
+    );
   }
 
   private mergeGraphicsFromRemoteAndView(): Observable<unknown> {
@@ -141,13 +168,13 @@ export class VizualRxViewerComponent implements OnChanges, AfterViewInit, OnDest
       );
   }
 
-  private mergeTimeTrackFromView(remote: VizualRxRemote): void {
+  private mergeTimeTrackFromView(remote: VizualRxEngine): void {
     this.timeTrackGraphics?.destroy();
     this.timeTrackGraphics = new TimeTrackGraphics(remote, this.timeTrack.nativeElement);
     this.timeTrackGraphics.init();
   }
 
-  private mergeObserverTracksFromView(remote: VizualRxRemote): void {
+  private mergeObserverTracksFromView(remote: VizualRxEngine): void {
     const newElements = this.observerTracks
       .map(elementRef => elementRef.nativeElement)
       .filter(svg => {

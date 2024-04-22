@@ -1,14 +1,15 @@
 import {TrackGraphics} from "../track-graphics";
-import {interval, mergeMap, takeUntil, tap} from "rxjs";
+import {mergeMap, takeUntil, tap, timer} from "rxjs";
 import {TimeTrackTickGraphics} from "./time-track-tick-graphics";
-import {VizualRxRemote} from "../../remote/vizual-rx-remote.model";
+
+import {VizualRxEngine} from "../../core/vizual-rx-engine";
 
 export class TimeTrackGraphics extends TrackGraphics {
 
   startTime: number;
   lastTickSeconds?: number;
 
-  constructor(remote: VizualRxRemote, svg: SVGSVGElement) {
+  constructor(remote: VizualRxEngine, svg: SVGSVGElement) {
     super(remote, svg, 'time-track');
     this.startTime = remote.now();
   }
@@ -24,7 +25,7 @@ export class TimeTrackGraphics extends TrackGraphics {
           this.lastTickSeconds = undefined;
         }),
         mergeMap(() =>
-          interval(20)
+          timer(0, 20)
             .pipe(
               tap(() => this.addNewTicks()),
               takeUntil(this.remote.stopping$)
@@ -47,7 +48,7 @@ export class TimeTrackGraphics extends TrackGraphics {
         tickSeconds = Math.round((this.lastTickSeconds + 0.1) * 10) / 10;
       }
       const tickTime = this.startTime + (tickSeconds * 1000);
-      this.addDynamicObject(new TimeTrackTickGraphics(this.remote, tickTime, tickSeconds));
+      this.addDynamicObject(new TimeTrackTickGraphics(tickTime, tickSeconds));
       this.lastTickSeconds = tickSeconds;
     }
   }

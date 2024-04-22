@@ -3,15 +3,15 @@ import {ObserverValueGraphics} from "./observer-value-graphics";
 import {catchError, EMPTY, merge, takeUntil, tap} from "rxjs";
 import {ObserverCompleteGraphics} from "./observer-complete-graphics";
 import {ObserverErrorGraphics} from "./observer-error-graphics";
-import {VizualRxRemote, VizualRxRemoteObserver} from "../../remote/vizual-rx-remote.model";
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 import {ObserverStackGraphics} from "./observer-stack-graphics";
+import {VizualRxEngine, VizualRxRemoteObserver} from "../../core/vizual-rx-engine";
 
 export class ObserverTrackGraphics extends TrackGraphics {
   private readonly observer: VizualRxRemoteObserver;
   private lastAddedStackableObject?: DynamicObjectGraphics;
 
-  constructor(remote: VizualRxRemote, observer: VizualRxRemoteObserver, svg: SVGSVGElement) {
+  constructor(remote: VizualRxEngine, observer: VizualRxRemoteObserver, svg: SVGSVGElement) {
     super(remote, svg, 'observer-track');
     this.observer = observer;
   }
@@ -62,7 +62,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
       .pipe(
         catchError(() => EMPTY),
         tap(notification => {
-          const valueGraphics = new ObserverValueGraphics(this.remote, notification);
+          const valueGraphics = new ObserverValueGraphics(notification);
           this.addDynamicObject(valueGraphics);
         })
       );
@@ -73,7 +73,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
       .pipe(
         catchError(() => EMPTY),
         tap(notification => {
-          const completedGraphics = new ObserverCompleteGraphics(this.remote, notification);
+          const completedGraphics = new ObserverCompleteGraphics(notification);
           this.addDynamicObject(completedGraphics);
         })
       )
@@ -83,7 +83,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
     return this.observer.error$
       .pipe(
         tap(notification => {
-          const erroredGraphics = new ObserverErrorGraphics(this.remote, notification);
+          const erroredGraphics = new ObserverErrorGraphics(notification);
           this.addDynamicObject(erroredGraphics);
         })
       )
@@ -95,14 +95,14 @@ export class ObserverTrackGraphics extends TrackGraphics {
       if (this.lastAddedStackableObject instanceof ObserverStackGraphics) {
         observerStackGraphics = this.lastAddedStackableObject;
       } else {
-        observerStackGraphics = new ObserverStackGraphics(this.remote, dynamicObject.time);
+        observerStackGraphics = new ObserverStackGraphics(dynamicObject.time);
         super.addDynamicObject(observerStackGraphics);
         this.removeDynamicObject(this.lastAddedStackableObject!);
         observerStackGraphics.addItem(this.lastAddedStackableObject!);
         this.lastAddedStackableObject = observerStackGraphics;
       }
       observerStackGraphics.addItem(dynamicObject);
-      observerStackGraphics.update();
+      observerStackGraphics.update(dynamicObject.time);
     } else {
       super.addDynamicObject(dynamicObject);
       this.lastAddedStackableObject = dynamicObject;
@@ -110,7 +110,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
   }
 
   private shouldStackObject(dynamicObject: DynamicObjectGraphics): boolean {
-    if (!this.isStackable(dynamicObject) || !this.lastAddedStackableObject) {
+    if (!this.isStackable(dynamicObject) || !this.lastAddedStackableObject || !this.isStackable(this.lastAddedStackableObject)) {
       return false;
     }
     const diff = Math.abs(dynamicObject.time - this.lastAddedStackableObject.time);

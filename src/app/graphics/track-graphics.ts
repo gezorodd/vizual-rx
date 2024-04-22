@@ -1,10 +1,10 @@
 import {interval, Subject, takeUntil} from "rxjs";
 import {DynamicObjectGraphics} from "./dynamic-object-graphics";
-import {VizualRxRemote} from "../remote/vizual-rx-remote.model";
 import {LayeredContainer} from "./layered-container";
+import {VizualRxEngine} from "../core/vizual-rx-engine";
 
 export class TrackGraphics {
-  protected readonly remote: VizualRxRemote;
+  protected readonly remote: VizualRxEngine;
   protected readonly svg: SVGSVGElement;
   protected readonly dynamicObjects: DynamicObjectGraphics[];
   protected trackContainer!: SVGGElement;
@@ -13,7 +13,7 @@ export class TrackGraphics {
   private readonly className: string;
   private updateIntervalId?: ReturnType<typeof setInterval>;
 
-  constructor(remote: VizualRxRemote, svg: SVGSVGElement, className: string) {
+  constructor(remote: VizualRxEngine, svg: SVGSVGElement, className: string) {
     this.remote = remote;
     this.svg = svg;
     this.dynamicObjects = [];
@@ -27,9 +27,9 @@ export class TrackGraphics {
     this.removeOutboundDynamicObjectsAtInterval();
   }
 
-  update(): void {
+  update(now: number): void {
     this.dynamicObjects.forEach(dynamicObject => {
-      dynamicObject.update();
+      dynamicObject.update(now);
     });
   }
 
@@ -45,7 +45,7 @@ export class TrackGraphics {
   addDynamicObject(dynamicObject: DynamicObjectGraphics): void {
     this.dynamicObjects.push(dynamicObject);
     this.scene.addObject(dynamicObject);
-    dynamicObject.update();
+    dynamicObject.update(dynamicObject.time);
   }
 
   removeDynamicObject(dynamicObject: DynamicObjectGraphics): void {

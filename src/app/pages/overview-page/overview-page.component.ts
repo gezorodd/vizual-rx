@@ -4,7 +4,8 @@ import {filter, map, Subject, takeUntil} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 import {NgIf} from "@angular/common";
 import {VizualRxPlayerComponent} from "../../vizual-rx-player/vizual-rx-player.component";
-import {VizualRxRemote} from "../../remote/vizual-rx-remote.model";
+
+import {VizualRxEngine} from "../../core/vizual-rx-engine";
 
 @Component({
   selector: 'app-overview-page',
@@ -15,12 +16,12 @@ import {VizualRxRemote} from "../../remote/vizual-rx-remote.model";
 })
 export class OverviewPageComponent implements OnInit, OnDestroy {
 
-  basicExampleRemote?: VizualRxRemote;
-  createValueExampleRemote?: VizualRxRemote;
-  colorAndShapeAtExampleRemote?: VizualRxRemote;
-  arrayExampleRemote?: VizualRxRemote;
-  miscExampleRemote?: VizualRxRemote;
-  pipeExampleRemote?: VizualRxRemote;
+  basicExampleRemote?: VizualRxEngine;
+  createValueExampleRemote?: VizualRxEngine;
+  colorAndShapeAtExampleRemote?: VizualRxEngine;
+  arrayExampleRemote?: VizualRxEngine;
+  miscExampleRemote?: VizualRxEngine;
+  pipeExampleRemote?: VizualRxEngine;
   private readonly destroy$ = new Subject<void>();
 
   constructor(private route: ActivatedRoute) {
@@ -31,7 +32,7 @@ export class OverviewPageComponent implements OnInit, OnDestroy {
       .pipe(
         map(data => data['remotes']),
         filter(remotes => !!remotes),
-        map(remotes => remotes as Map<string, VizualRxRemote>),
+        map(remotes => remotes as Map<string, VizualRxEngine>),
         takeUntil(this.destroy$)
       )
       .subscribe(remotes => {

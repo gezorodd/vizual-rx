@@ -2,16 +2,18 @@ import {ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot} from "@angular/r
 import {delay, forkJoin, from, map, mergeMap, Observable, of} from "rxjs";
 import {vizualRxEditorReadyResolver} from "../vizual-rx-player/vizual-rx-editor/vizual-rx-editor.resolver";
 import {inject, Type} from "@angular/core";
-import {VizualRxRemote} from "./vizual-rx-remote.model";
-import {VizualRxRemoteService} from "./vizual-rx-remote.service";
 import {ScriptService} from "../script/script.service";
+import {VizualRxEngine} from "./vizual-rx-engine";
+import {VizualRxScaledTimeEngine} from "./vizual-rx-scaled-time-engine";
+import {VizualRxVirtualTimeEngine} from "./vizual-rx-virtual-time-engine";
+import {VizualRxScaledTime} from "./vizual-rx-scaled-time";
 
 type UnresolvedCodes = { [name: string]: ResolveFn<string> };
 type ResolvedObservableCodes = { [name: string]: Observable<string> };
 type ResolvedCodes = { [name: string]: string };
 
-export const vizualRxRemoteResolver: ResolveFn<Map<string, VizualRxRemote>> = (route, state) => {
-  const disableWebWorker = route.data['disableWebWorker'] as boolean;
+export const vizualRxEnginesResolver: ResolveFn<Map<string, VizualRxEngine>> = (route, state) => {
+  const disableVirtualTime = route.data['disableVirtualTime'] as boolean;
   const unresolvedCodes = route.data['codes'] as UnresolvedCodes;
   if (!unresolvedCodes || Object.keys(unresolvedCodes).length === 0) {
     return of(new Map());
@@ -25,7 +27,6 @@ export const vizualRxRemoteResolver: ResolveFn<Map<string, VizualRxRemote>> = (r
     editorReady$ = from(editorReady);
   }
 
-  const remoteService = inject(VizualRxRemoteService);
   const resolvedObservableCodes = resolveObservableCodes(unresolvedCodes, route, state);
   const resolvedCodes$ = resolveCodes(resolvedObservableCodes);
 
@@ -33,13 +34,13 @@ export const vizualRxRemoteResolver: ResolveFn<Map<string, VizualRxRemote>> = (r
     .pipe(
       mergeMap(() => resolvedCodes$),
       map(resolvedCodes => {
-        const remotes = new Map<string, VizualRxRemote>();
+        const remotes = new Map<string, VizualRxEngine>();
         Object.keys(resolvedCodes)
           .forEach(name => {
             const code = resolvedCodes[name];
-            const remote = remoteService.createRemote(disableWebWorker);
+            const remote: VizualRxEngine = disableVirtualTime ? new VizualRxScaledTimeEngine() : new VizualRxVirtualTimeEngine();
             remote.prepare(code);
-            remote.timeFactor = remoteService.defaultTimeFactor;
+            remote.timeFactor = VizualRxScaledTime.defaultTimeFactor;
             remotes.set(name, remote);
           })
         return remotes;

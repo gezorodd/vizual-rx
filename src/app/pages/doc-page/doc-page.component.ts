@@ -8,7 +8,8 @@ import {MatTooltip} from "@angular/material/tooltip";
 import {MatAnchor} from "@angular/material/button";
 import {MatCardModule} from "@angular/material/card";
 import {VizualRxPlayerComponent} from "../../vizual-rx-player/vizual-rx-player.component";
-import {VizualRxRemote} from "../../remote/vizual-rx-remote.model";
+
+import {VizualRxEngine} from "../../core/vizual-rx-engine";
 
 @Component({
   selector: 'app-doc-page',
@@ -27,7 +28,7 @@ import {VizualRxRemote} from "../../remote/vizual-rx-remote.model";
 })
 export class DocPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  remote?: VizualRxRemote;
+  remote?: VizualRxEngine;
   page!: DocPage;
   private readonly destroy$ = new Subject<void>();
 

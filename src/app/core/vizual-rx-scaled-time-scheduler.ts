@@ -1,11 +1,11 @@
 import {SchedulerAction, SchedulerLike, Subscription} from "rxjs";
-import {VizualRxAction} from "./vizual-rx-action";
-import {VizualRxTime} from "./vizual-rx-time";
+import {VizualRxScaledTimeAction} from "./vizual-rx-scaled-time-action";
+import {VizualRxScaledTime} from "./vizual-rx-scaled-time";
 
 /**
  * This is a copy of the rxjs AsyncScheduler, adapted to scale time with VizualRxTime timeFactor.
  */
-export class VizualRxScheduler implements SchedulerLike {
+export class VizualRxScaledTimeScheduler implements SchedulerLike {
 
   /**
    * A getter method that returns a number representing the current time
@@ -17,8 +17,8 @@ export class VizualRxScheduler implements SchedulerLike {
    */
   public now: () => number;
 
-  constructor(public vizualRxTime: VizualRxTime) {
-    this.now = vizualRxTime.virtualNow.bind(vizualRxTime);
+  constructor(public scaledTime: VizualRxScaledTime) {
+    this.now = scaledTime.scaledNow.bind(scaledTime);
   }
 
   /**
@@ -39,11 +39,11 @@ export class VizualRxScheduler implements SchedulerLike {
    * the scheduled work.
    */
   public schedule<T>(work: (this: SchedulerAction<T>, state?: T) => void, delay: number = 0, state?: T): Subscription {
-    return new VizualRxAction<T>(this, work).schedule(state, delay);
+    return new VizualRxScaledTimeAction<T>(this, work).schedule(state, delay);
   }
 
 
-  public actions: Array<VizualRxAction<any>> = [];
+  public actions: Array<VizualRxScaledTimeAction<any>> = [];
   /**
    * A flag to indicate whether the Scheduler is currently executing a batch of
    * queued actions.
@@ -52,7 +52,7 @@ export class VizualRxScheduler implements SchedulerLike {
    */
   public _active: boolean = false;
 
-  public flush(action: VizualRxAction<any>): void {
+  public flush(action: VizualRxScaledTimeAction<any>): void {
     const {actions} = this;
 
     if (this._active) {
