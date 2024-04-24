@@ -45,7 +45,6 @@ export class TrackGraphics {
   addDynamicObject(dynamicObject: DynamicObjectGraphics): void {
     this.dynamicObjects.push(dynamicObject);
     this.scene.addObject(dynamicObject);
-    dynamicObject.update(dynamicObject.time);
   }
 
   removeDynamicObject(dynamicObject: DynamicObjectGraphics): void {

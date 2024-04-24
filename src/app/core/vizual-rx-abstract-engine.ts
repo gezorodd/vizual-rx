@@ -1,27 +1,38 @@
 import {InterpreterError, VizualRxInterpreter} from "./vizual-rx-interpreter";
 import {
+  animationFrames,
   BehaviorSubject,
+  combineLatest,
   filter,
   map,
+  merge,
+  mergeMap,
   Observable,
   pairwise,
   SchedulerLike,
   Subject,
   Subscription,
+  switchMap,
   takeUntil,
+  tap,
   TimestampProvider,
+  windowToggle,
 } from "rxjs";
 import {VizualRxScaledTime} from "./vizual-rx-scaled-time";
 import {VizualRxObserver} from "./vizual-rx-observer";
 import {VizualRxEngine, VizualRxRemoteObserver} from "./vizual-rx-engine";
 
-export abstract class VizualRxAbstractEngine<T extends SchedulerLike & TimestampProvider> implements VizualRxEngine {
+export abstract class VizualRxAbstractEngine<
+  EXECUTION_SCH extends SchedulerLike & TimestampProvider,
+  ANIMATION_SCH extends SchedulerLike & TimestampProvider> implements VizualRxEngine {
+
   code: string;
   error: InterpreterError | undefined;
 
-  readonly executionScheduler: T;
+  readonly executionScheduler: EXECUTION_SCH;
+  readonly animationScheduler: ANIMATION_SCH;
 
-  readonly starting$: Observable<number>;
+  readonly starting$: Observable<void>;
   readonly stopping$: Observable<void>;
   readonly stopped$: Observable<boolean>;
   readonly playing$: Observable<boolean>;
@@ -48,6 +59,8 @@ export abstract class VizualRxAbstractEngine<T extends SchedulerLike & Timestamp
 
     this.time = new VizualRxScaledTime();
     this.executionScheduler = this.createExecutionScheduler();
+    this.animationScheduler = this.createAnimationScheduler();
+
     this.interpreter = new VizualRxInterpreter(this.executionScheduler);
     this.interpreter.subscriptionCreated$
       .pipe(takeUntil(this.destroy$))
@@ -59,17 +72,15 @@ export abstract class VizualRxAbstractEngine<T extends SchedulerLike & Timestamp
       });
   }
 
-  abstract now(): number;
-
-  abstract get observers$(): Observable<VizualRxRemoteObserver[]>;
-
   abstract get maxTimeFactor(): number;
 
   abstract get enableInfiniteTimeFactor(): boolean;
 
-  protected abstract createExecutionScheduler(): T;
+  protected abstract createExecutionScheduler(): EXECUTION_SCH;
 
-  protected abstract get startingTime(): number;
+  protected abstract createAnimationScheduler(): ANIMATION_SCH;
+
+  protected abstract createVizualRxEngineObserver(observer: VizualRxObserver): VizualRxRemoteObserver;
 
   get playing(): boolean {
     return this.state$.value === PlayerState.PLAYING;
@@ -139,13 +150,39 @@ export abstract class VizualRxAbstractEngine<T extends SchedulerLike & Timestamp
     }
   }
 
+  get animation$(): Observable<number> {
+    return this.starting$
+      .pipe(
+        switchMap(() =>
+          animationFrames(this.animationScheduler)
+            .pipe(
+              takeUntil(this.stopping$)
+            )
+        ),
+        windowToggle(
+          this.playing$,
+          () => this.playing$
+            .pipe(
+              filter(playing => !playing)
+            )
+        ),
+        mergeMap(win$ => win$),
+        map(frame => frame.elapsed)
+      )
+  }
+
+  get observers$(): Observable<VizualRxRemoteObserver[]> {
+    return this._observers$
+      .pipe(
+        map(observers =>
+          observers.map(observer => this.createVizualRxEngineObserver(observer))
+        )
+      );
+  }
+
   destroy(): void {
     this.destroy$.next();
     this.destroy$.complete();
-  }
-
-  protected get internalObservers$(): Observable<VizualRxObserver[]> {
-    return this._observers$.asObservable();
   }
 
   protected run(): void {
@@ -172,7 +209,7 @@ export abstract class VizualRxAbstractEngine<T extends SchedulerLike & Timestamp
       .pipe(
         pairwise(),
         filter(states => states[0] === PlayerState.STOPPED && states[1] === PlayerState.PLAYING),
-        map(() => this.startingTime)
+        map(() => undefined)
       );
   }
 

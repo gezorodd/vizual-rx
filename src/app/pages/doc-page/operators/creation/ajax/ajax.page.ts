@@ -6,6 +6,7 @@ export const ajaxPage: DocPage = {
   routeUrl: 'operators/ajax',
   detailsComponent: AjaxDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/ajax/ajax',
+  disableVirtualTime: true,
   sampleCode: `import {ajax} from "rxjs/ajax";
 import {map} from "rxjs";
 import {observe} from "vizual-rx";

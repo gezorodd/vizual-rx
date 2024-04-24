@@ -11,20 +11,7 @@ import {
   ViewChild,
   ViewChildren
 } from '@angular/core';
-import {
-  delayWhen,
-  filter, identity,
-  interval,
-  merge,
-  mergeMap,
-  Observable,
-  of,
-  ReplaySubject,
-  Subject,
-  switchMap,
-  takeUntil,
-  tap, timer, windowToggle
-} from "rxjs";
+import {combineLatestWith, merge, Observable, of, ReplaySubject, Subject, switchMap, takeUntil, tap} from "rxjs";
 import {AsyncPipe, JsonPipe, NgForOf, NgIf} from "@angular/common";
 import {TimeTrackGraphics} from "../../graphics/time/time-track-graphics";
 import {ObserverTrackGraphics} from "../../graphics/observer/observer-track-graphics";
@@ -118,40 +105,16 @@ export class VizualRxViewerComponent implements OnChanges, AfterViewInit, OnDest
   }
 
   private updateGraphics(): Observable<unknown> {
-    const playingInterval$ = this.remote$
+    return this.remote$
       .pipe(
-        switchMap(remote =>
-          timer(0, 15)
-            .pipe(
-              windowToggle(
-                remote.playing$,
-                () => remote.playing$
-                  .pipe(
-                    filter(playing => !playing),
-                    mergeMap(() => timer(200))
-                  )
-              ),
-              mergeMap(win$ => win$)
-            )
-        )
+        switchMap(remote => remote.animation$),
+        combineLatestWith(DynamicObjectGraphics.timeScale$),
+        tap(([time, _]) => {
+          this.timeTrackGraphics?.update(time);
+          this.observerTrackGraphics
+            .forEach(observerTrackGraphics => observerTrackGraphics.update(time));
+        })
       );
-    const timeScaleChanged$ = this.remote$
-      .pipe(
-        switchMap(() =>
-          DynamicObjectGraphics.timeScale$
-        )
-      );
-    return merge(
-      playingInterval$,
-      timeScaleChanged$
-    ).pipe(
-      tap(remote => {
-        const now = this.remote.now();
-        this.timeTrackGraphics?.update(now);
-        this.observerTrackGraphics
-          .forEach(observerTrackGraphics => observerTrackGraphics.update(now));
-      })
-    );
   }
 
   private mergeGraphicsFromRemoteAndView(): Observable<unknown> {

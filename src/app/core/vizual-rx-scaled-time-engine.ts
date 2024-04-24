@@ -1,5 +1,5 @@
 import {VizualRxAbstractEngine} from "./vizual-rx-abstract-engine";
-import {filter, interval, map, mergeMap, Observable, takeUntil, tap, TimestampProvider} from "rxjs";
+import {animationFrames, filter, map, Observable, takeUntil, tap, TimestampProvider, withLatestFrom} from "rxjs";
 import {VizualRxScaledTimeScheduler} from "./vizual-rx-scaled-time-scheduler";
 import {
   VizualRxRemoteErrorNotification,
@@ -9,26 +9,13 @@ import {
 } from "./vizual-rx-engine";
 import {VizualRxObserver} from "./vizual-rx-observer";
 
-export class VizualRxScaledTimeEngine extends VizualRxAbstractEngine<VizualRxScaledTimeScheduler> {
+export class VizualRxScaledTimeEngine extends VizualRxAbstractEngine<VizualRxScaledTimeScheduler, VizualRxScaledTimeScheduler> {
 
   constructor() {
     super();
     this.stopEngineWhenAllSubscriptionsAreClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe();
-  }
-
-  override now(): number {
-    return this.executionScheduler.now();
-  }
-
-  override get observers$(): Observable<VizualRxRemoteObserver[]> {
-    return this.internalObservers$
-      .pipe(
-        map(observers =>
-          observers.map(observer => new VizualRxAsyncEngineObserver(this.executionScheduler, observer))
-        )
-      );
   }
 
   override get maxTimeFactor(): number {
@@ -43,21 +30,19 @@ export class VizualRxScaledTimeEngine extends VizualRxAbstractEngine<VizualRxSca
     return new VizualRxScaledTimeScheduler(this.time);
   }
 
-  protected override get startingTime(): number {
-    return this.now();
+  protected override createAnimationScheduler(): VizualRxScaledTimeScheduler {
+    return this.executionScheduler;
+  }
+
+  protected override createVizualRxEngineObserver(observer: VizualRxObserver): VizualRxRemoteObserver {
+    return new VizualRxAsyncEngineObserver(this.executionScheduler, observer);
   }
 
   private stopEngineWhenAllSubscriptionsAreClosed() {
-    return this.starting$
+    return this.animation$
       .pipe(
-        mergeMap(() => {
-          return interval(15)
-            .pipe(
-              filter(() => this.subscriptions.every(subscription => subscription.closed)),
-              tap(() => this.stop()),
-              takeUntil(this.stopping$)
-            );
-        })
+        filter(() => this.subscriptions.every(subscription => subscription.closed)),
+        tap(() => this.stop())
       );
   }
 }
@@ -75,8 +60,9 @@ class VizualRxAsyncEngineObserver implements VizualRxRemoteObserver {
   get next$(): Observable<VizualRxRemoteNextNotification> {
     return this.observer.next$
       .pipe(
-        map(value => ({
-          time: this.timestampProvider.now(),
+        withLatestFrom(animationFrames(this.timestampProvider)),
+        map(([value, frame]) => ({
+          time: frame.elapsed,
           value
         }))
       );
@@ -85,8 +71,9 @@ class VizualRxAsyncEngineObserver implements VizualRxRemoteObserver {
   get error$(): Observable<VizualRxRemoteErrorNotification> {
     return this.observer.error$
       .pipe(
-        map(err => ({
-          time: this.timestampProvider.now(),
+        withLatestFrom(animationFrames(this.timestampProvider)),
+        map(([err, frame]) => ({
+          time: frame.elapsed,
           err
         }))
       );
@@ -95,8 +82,9 @@ class VizualRxAsyncEngineObserver implements VizualRxRemoteObserver {
   get complete$(): Observable<VizualRxRemoteNotification> {
     return this.observer.complete$
       .pipe(
-        map(() => ({
-          time: this.timestampProvider.now()
+        withLatestFrom(animationFrames(this.timestampProvider)),
+        map(([_, frame]) => ({
+          time: frame.elapsed
         }))
       );
   }

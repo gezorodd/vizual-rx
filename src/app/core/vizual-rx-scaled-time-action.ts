@@ -31,8 +31,10 @@ export class VizualRxScaledTimeAction<T> extends Subscription {
             const elapseTimeRatio = diff / previousTimeout;
             this.remainingTimeRatio -= elapseTimeRatio;
           }
-          this.delay = this.originDelay * this.remainingTimeRatio;
-          this.schedule(this.state, this.delay, true);
+          if (this.originDelay) {
+            this.delay = this.originDelay * this.remainingTimeRatio;
+            this.schedule(this.state, this.delay, true);
+          }
         })
       )
       .subscribe();

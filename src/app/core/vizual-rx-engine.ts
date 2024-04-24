@@ -11,8 +11,6 @@ export interface VizualRxEngine {
 
   replay(): void;
 
-  now(): number;
-
   destroy(): void;
 
   prepare(code: string): void;
@@ -21,7 +19,7 @@ export interface VizualRxEngine {
 
   get code(): string;
 
-  get starting$(): Observable<number>;
+  get starting$(): Observable<void>;
 
   get playing$(): Observable<boolean>;
 
@@ -36,6 +34,8 @@ export interface VizualRxEngine {
   get timeFactor(): number;
 
   get error(): InterpreterError | undefined;
+
+  get animation$(): Observable<number>;
 
   get observers$(): Observable<VizualRxRemoteObserver[]>;
 

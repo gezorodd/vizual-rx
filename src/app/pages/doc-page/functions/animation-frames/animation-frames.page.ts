@@ -6,6 +6,7 @@ export const animationFramesPage: DocPage = {
   routeUrl: 'functions/animation-frames',
   detailsComponent: AnimationFramesDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/index/function/animationFrames',
+  disableVirtualTime: true,
   sampleCode: `import {animationFrames, filter, map} from "rxjs";
 import {observe} from "vizual-rx";
 

@@ -1,9 +1,12 @@
 import {
   delayWhen,
   map,
-  mergeMap,
+  mergeWith,
   Observable,
   of,
+  race,
+  Subject,
+  switchMap,
   takeUntil,
   tap,
   timer,
@@ -21,34 +24,40 @@ import {
 import {VizualRxScaledTimeScheduler} from "./vizual-rx-scaled-time-scheduler";
 import {VizualRxObserver} from "./vizual-rx-observer";
 
-export class VizualRxVirtualTimeEngine extends VizualRxAbstractEngine<VirtualTimeScheduler> {
+export class VizualRxVirtualTimeEngine extends VizualRxAbstractEngine<VirtualTimeScheduler, VizualRxScaledTimeScheduler> {
 
-  private readonly playingScheduler: VizualRxScaledTimeScheduler;
-  private startPlayingTime = 0;
+  private finish$ = new Subject<void>();
 
   constructor() {
     super();
-    this.playingScheduler = new VizualRxScaledTimeScheduler(this.time);
-
     this.stopEngineAfterSchedulerFrames()
       .pipe(takeUntil(this.destroy$))
       .subscribe(() => this.stop());
   }
 
-  override now(): number {
-    if (!Number.isFinite(this.timeFactor)) {
-      return this.executionScheduler.frame;
-    }
-    return Math.min(this.playingScheduler.now() - this.startPlayingTime, this.executionScheduler.frame);
+  protected override run() {
+    this.executionScheduler.frame = 0;
+    super.run();
+    this.executionScheduler.flush();
+    this.time.reset();
   }
 
-  override get observers$(): Observable<VizualRxRemoteObserver[]> {
-    return this.internalObservers$
+  override get animation$(): Observable<number> {
+    return super.animation$
       .pipe(
-        map(observers =>
-          observers.map(observer => new VizualRxVirtualTimeEngineObserver(this.executionScheduler,
-            this.playingScheduler, observer))
-        )
+        mergeWith(
+          this.finish$
+            .pipe(
+              map(() => this.executionScheduler.frame)
+            )
+        ),
+        map(time => {
+          if (Number.isFinite(time)) {
+            return time;
+          } else {
+            return this.executionScheduler.frame;
+          }
+        })
       );
   }
 
@@ -60,28 +69,26 @@ export class VizualRxVirtualTimeEngine extends VizualRxAbstractEngine<VirtualTim
     return true;
   }
 
-  protected override run() {
-    this.executionScheduler.frame = 0;
-    super.run();
-    this.executionScheduler.flush();
-    this.time.reset();
-    this.startPlayingTime = this.playingScheduler.now();
-  }
-
   protected override createExecutionScheduler(): VirtualTimeScheduler {
     return new VirtualTimeScheduler(VirtualAction, 30000);
   }
 
-  protected override get startingTime(): number {
-    return 0;
+  protected override createAnimationScheduler(): VizualRxScaledTimeScheduler {
+    return new VizualRxScaledTimeScheduler(this.time);
+  }
+
+  protected override createVizualRxEngineObserver(observer: VizualRxObserver): VizualRxRemoteObserver {
+    return new VizualRxVirtualTimeEngineObserver(this.executionScheduler, this.animationScheduler, this.finish$, observer);
   }
 
   private stopEngineAfterSchedulerFrames(): Observable<unknown> {
     return this.starting$
       .pipe(
-        mergeMap(() => timer(this.executionScheduler.frame, this.playingScheduler)),
-        mergeMap(() => timer(100)),
-        tap(() => this.stop())
+        switchMap(() => timer(this.executionScheduler.frame, this.animationScheduler)),
+        tap(() => {
+          this.finish$.next();
+          this.stop();
+        })
       );
   }
 }
@@ -91,8 +98,8 @@ class VizualRxVirtualTimeEngineObserver implements VizualRxRemoteObserver {
   readonly id: string;
   readonly label: string;
 
-  constructor(private timestampProvider: TimestampProvider, private playingScheduler: VizualRxScaledTimeScheduler,
-              private observer: VizualRxObserver) {
+  constructor(private executionTimeProvider: TimestampProvider, private animationScheduler: VizualRxScaledTimeScheduler,
+              private finish$: Observable<void>, private observer: VizualRxObserver) {
     this.id = observer.id;
     this.label = observer.label;
   }
@@ -101,12 +108,12 @@ class VizualRxVirtualTimeEngineObserver implements VizualRxRemoteObserver {
     return this.observer.next$
       .pipe(
         map(value => ({
-          time: this.timestampProvider.now(),
+          time: this.executionTimeProvider.now(),
           value
         })),
         delayWhen(value => {
-          if (Number.isFinite(this.playingScheduler.scaledTime.timeFactor)) {
-            return timer(value.time, this.playingScheduler);
+          if (Number.isFinite(this.animationScheduler.scaledTime.timeFactor)) {
+            return race(this.finish$, timer(value.time, this.animationScheduler));
           } else {
             return of(1);
           }
@@ -118,12 +125,12 @@ class VizualRxVirtualTimeEngineObserver implements VizualRxRemoteObserver {
     return this.observer.error$
       .pipe(
         map(err => ({
-          time: this.timestampProvider.now(),
+          time: this.executionTimeProvider.now(),
           err
         })),
         delayWhen(value => {
-          if (Number.isFinite(this.playingScheduler.scaledTime.timeFactor)) {
-            return timer(value.time, this.playingScheduler)
+          if (Number.isFinite(this.animationScheduler.scaledTime.timeFactor)) {
+            return race(this.finish$, timer(value.time, this.animationScheduler))
           } else {
             return of(1);
           }
@@ -135,11 +142,11 @@ class VizualRxVirtualTimeEngineObserver implements VizualRxRemoteObserver {
     return this.observer.complete$
       .pipe(
         map(() => ({
-          time: this.timestampProvider.now()
+          time: this.executionTimeProvider.now()
         })),
         delayWhen(value => {
-          if (Number.isFinite(this.playingScheduler.scaledTime.timeFactor)) {
-            return timer(value.time, this.playingScheduler);
+          if (Number.isFinite(this.animationScheduler.scaledTime.timeFactor)) {
+            return race(this.finish$, timer(value.time, this.animationScheduler));
           } else {
             return of(1);
           }
