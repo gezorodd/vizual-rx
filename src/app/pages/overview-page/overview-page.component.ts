@@ -6,11 +6,12 @@ import {NgIf} from "@angular/common";
 import {PlayerComponent} from "../../player/player.component";
 
 import {VizualRxEngine} from "../../core/vizual-rx-engine";
+import {MatIcon} from "@angular/material/icon";
 
 @Component({
   selector: 'app-overview-page',
   standalone: true,
-  imports: [MatCardModule, NgIf, PlayerComponent],
+  imports: [MatCardModule, NgIf, PlayerComponent, MatIcon],
   templateUrl: './overview-page.component.html',
   styleUrl: './overview-page.component.scss'
 })

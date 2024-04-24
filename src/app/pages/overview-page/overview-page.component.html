@@ -35,7 +35,7 @@
       in action.
     </p>
     <app-player *ngIf="basicExampleEngine" [engine]="basicExampleEngine" [disableMouseWheel]="true"
-                          [updateLayoutLightMode]="true" style="height: 210px"></app-player>
+                [updateLayoutLightMode]="true" style="height: 210px"></app-player>
   </mat-card-content>
 </mat-card>
 
@@ -62,8 +62,8 @@
       Below is an example demonstrating the usage of the <span class="code">createValue</span> function.
     </p>
     <app-player *ngIf="createValueExampleEngine" [engine]="createValueExampleEngine"
-                          [disableMouseWheel]="true" [updateLayoutLightMode]="true"
-                          style="height: 410px"></app-player>
+                [disableMouseWheel]="true" [updateLayoutLightMode]="true"
+                style="height: 410px"></app-player>
 
     <h2>The <span class="code">colorAt</span> and <span class="code">shapeAt</span> Functions</h2>
     <p>
@@ -81,8 +81,8 @@
       functions to dynamically assign colors and shapes to values based on their indices.
     </p>
     <app-player *ngIf="colorAndShapeAtExampleEngine" [engine]="colorAndShapeAtExampleEngine"
-                          [disableMouseWheel]="true" [updateLayoutLightMode]="true"
-                          style="height: 380px"></app-player>
+                [disableMouseWheel]="true" [updateLayoutLightMode]="true"
+                style="height: 380px"></app-player>
     <h2>Visualization of Arrays</h2>
     <p>
       The values created by the <span class="code">createValue</span> function can also be organized into an array,
@@ -95,7 +95,7 @@
       Below is an example demonstrating how the array representation appears in the diagram:
     </p>
     <app-player *ngIf="arrayExampleEngine" [engine]="arrayExampleEngine" [disableMouseWheel]="true"
-                          [updateLayoutLightMode]="true" style="height: 350px"></app-player>
+                [updateLayoutLightMode]="true" style="height: 350px"></app-player>
     <h2>Completion, Errors, and Other Values</h2>
     <p>
       As observed in the previous diagrams, various events and values are visually represented to provide a
@@ -115,7 +115,7 @@
     </ul>
     <p>Below is an example showcasing the representation of the completion sign, an error, and an object value:</p>
     <app-player *ngIf="miscExampleEngine" [engine]="miscExampleEngine" [disableMouseWheel]="true"
-                          [updateLayoutLightMode]="true" style="height: 320px"></app-player>
+                [updateLayoutLightMode]="true" style="height: 320px"></app-player>
   </mat-card-content>
 </mat-card>
 
@@ -145,6 +145,45 @@
       <li>Finally, the values are buffered by groups of 3 items using <span class="code">bufferCount</span>.</li>
     </ol>
     <app-player *ngIf="pipeExampleEngine" [engine]="pipeExampleEngine" [disableMouseWheel]="true"
-                          [updateLayoutLightMode]="true" style="height: 460px"></app-player>
+                [updateLayoutLightMode]="true" style="height: 460px"></app-player>
+  </mat-card-content>
+</mat-card>
+
+<mat-card>
+  <mat-card-header>
+    <mat-card-title>
+      <h1>VizualRx Schedulers</h1>
+    </mat-card-title>
+  </mat-card-header>
+  <mat-card-content>
+    <p>
+      <span>VisualRx offers two distinct schedulers for executing your code, each designed to handle different scenarios.
+        You can seamlessly switch between these schedulers by clicking the </span>
+      <mat-icon class="text-icon">schedule</mat-icon>
+      <span> icon in the player bar. Here's a breakdown of their characteristics:</span>
+    </p>
+    <h2>Virtual Time Scheduler</h2>
+    <ul>
+      <li>This scheduler prioritizes performance and accuracy, making it ideal for most scenarios.</li>
+      <li>Time speed can be adjusted from 0 to 5, allowing you to control the pace of execution.</li>
+      <li>Selecting a time speed greater than 5 results in instant execution.</li>
+      <li>However, it's important to note that this scheduler may produce inconsistent results when using operators that
+        rely on asynchronous actions outside of RxJS, such as <span class="code">fromEvent</span> or <span class="code">ajax</span>
+        Observables.
+      </li>
+    </ul>
+    <h2>Scaled Time Scheduler</h2>
+    <ul>
+      <li>Similar to the regular AsyncScheduler, this scheduler enables you to adjust the time speed.</li>
+      <li>Time speed ranges from 0 to 2, providing a balance between real-time execution and control.</li>
+      <li>With this scheduler, your code can include operations involving user input or other asynchronous actions
+        outside of RxJS, as it executes in real-time.
+      </li>
+    </ul>
+    <p>
+      By default, most pages within VisualRx utilize the Virtual Time Scheduler. However, for scenarios requiring user
+      input or interactions with external asynchronous actions, the Scaled Time Scheduler is employed to ensure seamless
+      execution.
+    </p>
   </mat-card-content>
 </mat-card>
