@@ -1,13 +1,13 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 import tippy from "tippy.js";
 
-import {VizualRxRemoteErrorNotification} from "../../core/vizual-rx-engine";
+import {VizualRxEngineErrorNotification} from "../../core/vizual-rx-engine";
 
 export class ObserverErrorGraphics extends DynamicObjectGraphics {
 
   private readonly err: any;
 
-  constructor(notification: VizualRxRemoteErrorNotification) {
+  constructor(notification: VizualRxEngineErrorNotification) {
     super(notification.time);
     this.err = notification.err;
   }

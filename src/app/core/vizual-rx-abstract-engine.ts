@@ -20,7 +20,7 @@ import {
 } from "rxjs";
 import {VizualRxScaledTime} from "./vizual-rx-scaled-time";
 import {VizualRxObserver} from "./vizual-rx-observer";
-import {VizualRxEngine, VizualRxRemoteObserver} from "./vizual-rx-engine";
+import {VizualRxEngine, VizualRxEngineObserver} from "./vizual-rx-engine";
 
 export abstract class VizualRxAbstractEngine<
   EXECUTION_SCH extends SchedulerLike & TimestampProvider,
@@ -80,7 +80,7 @@ export abstract class VizualRxAbstractEngine<
 
   protected abstract createAnimationScheduler(): ANIMATION_SCH;
 
-  protected abstract createVizualRxEngineObserver(observer: VizualRxObserver): VizualRxRemoteObserver;
+  protected abstract createVizualRxEngineObserver(observer: VizualRxObserver): VizualRxEngineObserver;
 
   get playing(): boolean {
     return this.state$.value === PlayerState.PLAYING;
@@ -171,7 +171,7 @@ export abstract class VizualRxAbstractEngine<
       )
   }
 
-  get observers$(): Observable<VizualRxRemoteObserver[]> {
+  get observers$(): Observable<VizualRxEngineObserver[]> {
     return this._observers$
       .pipe(
         map(observers =>

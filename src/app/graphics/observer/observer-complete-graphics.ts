@@ -1,10 +1,10 @@
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 
-import {VizualRxRemoteNotification} from "../../core/vizual-rx-engine";
+import {VizualRxEngineNotification} from "../../core/vizual-rx-engine";
 
 export class ObserverCompleteGraphics extends DynamicObjectGraphics {
 
-  constructor(notification: VizualRxRemoteNotification) {
+  constructor(notification: VizualRxEngineNotification) {
     super(notification.time, -1);
   }
 

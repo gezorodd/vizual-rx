@@ -30,7 +30,7 @@ import {VizualRxEngine} from "../../core/vizual-rx-engine";
 })
 export class PlaygroundPageComponent implements OnInit, OnDestroy {
 
-  remote?: VizualRxEngine;
+  engine?: VizualRxEngine;
   shareState: ShareState;
   shareUrl?: string;
 
@@ -49,7 +49,7 @@ export class PlaygroundPageComponent implements OnInit, OnDestroy {
         takeUntil(this.destroy$)
       )
       .subscribe(data => {
-        this.remote = data['remotes']?.get('playground');
+        this.engine = data['engines']?.get('playground');
       });
   }
 

@@ -5,14 +5,14 @@ import {ObserverCompleteGraphics} from "./observer-complete-graphics";
 import {ObserverErrorGraphics} from "./observer-error-graphics";
 import {DynamicObjectGraphics} from "../dynamic-object-graphics";
 import {ObserverStackGraphics} from "./observer-stack-graphics";
-import {VizualRxEngine, VizualRxRemoteObserver} from "../../core/vizual-rx-engine";
+import {VizualRxEngine, VizualRxEngineObserver} from "../../core/vizual-rx-engine";
 
 export class ObserverTrackGraphics extends TrackGraphics {
-  private readonly observer: VizualRxRemoteObserver;
+  private readonly observer: VizualRxEngineObserver;
   private lastAddedStackableObject?: DynamicObjectGraphics;
 
-  constructor(remote: VizualRxEngine, observer: VizualRxRemoteObserver, svg: SVGSVGElement) {
-    super(remote, svg, 'observer-track');
+  constructor(engine: VizualRxEngine, observer: VizualRxEngineObserver, svg: SVGSVGElement) {
+    super(engine, svg, 'observer-track');
     this.observer = observer;
   }
 
@@ -26,7 +26,7 @@ export class ObserverTrackGraphics extends TrackGraphics {
       this.createCompletedGraphicsWhenCompleted(),
       this.createErroredGraphicsWhenErrored()
     ).pipe(
-      takeUntil(this.remote.stopping$),
+      takeUntil(this.engine.stopping$),
       takeUntil(this.destroy$)
     ).subscribe();
   }

@@ -30,30 +30,30 @@ import {VizualRxVirtualTimeEngine} from "../../core/vizual-rx-virtual-time-engin
 })
 export class VizualRxControllerComponent implements OnChanges {
 
-  @Input({required: true}) remote!: VizualRxEngine;
-  @Output() switchRemote = new EventEmitter<void>();
+  @Input({required: true}) engine!: VizualRxEngine;
+  @Output() switchEngine = new EventEmitter<void>();
 
   isVirtualTimeEngine: boolean = false;
-  switchRemoteTooltip: string = '';
+  switchEngineTooltip: string = '';
 
   ngOnChanges(changes: SimpleChanges): void {
-    this.isVirtualTimeEngine = this.remote instanceof VizualRxVirtualTimeEngine;
-    this.switchRemoteTooltip = this.getRemoteSwitchTooltip();
+    this.isVirtualTimeEngine = this.engine instanceof VizualRxVirtualTimeEngine;
+    this.switchEngineTooltip = this.getSwitchEngineTooltip();
   }
 
   get timeFactor(): number {
-    if (!Number.isFinite(this.remote.timeFactor)) {
-      return this.remote.maxTimeFactor + 0.1;
+    if (!Number.isFinite(this.engine.timeFactor)) {
+      return this.engine.maxTimeFactor + 0.1;
     }
-    return this.remote.timeFactor;
+    return this.engine.timeFactor;
   }
 
   set timeFactor(value: number) {
-    if (value > this.remote.maxTimeFactor) {
+    if (value > this.engine.maxTimeFactor) {
       value = Number.POSITIVE_INFINITY;
     }
     VizualRxScaledTime.defaultTimeFactor = value;
-    this.remote.timeFactor = value;
+    this.engine.timeFactor = value;
   }
 
   get timeScale(): number {
@@ -65,15 +65,15 @@ export class VizualRxControllerComponent implements OnChanges {
   }
 
   get maxTimeFactor(): number {
-    let maxTimeFactor = this.remote.maxTimeFactor;
-    if (this.remote.enableInfiniteTimeFactor) {
+    let maxTimeFactor = this.engine.maxTimeFactor;
+    if (this.engine.enableInfiniteTimeFactor) {
       maxTimeFactor += 0.1;
     }
     return maxTimeFactor;
   }
 
-  private getRemoteSwitchTooltip(): string {
-    if (this.remote instanceof VizualRxScaledTimeEngine) {
+  private getSwitchEngineTooltip(): string {
+    if (this.engine instanceof VizualRxScaledTimeEngine) {
       return 'Enable Virtual Time';
     } else {
       return 'Disable Virtual Time';

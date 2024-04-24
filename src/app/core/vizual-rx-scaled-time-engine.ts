@@ -2,10 +2,10 @@ import {VizualRxAbstractEngine} from "./vizual-rx-abstract-engine";
 import {animationFrames, filter, map, Observable, takeUntil, tap, TimestampProvider, withLatestFrom} from "rxjs";
 import {VizualRxScaledTimeScheduler} from "./vizual-rx-scaled-time-scheduler";
 import {
-  VizualRxRemoteErrorNotification,
-  VizualRxRemoteNextNotification,
-  VizualRxRemoteNotification,
-  VizualRxRemoteObserver
+  VizualRxEngineErrorNotification,
+  VizualRxEngineNextNotification,
+  VizualRxEngineNotification,
+  VizualRxEngineObserver
 } from "./vizual-rx-engine";
 import {VizualRxObserver} from "./vizual-rx-observer";
 
@@ -34,7 +34,7 @@ export class VizualRxScaledTimeEngine extends VizualRxAbstractEngine<VizualRxSca
     return this.executionScheduler;
   }
 
-  protected override createVizualRxEngineObserver(observer: VizualRxObserver): VizualRxRemoteObserver {
+  protected override createVizualRxEngineObserver(observer: VizualRxObserver): VizualRxEngineObserver {
     return new VizualRxAsyncEngineObserver(this.executionScheduler, observer);
   }
 
@@ -48,7 +48,7 @@ export class VizualRxScaledTimeEngine extends VizualRxAbstractEngine<VizualRxSca
 }
 
 
-class VizualRxAsyncEngineObserver implements VizualRxRemoteObserver {
+class VizualRxAsyncEngineObserver implements VizualRxEngineObserver {
   readonly id: string;
   readonly label: string;
 
@@ -57,7 +57,7 @@ class VizualRxAsyncEngineObserver implements VizualRxRemoteObserver {
     this.label = observer.label;
   }
 
-  get next$(): Observable<VizualRxRemoteNextNotification> {
+  get next$(): Observable<VizualRxEngineNextNotification> {
     return this.observer.next$
       .pipe(
         withLatestFrom(animationFrames(this.timestampProvider)),
@@ -68,7 +68,7 @@ class VizualRxAsyncEngineObserver implements VizualRxRemoteObserver {
       );
   }
 
-  get error$(): Observable<VizualRxRemoteErrorNotification> {
+  get error$(): Observable<VizualRxEngineErrorNotification> {
     return this.observer.error$
       .pipe(
         withLatestFrom(animationFrames(this.timestampProvider)),
@@ -79,7 +79,7 @@ class VizualRxAsyncEngineObserver implements VizualRxRemoteObserver {
       );
   }
 
-  get complete$(): Observable<VizualRxRemoteNotification> {
+  get complete$(): Observable<VizualRxEngineNotification> {
     return this.observer.complete$
       .pipe(
         withLatestFrom(animationFrames(this.timestampProvider)),

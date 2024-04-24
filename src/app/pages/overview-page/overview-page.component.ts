@@ -16,12 +16,12 @@ import {VizualRxEngine} from "../../core/vizual-rx-engine";
 })
 export class OverviewPageComponent implements OnInit, OnDestroy {
 
-  basicExampleRemote?: VizualRxEngine;
-  createValueExampleRemote?: VizualRxEngine;
-  colorAndShapeAtExampleRemote?: VizualRxEngine;
-  arrayExampleRemote?: VizualRxEngine;
-  miscExampleRemote?: VizualRxEngine;
-  pipeExampleRemote?: VizualRxEngine;
+  basicExampleEngine?: VizualRxEngine;
+  createValueExampleEngine?: VizualRxEngine;
+  colorAndShapeAtExampleEngine?: VizualRxEngine;
+  arrayExampleEngine?: VizualRxEngine;
+  miscExampleEngine?: VizualRxEngine;
+  pipeExampleEngine?: VizualRxEngine;
   private readonly destroy$ = new Subject<void>();
 
   constructor(private route: ActivatedRoute) {
@@ -30,18 +30,18 @@ export class OverviewPageComponent implements OnInit, OnDestroy {
   ngOnInit(): void {
     this.route.data
       .pipe(
-        map(data => data['remotes']),
-        filter(remotes => !!remotes),
-        map(remotes => remotes as Map<string, VizualRxEngine>),
+        map(data => data['engines']),
+        filter(engines => !!engines),
+        map(engines => engines as Map<string, VizualRxEngine>),
         takeUntil(this.destroy$)
       )
-      .subscribe(remotes => {
-        this.basicExampleRemote = remotes.get('basicExample');
-        this.createValueExampleRemote = remotes.get('createValueExample');
-        this.colorAndShapeAtExampleRemote = remotes.get('colorAndShapeAtExample');
-        this.arrayExampleRemote = remotes.get('arrayExample');
-        this.miscExampleRemote = remotes.get('miscExample');
-        this.pipeExampleRemote = remotes.get('pipeExample');
+      .subscribe(engines => {
+        this.basicExampleEngine = engines.get('basicExample');
+        this.createValueExampleEngine = engines.get('createValueExample');
+        this.colorAndShapeAtExampleEngine = engines.get('colorAndShapeAtExample');
+        this.arrayExampleEngine = engines.get('arrayExample');
+        this.miscExampleEngine = engines.get('miscExample');
+        this.pipeExampleEngine = engines.get('pipeExample');
       });
   }
 

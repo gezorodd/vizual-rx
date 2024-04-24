@@ -30,7 +30,7 @@ import {VizualRxScaledTimeEngine} from "../core/vizual-rx-scaled-time-engine";
 })
 export class VizualRxPlayerComponent implements OnDestroy {
 
-  @Input({required: true}) remote!: VizualRxEngine;
+  @Input({required: true}) engine!: VizualRxEngine;
   @Input() disableMouseWheel?: boolean;
   @Input() updateLayoutLightMode?: boolean;
 
@@ -42,35 +42,35 @@ export class VizualRxPlayerComponent implements OnDestroy {
   }
 
   ngOnDestroy(): void {
-    this.remote.destroy();
+    this.engine.destroy();
   }
 
   @HostListener('window:blur')
   handleWindowBlur(): void {
-    if (this.remote instanceof VizualRxScaledTimeEngine && this.remote.playing) {
-      this.remote.pause();
+    if (this.engine instanceof VizualRxScaledTimeEngine && this.engine.playing) {
+      this.engine.pause();
       this.wasPausedOnBlur = true;
     }
   }
 
   @HostListener('window:focus')
   handleWindowFocus(): void {
-    if (this.remote instanceof VizualRxScaledTimeEngine && this.wasPausedOnBlur) {
-      this.remote.play();
+    if (this.engine instanceof VizualRxScaledTimeEngine && this.wasPausedOnBlur) {
+      this.engine.play();
       this.wasPausedOnBlur = false;
     }
   }
 
-  switchRemote(): void {
-    let newRemote: VizualRxEngine;
-    if (this.remote instanceof VizualRxVirtualTimeEngine) {
-      newRemote = new VizualRxScaledTimeEngine();
+  switchEngine(): void {
+    let newEngine: VizualRxEngine;
+    if (this.engine instanceof VizualRxVirtualTimeEngine) {
+      newEngine = new VizualRxScaledTimeEngine();
     } else {
-      newRemote = new VizualRxVirtualTimeEngine();
+      newEngine = new VizualRxVirtualTimeEngine();
     }
-    newRemote.code = this.remote.code;
-    newRemote.timeFactor = this.remote.timeFactor;
-    this.remote.destroy();
-    this.remote = newRemote;
+    newEngine.code = this.engine.code;
+    newEngine.timeFactor = this.engine.timeFactor;
+    this.engine.destroy();
+    this.engine = newEngine;
   }
 }

@@ -4,7 +4,7 @@ import {LayeredContainer} from "./layered-container";
 import {VizualRxEngine} from "../core/vizual-rx-engine";
 
 export class TrackGraphics {
-  protected readonly remote: VizualRxEngine;
+  protected readonly engine: VizualRxEngine;
   protected readonly svg: SVGSVGElement;
   protected readonly dynamicObjects: DynamicObjectGraphics[];
   protected trackContainer!: SVGGElement;
@@ -13,8 +13,8 @@ export class TrackGraphics {
   private readonly className: string;
   private updateIntervalId?: ReturnType<typeof setInterval>;
 
-  constructor(remote: VizualRxEngine, svg: SVGSVGElement, className: string) {
-    this.remote = remote;
+  constructor(engine: VizualRxEngine, svg: SVGSVGElement, className: string) {
+    this.engine = engine;
     this.svg = svg;
     this.dynamicObjects = [];
     this.className = className;

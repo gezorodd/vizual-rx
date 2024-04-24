@@ -8,8 +8,8 @@ export class TimeTrackGraphics extends TrackGraphics {
 
   lastTickSeconds?: number;
 
-  constructor(remote: VizualRxEngine, svg: SVGSVGElement) {
-    super(remote, svg, 'time-track');
+  constructor(engine: VizualRxEngine, svg: SVGSVGElement) {
+    super(engine, svg, 'time-track');
   }
 
   override init() {
@@ -24,7 +24,7 @@ export class TimeTrackGraphics extends TrackGraphics {
   }
 
   private resetTicksOnStarting(): Observable<unknown> {
-    return this.remote.starting$
+    return this.engine.starting$
       .pipe(
         tap(time => {
           this.clearDynamicObjects();
@@ -34,7 +34,7 @@ export class TimeTrackGraphics extends TrackGraphics {
   }
 
   private addTicksOnAnimation(): Observable<unknown> {
-    return this.remote.animation$
+    return this.engine.animation$
       .pipe(
         tap(time => this.addNewTicks(time))
       );

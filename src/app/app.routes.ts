@@ -35,7 +35,7 @@ export const routes: Routes = [
         disableVirtualTime: page.disableVirtualTime
       },
       resolve: {
-        remotes: vizualRxEnginesResolver
+        engines: vizualRxEnginesResolver
       }
     })),
   {
@@ -49,7 +49,7 @@ export const routes: Routes = [
       }
     },
     resolve: {
-      remotes: vizualRxEnginesResolver
+      engines: vizualRxEnginesResolver
     }
   },
   {
@@ -61,7 +61,7 @@ export const routes: Routes = [
       }
     },
     resolve: {
-      remotes: vizualRxEnginesResolver
+      engines: vizualRxEnginesResolver
     }
   },
   {
@@ -78,7 +78,7 @@ export const routes: Routes = [
       }
     },
     resolve: {
-      remotes: vizualRxEnginesResolver
+      engines: vizualRxEnginesResolver
     }
   },
   {

@@ -37,32 +37,32 @@ export interface VizualRxEngine {
 
   get animation$(): Observable<number>;
 
-  get observers$(): Observable<VizualRxRemoteObserver[]>;
+  get observers$(): Observable<VizualRxEngineObserver[]>;
 
   get maxTimeFactor(): number;
 
   get enableInfiniteTimeFactor(): boolean;
 }
 
-export interface VizualRxRemoteObserver {
+export interface VizualRxEngineObserver {
   readonly id: string;
   readonly label: string;
 
-  get next$(): Observable<VizualRxRemoteNextNotification>;
+  get next$(): Observable<VizualRxEngineNextNotification>;
 
-  get error$(): Observable<VizualRxRemoteErrorNotification>;
+  get error$(): Observable<VizualRxEngineErrorNotification>;
 
-  get complete$(): Observable<VizualRxRemoteNotification>;
+  get complete$(): Observable<VizualRxEngineNotification>;
 }
 
-export interface VizualRxRemoteNotification {
+export interface VizualRxEngineNotification {
   time: number;
 }
 
-export interface VizualRxRemoteNextNotification extends VizualRxRemoteNotification {
+export interface VizualRxEngineNextNotification extends VizualRxEngineNotification {
   value: any;
 }
 
-export interface VizualRxRemoteErrorNotification extends VizualRxRemoteNotification {
+export interface VizualRxEngineErrorNotification extends VizualRxEngineNotification {
   err: any;
 }

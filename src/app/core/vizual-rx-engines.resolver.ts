@@ -34,16 +34,16 @@ export const vizualRxEnginesResolver: ResolveFn<Map<string, VizualRxEngine>> = (
     .pipe(
       mergeMap(() => resolvedCodes$),
       map(resolvedCodes => {
-        const remotes = new Map<string, VizualRxEngine>();
+        const engines = new Map<string, VizualRxEngine>();
         Object.keys(resolvedCodes)
           .forEach(name => {
             const code = resolvedCodes[name];
-            const remote: VizualRxEngine = disableVirtualTime ? new VizualRxScaledTimeEngine() : new VizualRxVirtualTimeEngine();
-            remote.prepare(code);
-            remote.timeFactor = VizualRxScaledTime.defaultTimeFactor;
-            remotes.set(name, remote);
+            const engine: VizualRxEngine = disableVirtualTime ? new VizualRxScaledTimeEngine() : new VizualRxVirtualTimeEngine();
+            engine.prepare(code);
+            engine.timeFactor = VizualRxScaledTime.defaultTimeFactor;
+            engines.set(name, engine);
           })
-        return remotes;
+        return engines;
       }),
       delay(200)
     );

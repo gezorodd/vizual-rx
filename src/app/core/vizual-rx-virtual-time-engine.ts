@@ -16,10 +16,10 @@ import {
 } from "rxjs";
 import {VizualRxAbstractEngine} from "./vizual-rx-abstract-engine";
 import {
-  VizualRxRemoteErrorNotification,
-  VizualRxRemoteNextNotification,
-  VizualRxRemoteNotification,
-  VizualRxRemoteObserver
+  VizualRxEngineErrorNotification,
+  VizualRxEngineNextNotification,
+  VizualRxEngineNotification,
+  VizualRxEngineObserver
 } from "./vizual-rx-engine";
 import {VizualRxScaledTimeScheduler} from "./vizual-rx-scaled-time-scheduler";
 import {VizualRxObserver} from "./vizual-rx-observer";
@@ -77,7 +77,7 @@ export class VizualRxVirtualTimeEngine extends VizualRxAbstractEngine<VirtualTim
     return new VizualRxScaledTimeScheduler(this.time);
   }
 
-  protected override createVizualRxEngineObserver(observer: VizualRxObserver): VizualRxRemoteObserver {
+  protected override createVizualRxEngineObserver(observer: VizualRxObserver): VizualRxEngineObserver {
     return new VizualRxVirtualTimeEngineObserver(this.executionScheduler, this.animationScheduler, this.finish$, observer);
   }
 
@@ -94,7 +94,7 @@ export class VizualRxVirtualTimeEngine extends VizualRxAbstractEngine<VirtualTim
 }
 
 
-class VizualRxVirtualTimeEngineObserver implements VizualRxRemoteObserver {
+class VizualRxVirtualTimeEngineObserver implements VizualRxEngineObserver {
   readonly id: string;
   readonly label: string;
 
@@ -104,7 +104,7 @@ class VizualRxVirtualTimeEngineObserver implements VizualRxRemoteObserver {
     this.label = observer.label;
   }
 
-  get next$(): Observable<VizualRxRemoteNextNotification> {
+  get next$(): Observable<VizualRxEngineNextNotification> {
     return this.observer.next$
       .pipe(
         map(value => ({
@@ -121,7 +121,7 @@ class VizualRxVirtualTimeEngineObserver implements VizualRxRemoteObserver {
       );
   }
 
-  get error$(): Observable<VizualRxRemoteErrorNotification> {
+  get error$(): Observable<VizualRxEngineErrorNotification> {
     return this.observer.error$
       .pipe(
         map(err => ({
@@ -138,7 +138,7 @@ class VizualRxVirtualTimeEngineObserver implements VizualRxRemoteObserver {
       );
   }
 
-  get complete$(): Observable<VizualRxRemoteNotification> {
+  get complete$(): Observable<VizualRxEngineNotification> {
     return this.observer.complete$
       .pipe(
         map(() => ({

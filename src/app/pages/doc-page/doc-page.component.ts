@@ -28,7 +28,7 @@ import {VizualRxEngine} from "../../core/vizual-rx-engine";
 })
 export class DocPageComponent implements OnInit, AfterViewInit, OnDestroy {
 
-  remote?: VizualRxEngine;
+  engine?: VizualRxEngine;
   page!: DocPage;
   private readonly destroy$ = new Subject<void>();
 
@@ -42,14 +42,14 @@ export class DocPageComponent implements OnInit, AfterViewInit, OnDestroy {
       )
       .subscribe(data => {
         this.page = data['page'];
-        this.remote = data['remotes']?.get('page');
+        this.engine = data['engines']?.get('page');
       });
   }
 
   ngAfterViewInit(): void {
     timer(0)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.remote?.play());
+      .subscribe(() => this.engine?.play());
   }
 
   ngOnDestroy(): void {
