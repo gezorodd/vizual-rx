@@ -19,7 +19,7 @@ const source1$ = timer(0, 2000)
 const source2$ = timer(1000, 2000)
     .pipe(
         map(i => createValue('blue', shapeAt(i))),
-        take(5)
+        take(3)
     );
 
 const example$ = combineLatest([source1$, source2$]);

@@ -148,6 +148,7 @@ import {sequenceEqualPage} from "../pages/doc-page/operators/conditional/sequenc
 import {throwIfEmptyPage} from "../pages/doc-page/operators/utility/throw-if-empty/throw-if-empty.page";
 import {usingPage} from "../pages/doc-page/functions/using/using.page";
 import {zipWithPage} from "../pages/doc-page/operators/join/zip-with/zip-with.page";
+import {combineLatestWithPage} from "../pages/doc-page/operators/join/combine-latest-with/combine-latest-with.page";
 
 export const sectionDefinitions: SectionDefinition[] = [
   {
@@ -293,6 +294,7 @@ export const sectionDefinitions: SectionDefinition[] = [
             pages: [
               combineAllPage,
               combineLatestAllPage,
+              combineLatestWithPage,
               concatAllPage,
               concatWithPage,
               endWithPage,

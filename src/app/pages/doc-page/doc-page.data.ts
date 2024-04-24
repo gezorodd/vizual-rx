@@ -136,6 +136,7 @@ import {sequenceEqualPage} from "./operators/conditional/sequence-equal/sequence
 import {throwIfEmptyPage} from "./operators/utility/throw-if-empty/throw-if-empty.page";
 import {usingPage} from "./functions/using/using.page";
 import {zipWithPage} from "./operators/join/zip-with/zip-with.page";
+import {combineLatestWithPage} from "./operators/join/combine-latest-with/combine-latest-with.page";
 
 export const docPages = [
   // Subjects
@@ -227,6 +228,7 @@ export const docPages = [
   // Join Operators
   combineAllPage,
   combineLatestAllPage,
+  combineLatestWithPage,
   concatAllPage,
   concatWithPage,
   endWithPage,

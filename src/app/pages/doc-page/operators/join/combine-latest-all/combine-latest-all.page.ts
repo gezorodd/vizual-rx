@@ -7,26 +7,30 @@ export const combineLatestAllPage: DocPage = {
   detailsComponent: CombineLatestAllDetailsComponent,
   documentationUrl: 'https://rxjs.dev/api/operators/combineLatestAll',
   starred: true,
-  sampleCode: `import {combineLatestAll, timer, map, take, tap} from "rxjs";
-import {createValue, observe, colorAt, shapeAt} from "vizual-rx";
+  sampleCode: `import {combineLatestAll, timer, map, take, from} from "rxjs";
+import {createValue, observe, shapeAt} from "vizual-rx";
 
-const innerObservers = new Array(2).fill(undefined)
-    .map((_, i) => observe('inner ' + i));
-
-const example$ = timer(0, 500)
+const source1$ = timer(0, 2000)
     .pipe(
-        take(2),
-        map((val) =>
-            timer(val * 1000, 2000)
-                .pipe(
-                    map(i => createValue(colorAt(val), shapeAt(i))),
-                    take(3 + (val * 2)),
-                    tap(innerObservers[val])
-                )
-        ),
-        combineLatestAll()
+        map(i => createValue(shapeAt(i), 'blue')),
+        take(3)
     );
 
+const source2$ = timer(1000, 2000)
+    .pipe(
+        map(i => createValue(shapeAt(i), 'red')),
+        take(3)
+    );
+
+const example$ = from([source1$, source2$])
+    .pipe(
+        combineLatestAll()
+    )
+
+source1$
+    .subscribe(observe('source 1'));
+source2$
+    .subscribe(observe('source 2'));
 example$
     .subscribe(observe('example'));`
 };
