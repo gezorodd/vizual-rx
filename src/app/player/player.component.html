@@ -1,16 +1,16 @@
 <div class="left-panel">
-  <app-vizual-rx-controller [engine]="engine" class="controller"
-                            (switchEngine)="switchEngine()"></app-vizual-rx-controller>
-  <app-vizual-rx-editor class="editor" [(code)]="engine.code" (codeChange)="codeChange.next($event)"
+  <app-player-controller [engine]="engine" class="controller"
+                            (switchEngine)="switchEngine()"></app-player-controller>
+  <app-player-editor class="editor" [(code)]="engine.code" (codeChange)="codeChange.next($event)"
                         [disableMouseWheel]="disableMouseWheel"
                         [updateLayoutLightMode]="updateLayoutLightMode"
                         (ctrlEnter)="engine.replay()"
                         (ctrlSpace)="engine.playing ? engine.pause() : engine.play()"
-                        (ctrlK)="engine.stop()"></app-vizual-rx-editor>
+                        (ctrlK)="engine.stop()"></app-player-editor>
 </div>
 <div class="right-panel">
   <div [hidden]="engine.error">
-    <app-vizual-rx-viewer [engine]="engine"></app-vizual-rx-viewer>
+    <app-player-viewer [engine]="engine"></app-player-viewer>
   </div>
   <app-alert-message type="danger" *ngIf="engine.error as err" class="error-panel">
     <div class="error-panel-content">

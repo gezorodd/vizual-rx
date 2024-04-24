@@ -24,7 +24,7 @@ import {DynamicObjectGraphics} from "../../graphics/dynamic-object-graphics";
 import {VizualRxEngine, VizualRxEngineObserver} from "../../core/vizual-rx-engine";
 
 @Component({
-  selector: 'app-vizual-rx-viewer',
+  selector: 'app-player-viewer',
   standalone: true,
   imports: [
     NgForOf,
@@ -39,11 +39,11 @@ import {VizualRxEngine, VizualRxEngineObserver} from "../../core/vizual-rx-engin
     MatSliderThumb,
     MatDivider
   ],
-  templateUrl: './vizual-rx-viewer.component.html',
-  styleUrl: './vizual-rx-viewer.component.scss',
+  templateUrl: './player-viewer.component.html',
+  styleUrl: './player-viewer.component.scss',
   changeDetection: ChangeDetectionStrategy.OnPush
 })
-export class VizualRxViewerComponent implements OnChanges, AfterViewInit, OnDestroy {
+export class PlayerViewerComponent implements OnChanges, AfterViewInit, OnDestroy {
 
   @Input({required: true}) engine!: VizualRxEngine;
 

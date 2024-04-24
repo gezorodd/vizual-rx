@@ -7,7 +7,7 @@ import path from "path-browserify";
 @Injectable({
   providedIn: 'root'
 })
-export class VizualRxEditorService {
+export class PlayerEditorService {
 
   private readonly monacoReady$: Subject<void>;
   private readonly exportedFileRegex = /export .* from '([^']*)';/;

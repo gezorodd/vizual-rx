@@ -1,6 +1,6 @@
 import {Component, ElementRef, OnDestroy, OnInit, ViewChild} from '@angular/core';
 import {PlaygroundPageService} from "./playground-page.service";
-import {VizualRxPlayerComponent} from "../../vizual-rx-player/vizual-rx-player.component";
+import {PlayerComponent} from "../../player/player.component";
 import {catchError, noop, Subject, takeUntil, tap, throwError} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 import {NgComponentOutlet, NgIf, NgSwitch, NgSwitchCase} from "@angular/common";
@@ -15,7 +15,7 @@ import {VizualRxEngine} from "../../core/vizual-rx-engine";
   selector: 'app-playground-page',
   standalone: true,
   imports: [
-    VizualRxPlayerComponent,
+    PlayerComponent,
     NgIf,
     MatAnchor,
     MatIcon,

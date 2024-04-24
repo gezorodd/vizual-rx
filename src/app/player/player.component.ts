@@ -4,15 +4,15 @@ import {MatAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
 import {NgComponentOutlet, NgIf} from "@angular/common";
-import {VizualRxControllerComponent} from "./vizual-rx-controller/vizual-rx-controller.component";
-import {VizualRxEditorComponent} from "./vizual-rx-editor/vizual-rx-editor.component";
-import {VizualRxViewerComponent} from "./vizual-rx-viewer/vizual-rx-viewer.component";
+import {PlayerControllerComponent} from "./player-controller/player-controller.component";
+import {PlayerEditorComponent} from "./player-editor/player-editor.component";
+import {PlayerViewerComponent} from "./player-viewer/player-viewer.component";
 import {VizualRxEngine} from "../core/vizual-rx-engine";
 import {VizualRxVirtualTimeEngine} from "../core/vizual-rx-virtual-time-engine";
 import {VizualRxScaledTimeEngine} from "../core/vizual-rx-scaled-time-engine";
 
 @Component({
-  selector: 'app-vizual-rx-player',
+  selector: 'app-player',
   standalone: true,
   imports: [
     AlertMessageComponent,
@@ -21,14 +21,14 @@ import {VizualRxScaledTimeEngine} from "../core/vizual-rx-scaled-time-engine";
     MatTooltip,
     NgComponentOutlet,
     NgIf,
-    VizualRxControllerComponent,
-    VizualRxEditorComponent,
-    VizualRxViewerComponent
+    PlayerControllerComponent,
+    PlayerEditorComponent,
+    PlayerViewerComponent
   ],
-  templateUrl: './vizual-rx-player.component.html',
-  styleUrl: './vizual-rx-player.component.scss'
+  templateUrl: './player.component.html',
+  styleUrl: './player.component.scss'
 })
-export class VizualRxPlayerComponent implements OnDestroy {
+export class PlayerComponent implements OnDestroy {
 
   @Input({required: true}) engine!: VizualRxEngine;
   @Input() disableMouseWheel?: boolean;

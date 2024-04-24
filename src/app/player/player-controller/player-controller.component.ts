@@ -12,7 +12,7 @@ import {VizualRxScaledTimeEngine} from "../../core/vizual-rx-scaled-time-engine"
 import {VizualRxVirtualTimeEngine} from "../../core/vizual-rx-virtual-time-engine";
 
 @Component({
-  selector: 'app-vizual-rx-controller',
+  selector: 'app-player-controller',
   standalone: true,
   imports: [
     MatSlider,
@@ -25,10 +25,10 @@ import {VizualRxVirtualTimeEngine} from "../../core/vizual-rx-virtual-time-engin
     MatRipple,
     MatTooltip
   ],
-  templateUrl: './vizual-rx-controller.component.html',
-  styleUrl: './vizual-rx-controller.component.scss'
+  templateUrl: './player-controller.component.html',
+  styleUrl: './player-controller.component.scss'
 })
-export class VizualRxControllerComponent implements OnChanges {
+export class PlayerControllerComponent implements OnChanges {
 
   @Input({required: true}) engine!: VizualRxEngine;
   @Output() switchEngine = new EventEmitter<void>();

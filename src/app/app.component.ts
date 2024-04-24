@@ -8,8 +8,8 @@ import {
   RouterOutlet
 } from '@angular/router';
 import {FormsModule} from "@angular/forms";
-import {VizualRxViewerComponent} from "./vizual-rx-player/vizual-rx-viewer/vizual-rx-viewer.component";
-import {VizualRxEditorComponent} from "./vizual-rx-player/vizual-rx-editor/vizual-rx-editor.component";
+import {PlayerViewerComponent} from "./player/player-viewer/player-viewer.component";
+import {PlayerEditorComponent} from "./player/player-editor/player-editor.component";
 import {SidenavComponent} from "./sidenav/sidenav.component";
 import {MatToolbar} from "@angular/material/toolbar";
 import {MatIcon} from "@angular/material/icon";
@@ -25,7 +25,7 @@ import {LoadingAnimationComponent} from "./ui/loading-animation/loading-animatio
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule, VizualRxViewerComponent, VizualRxEditorComponent, SidenavComponent, MatToolbar, MatIcon, MatIconButton, MatDrawerContainer, MatDrawer, AsyncPipe, MatProgressBar, MatTooltip, NgIf, LoadingAnimationComponent],
+  imports: [RouterOutlet, FormsModule, PlayerViewerComponent, PlayerEditorComponent, SidenavComponent, MatToolbar, MatIcon, MatIconButton, MatDrawerContainer, MatDrawer, AsyncPipe, MatProgressBar, MatTooltip, NgIf, LoadingAnimationComponent],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })

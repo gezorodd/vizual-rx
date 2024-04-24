@@ -3,14 +3,14 @@ import {MatCardModule} from "@angular/material/card";
 import {filter, map, Subject, takeUntil} from "rxjs";
 import {ActivatedRoute} from "@angular/router";
 import {NgIf} from "@angular/common";
-import {VizualRxPlayerComponent} from "../../vizual-rx-player/vizual-rx-player.component";
+import {PlayerComponent} from "../../player/player.component";
 
 import {VizualRxEngine} from "../../core/vizual-rx-engine";
 
 @Component({
   selector: 'app-overview-page',
   standalone: true,
-  imports: [MatCardModule, NgIf, VizualRxPlayerComponent],
+  imports: [MatCardModule, NgIf, PlayerComponent],
   templateUrl: './overview-page.component.html',
   styleUrl: './overview-page.component.scss'
 })

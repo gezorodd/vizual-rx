@@ -7,7 +7,7 @@ import {MatIcon} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
 import {MatAnchor} from "@angular/material/button";
 import {MatCardModule} from "@angular/material/card";
-import {VizualRxPlayerComponent} from "../../vizual-rx-player/vizual-rx-player.component";
+import {PlayerComponent} from "../../player/player.component";
 
 import {VizualRxEngine} from "../../core/vizual-rx-engine";
 
@@ -20,7 +20,7 @@ import {VizualRxEngine} from "../../core/vizual-rx-engine";
     MatIcon,
     MatTooltip,
     MatAnchor,
-    VizualRxPlayerComponent,
+    PlayerComponent,
     MatCardModule
   ],
   templateUrl: './doc-page.component.html',

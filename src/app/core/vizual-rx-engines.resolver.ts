@@ -1,6 +1,6 @@
 import {ActivatedRouteSnapshot, ResolveFn, RouterStateSnapshot} from "@angular/router";
 import {delay, forkJoin, from, map, mergeMap, Observable, of} from "rxjs";
-import {vizualRxEditorReadyResolver} from "../vizual-rx-player/vizual-rx-editor/vizual-rx-editor.resolver";
+import {playerEditorReadyResolver} from "../player/player-editor/player-editor.resolver";
 import {inject, Type} from "@angular/core";
 import {ScriptService} from "../script/script.service";
 import {VizualRxEngine} from "./vizual-rx-engine";
@@ -20,7 +20,7 @@ export const vizualRxEnginesResolver: ResolveFn<Map<string, VizualRxEngine>> = (
   }
 
   let editorReady$: Observable<boolean>;
-  const editorReady = vizualRxEditorReadyResolver(route, state);
+  const editorReady = playerEditorReadyResolver(route, state);
   if (typeof (editorReady) === 'boolean') {
     editorReady$ = of(editorReady);
   } else {

@@ -4,7 +4,7 @@ import {FormsModule} from "@angular/forms";
 import {MatFormFieldModule} from "@angular/material/form-field";
 import {MatSelectModule} from "@angular/material/select";
 import * as monaco from "monaco-editor";
-import {VizualRxEditorService} from "./vizual-rx-editor.service";
+import {PlayerEditorService} from "./player-editor.service";
 import {
   defer,
   distinctUntilChanged,
@@ -30,13 +30,13 @@ import {not} from "rxjs/internal/util/not";
 import {v4 as uuid} from 'uuid';
 
 @Component({
-  selector: 'app-vizual-rx-editor',
+  selector: 'app-player-editor',
   standalone: true,
   imports: [MonacoEditorModule, FormsModule, MatFormFieldModule, MatSelectModule, MatIcon, MatInput],
-  templateUrl: './vizual-rx-editor.component.html',
-  styleUrl: './vizual-rx-editor.component.scss'
+  templateUrl: './player-editor.component.html',
+  styleUrl: './player-editor.component.scss'
 })
-export class VizualRxEditorComponent implements OnInit, OnDestroy {
+export class PlayerEditorComponent implements OnInit, OnDestroy {
 
   @Input() disableMouseWheel?: boolean;
   @Input() updateLayoutLightMode?: boolean;
@@ -61,7 +61,7 @@ export class VizualRxEditorComponent implements OnInit, OnDestroy {
   private editor?: monaco.editor.IStandaloneCodeEditor;
   private destroy$ = new Subject<void>();
 
-  constructor(private vizualRxEditorService: VizualRxEditorService, private appService: AppService) {
+  constructor(private vizualRxEditorService: PlayerEditorService, private appService: AppService) {
   }
 
   ngOnInit(): void {

@@ -1,18 +1,17 @@
 import {ResolveFn} from '@angular/router';
 import {forkJoin, map, Observable, Subject} from "rxjs";
 import {inject, NgZone} from "@angular/core";
-import {VizualRxEditorService} from "./vizual-rx-editor.service";
+import {PlayerEditorService} from "./player-editor.service";
 import {EditorComponent, NGX_MONACO_EDITOR_CONFIG} from "ngx-monaco-editor-v2";
 import {NgxMonacoEditorConfig} from "ngx-monaco-editor-v2/lib/config";
 
-export const vizualRxEditorReadyResolver: ResolveFn<boolean> = () => {
-  const editorService = inject(VizualRxEditorService);
+export const playerEditorReadyResolver: ResolveFn<boolean> = () => {
+  const editorService = inject(PlayerEditorService);
   return forkJoin([editorService.getExtraLibs(), loadMonaco()])
     .pipe(
       map(() => true)
     );
 };
-
 
 function loadMonaco(): Observable<void> {
   const config = inject(NGX_MONACO_EDITOR_CONFIG) as NgxMonacoEditorConfig;
