@@ -1,5 +1,5 @@
 import {VizualRxAbstractEngine} from "./vizual-rx-abstract-engine";
-import {animationFrames, filter, map, Observable, takeUntil, tap, TimestampProvider, withLatestFrom} from "rxjs";
+import {animationFrames, filter, map, Observable, switchMap, takeUntil, tap} from "rxjs";
 import {VizualRxScaledTimeScheduler} from "./vizual-rx-scaled-time-scheduler";
 import {
   VizualRxEngineErrorNotification,
@@ -11,8 +11,23 @@ import {VizualRxObserver} from "./vizual-rx-observer";
 
 export class VizualRxScaledTimeEngine extends VizualRxAbstractEngine<VizualRxScaledTimeScheduler, VizualRxScaledTimeScheduler> {
 
+  private frameTime: number;
+
   constructor() {
     super();
+    this.frameTime = 0;
+
+    this.starting$
+      .pipe(
+        tap(() => this.frameTime = 0),
+        switchMap(() =>
+          animationFrames(this.executionScheduler)
+            .pipe(takeUntil(this.stopping$))
+        ),
+        map(frame => frame.elapsed)
+      )
+      .subscribe(time => this.frameTime = time);
+
     this.stopEngineWhenAllSubscriptionsAreClosed()
       .pipe(takeUntil(this.destroy$))
       .subscribe();
@@ -35,7 +50,7 @@ export class VizualRxScaledTimeEngine extends VizualRxAbstractEngine<VizualRxSca
   }
 
   protected override createVizualRxEngineObserver(observer: VizualRxObserver): VizualRxEngineObserver {
-    return new VizualRxAsyncEngineObserver(this.executionScheduler, observer);
+    return new VizualRxAsyncEngineObserver(() => this.frameTime, observer);
   }
 
   private stopEngineWhenAllSubscriptionsAreClosed() {
@@ -52,7 +67,7 @@ class VizualRxAsyncEngineObserver implements VizualRxEngineObserver {
   readonly id: string;
   readonly label: string;
 
-  constructor(private timestampProvider: TimestampProvider, private observer: VizualRxObserver) {
+  constructor(private frameTimeProvider: () => number, private observer: VizualRxObserver) {
     this.id = observer.id;
     this.label = observer.label;
   }
@@ -60,9 +75,8 @@ class VizualRxAsyncEngineObserver implements VizualRxEngineObserver {
   get next$(): Observable<VizualRxEngineNextNotification> {
     return this.observer.next$
       .pipe(
-        withLatestFrom(animationFrames(this.timestampProvider)),
-        map(([value, frame]) => ({
-          time: frame.elapsed,
+        map(value => ({
+          time: this.frameTimeProvider(),
           value
         }))
       );
@@ -71,9 +85,8 @@ class VizualRxAsyncEngineObserver implements VizualRxEngineObserver {
   get error$(): Observable<VizualRxEngineErrorNotification> {
     return this.observer.error$
       .pipe(
-        withLatestFrom(animationFrames(this.timestampProvider)),
-        map(([err, frame]) => ({
-          time: frame.elapsed,
+        map(err => ({
+          time: this.frameTimeProvider(),
           err
         }))
       );
@@ -82,9 +95,8 @@ class VizualRxAsyncEngineObserver implements VizualRxEngineObserver {
   get complete$(): Observable<VizualRxEngineNotification> {
     return this.observer.complete$
       .pipe(
-        withLatestFrom(animationFrames(this.timestampProvider)),
-        map(([_, frame]) => ({
-          time: frame.elapsed
+        map(() => ({
+          time: this.frameTimeProvider(),
         }))
       );
   }
