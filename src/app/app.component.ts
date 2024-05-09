@@ -1,5 +1,6 @@
 import {Component} from '@angular/core';
 import {
+  ActivatedRoute,
   NavigationEnd,
   NavigationError,
   NavigationSkipped,
@@ -21,6 +22,7 @@ import {AsyncPipe, NgIf} from "@angular/common";
 import {MatProgressBar} from "@angular/material/progress-bar";
 import {MatTooltip} from "@angular/material/tooltip";
 import {LoadingAnimationComponent} from "./ui/loading-animation/loading-animation.component";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-root',
@@ -35,9 +37,24 @@ export class AppComponent {
   readonly loading$: Observable<boolean>;
   readonly initialized$: Observable<boolean>;
 
-  constructor(private appService: AppService, router: Router) {
+  constructor(private appService: AppService, private router: Router, private route: ActivatedRoute, title: Title) {
     this.sidenavOpenedState$ = appService.sidenavOpenedState$;
-    this.loading$ = router.events
+    this.loading$ = this.getLoading();
+    this.initialized$ = this.getInitialized();
+    this.getPageTitle()
+      .subscribe(titleValue => title.setTitle(titleValue));
+  }
+
+  toggleSidenav(): void {
+    this.sidenavOpenedState$.next(!this.sidenavOpenedState$.value);
+  }
+
+  sidenavOpenedChanged(): void {
+    this.appService.sidenavOpenedChanged$.next();
+  }
+
+  private getLoading(): Observable<boolean> {
+    return this.router.events
       .pipe(
         map(event => {
           if (event instanceof NavigationStart) {
@@ -49,9 +66,11 @@ export class AppComponent {
         }),
         filter(loading => loading !== undefined),
         map(loading => !!loading)
-      )
-    ;
-    this.initialized$ = this.loading$
+      );
+  }
+
+  private getInitialized(): Observable<boolean> {
+    return this.loading$
       .pipe(
         map(loading => !loading),
         distinctUntilChanged(),
@@ -59,15 +78,17 @@ export class AppComponent {
       );
   }
 
-  toggleSidenav()
-    :
-    void {
-    this.sidenavOpenedState$.next(!this.sidenavOpenedState$.value);
-  }
-
-  sidenavOpenedChanged()
-    :
-    void {
-    this.appService.sidenavOpenedChanged$.next();
+  private getPageTitle(): Observable<string> {
+    return this.router.events
+      .pipe(
+        filter((event) => event instanceof NavigationEnd),
+        map(() => {
+          const child: ActivatedRoute | null = this.route.firstChild;
+          let title = child && child.snapshot.data['title'];
+          if (title) {
+            return title;
+          }
+        })
+      );
   }
 }

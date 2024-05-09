@@ -10,6 +10,7 @@ import {MatCardModule} from "@angular/material/card";
 import {PlayerComponent} from "../../player/player.component";
 
 import {VizualRxEngine} from "../../core/vizual-rx-engine";
+import {Title} from "@angular/platform-browser";
 
 @Component({
   selector: 'app-doc-page',
@@ -32,7 +33,7 @@ export class DocPageComponent implements OnInit, AfterViewInit, OnDestroy {
   page!: DocPage;
   private readonly destroy$ = new Subject<void>();
 
-  constructor(private route: ActivatedRoute) {
+  constructor(private route: ActivatedRoute, private title: Title) {
   }
 
   ngOnInit(): void {
@@ -43,6 +44,7 @@ export class DocPageComponent implements OnInit, AfterViewInit, OnDestroy {
       .subscribe(data => {
         this.page = data['page'];
         this.engine = data['engines']?.get('page');
+        this.title.setTitle(`VizualRx - ${this.page.title}`);
       });
   }
 

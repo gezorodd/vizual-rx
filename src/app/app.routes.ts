@@ -42,6 +42,7 @@ export const routes: Routes = [
     path: playgroundPageData.routeUrl,
     component: PlaygroundPageComponent,
     data: {
+      title: 'VizualRx Playground',
       codes: {
         playground: fromProvider(PlaygroundPageService, function (this: PlaygroundPageService) {
           return this.code
@@ -56,6 +57,7 @@ export const routes: Routes = [
     path: `${playgroundPageData.routeUrl}/:scriptId`,
     component: PlaygroundPageComponent,
     data: {
+      title: 'VizualRx Playground',
       codes: {
         playground: fromScriptRouteParam('scriptId')
       }
@@ -68,6 +70,7 @@ export const routes: Routes = [
     path: overviewPage.routeUrl,
     component: OverviewPageComponent,
     data: {
+      title: 'VizualRx Overview',
       codes: {
         basicExample: fromValue(basicExampleCode),
         createValueExample: fromValue(createValueExampleCode),
