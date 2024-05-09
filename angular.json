@@ -30,6 +30,7 @@
             "assets": [
               "src/favicon.ico",
               "src/icon.svg",
+              "src/googleef2d19121e9e0463.html",
               "src/assets",
               {
                 "glob": "**/*",
