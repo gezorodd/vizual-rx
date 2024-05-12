@@ -107,7 +107,6 @@ import {tapPage} from "../pages/doc-page/operators/utility/tap/tap.page";
 import {delayPage} from "../pages/doc-page/operators/utility/delay/delay.page";
 import {delayWhenPage} from "../pages/doc-page/operators/utility/delay-when/delay-when.page";
 import {dematerializePage} from "../pages/doc-page/operators/utility/dematerialize/dematerialize.page";
-import {ErrorNotification} from "rxjs";
 import {materializePage} from "../pages/doc-page/operators/utility/materialize/materialize.page";
 import {timeIntervalPage} from "../pages/doc-page/operators/utility/time-interval/time-interval.page";
 import {timestampPage} from "../pages/doc-page/operators/utility/timestamp/timestamp.page";
@@ -380,5 +379,3 @@ export const sectionDefinitions: SectionDefinition[] = [
     ]
   }
 ];
-
-let e: ErrorNotification;

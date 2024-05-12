@@ -91,6 +91,7 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
       .map(sectionDefinition => new Section(sectionDefinition));
 
     const allPages = this.getAllPages();
+    // this.logAllPageUrls(allPages);
     this.currentPage$ = this.router.events
       .pipe(
         filter(event => event instanceof NavigationEnd),
@@ -360,6 +361,23 @@ export class SidenavComponent implements AfterViewInit, OnDestroy {
       rect.bottom <= (window.innerHeight || html.clientHeight) &&
       rect.right <= (window.innerWidth || html.clientWidth)
     );
+  }
+
+  private logAllPageUrls(pages: Page[]): void {
+    const appBaseUrl = 'https://vizual-rx.vercel.app';
+    const allPageUrls = pages
+      .map(page => `${appBaseUrl}/${page.routeUrl}`)
+      .sort((u1, u2) => {
+        const n1 = (u1.match(/\//g) || []).length;
+        const n2 = (u2.match(/\//g) || []).length;
+        if (n2 !== n1) {
+          return n1 - n2;
+        } else {
+          return u1.localeCompare(u2);
+        }
+      })
+      .join('\n');
+    console.log(allPageUrls);
   }
 }
 

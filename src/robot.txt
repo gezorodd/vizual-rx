@@ -1,0 +1,3 @@
+User-agent: *
+Disallow:
+Sitemap: https://vizual-rx.vercel.app/sitemap.txt
