@@ -6,7 +6,7 @@ import {
   NavigationSkipped,
   NavigationStart,
   Router,
-  RouterOutlet
+  RouterOutlet, RoutesRecognized
 } from '@angular/router';
 import {FormsModule} from "@angular/forms";
 import {PlayerViewerComponent} from "./player/player-viewer/player-viewer.component";
@@ -42,7 +42,7 @@ export class AppComponent {
     this.loading$ = this.getLoading();
     this.initialized$ = this.getInitialized();
     this.getPageTitle()
-      .subscribe(titleValue => title.setTitle(titleValue));
+      .subscribe(titleValue => title.setTitle(`VizualRx - ${titleValue}`));
   }
 
   toggleSidenav(): void {
@@ -81,14 +81,15 @@ export class AppComponent {
   private getPageTitle(): Observable<string> {
     return this.router.events
       .pipe(
-        filter((event) => event instanceof NavigationEnd),
-        map(() => {
-          const child: ActivatedRoute | null = this.route.firstChild;
-          let title = child && child.snapshot.data['title'];
+        filter((event) => event instanceof RoutesRecognized),
+        map((event) => {
+          const routesRecognized = event as RoutesRecognized;
+          const title = routesRecognized.state.root.firstChild?.data['title'];
           if (title) {
             return title;
           }
-        })
+        }),
+        filter(title => !!title)
       );
   }
 }

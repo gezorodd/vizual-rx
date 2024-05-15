@@ -44,8 +44,7 @@ export const vizualRxEnginesResolver: ResolveFn<Map<string, VizualRxEngine>> = (
             engines.set(name, engine);
           })
         return engines;
-      }),
-      delay(200)
+      })
     );
 };
 
