@@ -1,28 +1,32 @@
-<button matRipple (click)="engine.replay()" matTooltip="Replay (Ctrl + Enter)">
+<button matRipple (click)="engine.replay()" matTooltip="Replay (Ctrl + Enter)" aria-label="Replay">
   <mat-icon>refresh</mat-icon>
 </button>
-<button *ngIf="engine.playing$ | async" (click)="engine.pause()" matTooltip="Pause (Ctrl + Space)">
+<button *ngIf="engine.playing$ | async" (click)="engine.pause()" matTooltip="Pause (Ctrl + Space)" aria-label="Pause">
   <mat-icon>pause</mat-icon>
 </button>
-<button matRipple *ngIf="!(engine.playing$ | async)" (click)="engine.play()" matTooltip="Play (Ctrl + Space)">
+<button matRipple *ngIf="!(engine.playing$ | async)" (click)="engine.play()" matTooltip="Play (Ctrl + Space)"
+        aria-label="Play">
   <mat-icon>play_arrow</mat-icon>
 </button>
-<button matRipple (click)="engine.stop()" matTooltip="Stop (Ctrl + K)" [disabled]="engine.stopped$ | async">
+<button matRipple (click)="engine.stop()" matTooltip="Stop (Ctrl + K)" [disabled]="engine.stopped$ | async"
+        aria-label="Stop">
   <mat-icon>stop</mat-icon>
 </button>
 <div class="grow-1"></div>
-<button matRipple (click)="switchEngine.next()" [matTooltip]="switchEngineTooltip">
+<button matRipple (click)="switchEngine.next()" [matTooltip]="switchEngineTooltip" aria-label="Toggle Scheduler">
   <mat-icon>{{ isVirtualTimeEngine ? 'schedule' : 'history_toggle_off' }}</mat-icon>
 </button>
 <div class="slider">
-  <label>Time Speed</label>
-  <mat-slider min="0" [max]="maxTimeFactor" step="0.1" [showTickMarks]="true" [discrete]="true">
-    <input matSliderThumb [(ngModel)]="timeFactor" [matTooltip]="engine.timeFactor.toString()">
-  </mat-slider>
+  <label>Time Speed
+    <mat-slider min="0" [max]="maxTimeFactor" step="0.1" [showTickMarks]="true" [discrete]="true">
+      <input matSliderThumb [(ngModel)]="timeFactor" [matTooltip]="engine.timeFactor.toString()">
+    </mat-slider>
+  </label>
 </div>
 <div class="slider">
-  <label>Time Scale</label>
-  <mat-slider min="0.5" max="2" step="0.1" [showTickMarks]="true">
-    <input matSliderThumb [(ngModel)]="timeScale" [matTooltip]="timeScale.toString()">
-  </mat-slider>
+  <label>Time Scale
+    <mat-slider min="0.5" max="2" step="0.1" [showTickMarks]="true">
+      <input matSliderThumb [(ngModel)]="timeScale" [matTooltip]="timeScale.toString()">
+    </mat-slider>
+  </label>
 </div>

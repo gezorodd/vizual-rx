@@ -5,7 +5,7 @@
       <input #searchInput type="text" matInput (input)="filterChanged$.next(searchInput.value)">
       <mat-icon matSuffix>search</mat-icon>
     </mat-form-field>
-    <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button">
+    <button mat-icon-button [matMenuTriggerFor]="menu" class="menu-button" aria-label="More">
       <mat-icon>more_vert</mat-icon>
     </button>
     <mat-menu #menu="matMenu">
@@ -43,7 +43,7 @@
       <div [hidden]="section.filtered" [class]="'section section-' + section.level"
            [ngClass]="{'collapsing': section.collapsing, 'expanding': section.expanding, 'collapsed': section.collapsed}">
         <div class="section-label">
-          <button mat-button (click)="toggleSectionCollapsed(section)">
+          <button mat-button (click)="toggleSectionCollapsed(section)" aria-label="Toggle expansion">
             <mat-icon [fontSet]="'material-symbols-rounded'">keyboard_arrow_down</mat-icon>
           </button>
           <span>{{ section.label }}</span>
