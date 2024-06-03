@@ -43,7 +43,7 @@ export class PlayerEditorComponent implements OnInit, OnDestroy {
 
   @Output() codeChange = new EventEmitter<string>();
   @Output() ctrlEnter = new EventEmitter<void>();
-  @Output() ctrlSpace = new EventEmitter<void>();
+  @Output() ctrlShiftSpace = new EventEmitter<void>();
   @Output() ctrlK = new EventEmitter<void>();
   private _code: string = '';
 
@@ -151,8 +151,8 @@ export class PlayerEditorComponent implements OnInit, OnDestroy {
       editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Enter, () => {
         this.ctrlEnter.next();
       });
-      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.Space, () => {
-        this.ctrlSpace.next();
+      editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyMod.Shift | monaco.KeyCode.Space, () => {
+        this.ctrlShiftSpace.next();
       });
       editor.addCommand(monaco.KeyMod.CtrlCmd | monaco.KeyCode.KeyK, () => {
         this.ctrlK.next();

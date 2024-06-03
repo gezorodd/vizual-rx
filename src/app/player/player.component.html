@@ -5,7 +5,7 @@
                         [disableMouseWheel]="disableMouseWheel"
                         [updateLayoutLightMode]="updateLayoutLightMode"
                         (ctrlEnter)="engine.replay()"
-                        (ctrlSpace)="engine.playing ? engine.pause() : engine.play()"
+                        (ctrlShiftSpace)="engine.playing ? engine.pause() : engine.play()"
                         (ctrlK)="engine.stop()"></app-player-editor>
 </div>
 <div class="right-panel">
