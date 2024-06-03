@@ -1,5 +1,5 @@
 import {VizualRxAbstractEngine} from "./vizual-rx-abstract-engine";
-import {animationFrames, filter, map, Observable, switchMap, takeUntil, tap} from "rxjs";
+import {animationFrames, filter, finalize, map, Observable, switchMap, takeUntil, tap} from "rxjs";
 import {VizualRxScaledTimeScheduler} from "./vizual-rx-scaled-time-scheduler";
 import {
   VizualRxEngineErrorNotification,
@@ -22,7 +22,10 @@ export class VizualRxScaledTimeEngine extends VizualRxAbstractEngine<VizualRxSca
         tap(() => this.frameTime = 0),
         switchMap(() =>
           animationFrames(this.executionScheduler)
-            .pipe(takeUntil(this.stopping$))
+            .pipe(
+              finalize(() => this.frameTime = 0),
+              takeUntil(this.stopping$)
+            )
         ),
         map(frame => frame.elapsed)
       )
@@ -96,7 +99,7 @@ class VizualRxAsyncEngineObserver implements VizualRxEngineObserver {
     return this.observer.complete$
       .pipe(
         map(() => ({
-          time: this.frameTimeProvider(),
+            time: this.frameTimeProvider(),
         }))
       );
   }
