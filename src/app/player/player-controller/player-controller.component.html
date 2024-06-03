@@ -1,7 +1,7 @@
 <button matRipple (click)="engine.replay()" matTooltip="Replay (Ctrl + Enter)" aria-label="Replay">
   <mat-icon>refresh</mat-icon>
 </button>
-<button *ngIf="engine.playing$ | async" (click)="engine.pause()" matTooltip="Pause (Ctrl + Space)" aria-label="Pause">
+<button *ngIf="engine.playing$ | async" (click)="engine.pause()" matTooltip="Pause (Ctrl + Shift + Space)" aria-label="Pause">
   <mat-icon>pause</mat-icon>
 </button>
 <button matRipple *ngIf="!(engine.playing$ | async)" (click)="engine.play()" matTooltip="Play (Ctrl + Shift + Space)"
