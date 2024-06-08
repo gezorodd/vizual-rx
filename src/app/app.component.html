@@ -2,10 +2,10 @@
   <button mat-icon-button (click)="toggleSidenav()" aria-label="Menu">
     <mat-icon>menu</mat-icon>
   </button>
-  <div>
+  <a [routerLink]="['']" class="navbar-logo">
     <span>VizualRx</span>
     <span class="beta-label">Beta</span>
-  </div>
+  </a>
   <a class="github-link" href="https://github.com/gezorodd" matTooltip="GitHub" target="_blank">
     <img src="assets/github-mark-white.svg" alt="github logo"/>
   </a>

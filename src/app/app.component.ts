@@ -5,8 +5,9 @@ import {
   NavigationError,
   NavigationSkipped,
   NavigationStart,
-  Router,
-  RouterOutlet, RoutesRecognized
+  Router, RouterLink,
+  RouterOutlet,
+  RoutesRecognized
 } from '@angular/router';
 import {FormsModule} from "@angular/forms";
 import {PlayerViewerComponent} from "./player/player-viewer/player-viewer.component";
@@ -27,7 +28,7 @@ import {Title} from "@angular/platform-browser";
 @Component({
   selector: 'app-root',
   standalone: true,
-  imports: [RouterOutlet, FormsModule, PlayerViewerComponent, PlayerEditorComponent, SidenavComponent, MatToolbar, MatIcon, MatIconButton, MatDrawerContainer, MatDrawer, AsyncPipe, MatProgressBar, MatTooltip, NgIf, LoadingAnimationComponent],
+  imports: [RouterOutlet, FormsModule, PlayerViewerComponent, PlayerEditorComponent, SidenavComponent, MatToolbar, MatIcon, MatIconButton, MatDrawerContainer, MatDrawer, AsyncPipe, MatProgressBar, MatTooltip, NgIf, LoadingAnimationComponent, RouterLink],
   templateUrl: './app.component.html',
   styleUrl: './app.component.scss'
 })
