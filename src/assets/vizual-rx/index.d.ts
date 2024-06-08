@@ -2,7 +2,7 @@ import {Observer} from "rxjs";
 
 export type VizualRxValueShape = 'circle' | 'square' | 'triangle' | 'diamond' | 'pentagon';
 
-export type VizualRxValueColor = 'red' | 'blue' | 'green' | 'orange' | 'yellow' | 'purple' | 'cyan' | 'pink';
+export type VizualRxValueColor = 'red' | 'blue' | 'green' | 'yellow' | 'orange' | 'purple' | 'teal' | 'indigo';
 
 export type VizualRxValueAttribute = VizualRxValueShape | VizualRxValueColor;
 
