@@ -1,20 +1,55 @@
 @use "sass:map";
 @import "../../../theme";
+@import "../../ui/responsive/responsive";
 
 :host {
-  justify-content: space-evenly;
+  justify-content: start;
   align-items: center;
-  height: 30px;
   background-image: $player-component-background;
   display: flex;
   overflow: hidden;
+  flex-wrap: wrap;
 
   & > * {
-    height: 100%;
+    height: 30px;
 
     &:not(:first-child) {
       border-left: $player-component-border;
     }
+  }
+
+  &::ng-deep {
+    .mat-button-toggle-appearance-standard .mat-button-toggle-label-content {
+      line-height: 2;
+    }
+
+    .mat-button-toggle-appearance-standard {
+      background-color: transparent
+    }
+  }
+}
+
+.view-selector {
+  display: none;
+
+  *:not(:first-child) {
+    border-left: $player-component-border;
+  }
+
+  button {
+    font-size: 14px;
+    color: map.get(map.get($theme, "foreground"), "text");
+
+    &.active {
+      color: map.get($primary, "default");
+      background-image: $player-component-background-active;
+    }
+  }
+}
+
+@media only screen and (max-width: $screen-width-breakpoint-player-mode) {
+  .view-selector {
+    display: flex;
   }
 }
 
@@ -44,12 +79,19 @@ button {
   vertical-align: middle;
   display: flex;
   align-items: center;
-  padding: 0 1em;
+  padding: 0 0.5em;
   justify-content: end;
   color: $player-component-color;
 
   label {
     white-space: nowrap;
+  }
+
+  @media only screen and (max-width: $screen-width-breakpoint-player-mode) {
+    mat-slider {
+      min-width: 80px;
+      width: 80px
+    }
   }
 }
 

@@ -1,5 +1,6 @@
 @use "sass:map";
 @import "../../../theme";
+@import "../../ui/responsive/responsive";
 
 :host {
   height: 100%;
@@ -16,6 +17,24 @@
     b {
       font-weight: 500;
     }
+  }
+}
+
+@media only screen and (max-height: $screen-height-breakpoint-compact-text) {
+  .mat-mdc-card-header {
+    padding: 0.5rem 0.5rem 0;
+  }
+
+  .mat-mdc-card-content {
+    padding: 0 0.5rem 0.5rem;
+
+    &:last-child {
+      padding-bottom: 0.5rem;
+    }
+  }
+
+  h1 {
+    margin-bottom: 0.5rem;
   }
 }
 
@@ -66,4 +85,5 @@
 
 .player {
   flex-grow: 1;
+  min-height: 200px;
 }

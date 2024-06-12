@@ -10,6 +10,7 @@ import {VizualRxEngine} from "../../core/vizual-rx-engine";
 import {VizualRxScaledTime} from "../../core/vizual-rx-scaled-time";
 import {VizualRxScaledTimeEngine} from "../../core/vizual-rx-scaled-time-engine";
 import {VizualRxVirtualTimeEngine} from "../../core/vizual-rx-virtual-time-engine";
+import {PlayerViewMode} from "../player.model";
 
 @Component({
   selector: 'app-player-controller',
@@ -31,7 +32,14 @@ import {VizualRxVirtualTimeEngine} from "../../core/vizual-rx-virtual-time-engin
 export class PlayerControllerComponent implements OnChanges {
 
   @Input({required: true}) engine!: VizualRxEngine;
+  @Input({required: true}) viewMode!: PlayerViewMode;
+
+  @Output() replay = new EventEmitter<void>();
+  @Output() play = new EventEmitter<void>();
+  @Output() pause = new EventEmitter<void>();
+  @Output() stop = new EventEmitter<void>();
   @Output() switchEngine = new EventEmitter<void>();
+  @Output() viewModeChange = new EventEmitter<PlayerViewMode>();
 
   isVirtualTimeEngine: boolean = false;
   switchEngineTooltip: string = '';
@@ -70,6 +78,11 @@ export class PlayerControllerComponent implements OnChanges {
       maxTimeFactor += 0.1;
     }
     return maxTimeFactor;
+  }
+
+  changeViewMode(viewMode: PlayerViewMode): void {
+    this.viewMode = viewMode;
+    this.viewModeChange.next(viewMode);
   }
 
   private getSwitchEngineTooltip(): string {

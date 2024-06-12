@@ -10,6 +10,7 @@ import {MatCardModule} from "@angular/material/card";
 import {PlayerComponent} from "../../player/player.component";
 
 import {VizualRxEngine} from "../../core/vizual-rx-engine";
+import {SCREEN_WIDTH_BREAKPOINT_PLAYER_MODE} from "../../ui/responsive/responsive";
 
 @Component({
   selector: 'app-doc-page',
@@ -49,7 +50,11 @@ export class DocPageComponent implements OnInit, AfterViewInit, OnDestroy {
   ngAfterViewInit(): void {
     timer(0)
       .pipe(takeUntil(this.destroy$))
-      .subscribe(() => this.engine?.play());
+      .subscribe(() => {
+        if (window.innerWidth > SCREEN_WIDTH_BREAKPOINT_PLAYER_MODE) {
+          this.engine?.play();
+        }
+      });
   }
 
   ngOnDestroy(): void {

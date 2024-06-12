@@ -1,3 +1,5 @@
+@import "./ui/responsive/responsive";
+
 :host {
   height: 100%;
   display: flex;
@@ -37,6 +39,10 @@
       vertical-align: middle;
     }
   }
+
+  @media only screen and (max-height: $screen-height-breakpoint-small-navbar) {
+    height: 45px;
+  }
 }
 
 .loading-bar {
@@ -66,8 +72,12 @@
 
   .inner-page-container {
     flex-grow: 1;
-    padding: 2em;
     overflow: auto;
+    padding: 2em;
+
+    @media only screen and (max-width: $screen-width-breakpoint-sidenav-mode) {
+      padding: 0.2em;
+    }
   }
 }
 

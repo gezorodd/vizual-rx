@@ -1,11 +1,11 @@
 import {Component} from '@angular/core';
 import {
-  ActivatedRoute,
   NavigationEnd,
   NavigationError,
   NavigationSkipped,
   NavigationStart,
-  Router, RouterLink,
+  Router,
+  RouterLink,
   RouterOutlet,
   RoutesRecognized
 } from '@angular/router';
@@ -16,8 +16,8 @@ import {SidenavComponent} from "./sidenav/sidenav.component";
 import {MatToolbar} from "@angular/material/toolbar";
 import {MatIcon} from "@angular/material/icon";
 import {MatIconButton} from "@angular/material/button";
-import {MatDrawer, MatDrawerContainer} from "@angular/material/sidenav";
-import {BehaviorSubject, distinctUntilChanged, filter, map, Observable, take} from "rxjs";
+import {MatDrawer, MatDrawerContainer, MatDrawerMode} from "@angular/material/sidenav";
+import {BehaviorSubject, distinctUntilChanged, filter, map, Observable, take, tap} from "rxjs";
 import {AppService} from "./app.service";
 import {AsyncPipe, NgIf} from "@angular/common";
 import {MatProgressBar} from "@angular/material/progress-bar";
@@ -38,20 +38,27 @@ export class AppComponent {
   readonly loading$: Observable<boolean>;
   readonly initialized$: Observable<boolean>;
 
-  constructor(private appService: AppService, private router: Router, private route: ActivatedRoute, title: Title) {
+  constructor(private appService: AppService, private router: Router, title: Title) {
     this.sidenavOpenedState$ = appService.sidenavOpenedState$;
     this.loading$ = this.getLoading();
     this.initialized$ = this.getInitialized();
     this.getPageTitle()
       .subscribe(titleValue => title.setTitle(`VizualRx - ${titleValue}`));
+    this.closeOverSidenavOnRouteChange()
+      .subscribe();
   }
 
   toggleSidenav(): void {
     this.sidenavOpenedState$.next(!this.sidenavOpenedState$.value);
   }
 
-  sidenavOpenedChanged(): void {
+  changeSidenavOpened(state: boolean): void {
+    this.sidenavOpenedState$.next(state);
     this.appService.sidenavOpenedChanged$.next();
+  }
+
+  getSidenavMode(): MatDrawerMode {
+    return this.appService.getSidenavMode();
   }
 
   private getLoading(): Observable<boolean> {
@@ -91,6 +98,15 @@ export class AppComponent {
           }
         }),
         filter(title => !!title)
+      );
+  }
+
+  private closeOverSidenavOnRouteChange(): Observable<unknown> {
+    return this.router.events
+      .pipe(
+        filter(() => this.getSidenavMode() === 'over'),
+        filter((event) => event instanceof RoutesRecognized),
+        tap(() => this.sidenavOpenedState$.next(false))
       );
   }
 }

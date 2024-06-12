@@ -1,22 +1,20 @@
-<div class="left-panel">
-  <app-player-controller [engine]="engine" class="controller"
-                            (switchEngine)="switchEngine()"></app-player-controller>
-  <app-player-editor class="editor" [(code)]="engine.code" (codeChange)="codeChange.next($event)"
-                        [disableMouseWheel]="disableMouseWheel"
-                        [updateLayoutLightMode]="updateLayoutLightMode"
-                        (ctrlEnter)="engine.replay()"
-                        (ctrlShiftSpace)="engine.playing ? engine.pause() : engine.play()"
-                        (ctrlK)="engine.stop()"></app-player-editor>
+<app-player-controller [engine]="engine" class="controller" [(viewMode)]="viewMode"
+                       (replay)="replay()" (play)="play()" (pause)="pause()" (stop)="stop()"
+                       (switchEngine)="switchEngine()"></app-player-controller>
+<app-player-editor class="editor" [(code)]="engine.code" (codeChange)="codeChange.next($event)"
+                   [hidden]="viewMode === 'diagram'"
+                   [disableMouseWheel]="disableMouseWheel"
+                   [updateLayoutLightMode]="updateLayoutLightMode"
+                   (ctrlEnter)="replay()"
+                   (ctrlShiftSpace)="engine.playing ? pause() : play()"
+                   (ctrlK)="stop()"></app-player-editor>
+<div [hidden]="engine.error || viewMode === 'editor'" class="viewer-container">
+  <app-player-viewer class="viewer" [engine]="engine"></app-player-viewer>
 </div>
-<div class="right-panel">
-  <div [hidden]="engine.error">
-    <app-player-viewer [engine]="engine"></app-player-viewer>
+<app-alert-message type="danger" *ngIf="engine.error as err" class="error-panel">
+  <div class="error-panel-content">
+    <h2>{{ err.label }}</h2>
+    <span>{{ err.name }}: {{ err.message }}</span>
+    <pre *ngIf="err.stack">{{ err.stack }}</pre>
   </div>
-  <app-alert-message type="danger" *ngIf="engine.error as err" class="error-panel">
-    <div class="error-panel-content">
-      <h2>{{ err.label }}</h2>
-      <span>{{ err.name }}: {{ err.message }}</span>
-      <pre *ngIf="err.stack">{{ err.stack }}</pre>
-    </div>
-  </app-alert-message>
-</div>
+</app-alert-message>

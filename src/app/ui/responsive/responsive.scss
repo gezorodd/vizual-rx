@@ -1,0 +1,14 @@
+// When the screen width is smaller or equals to this value, the sidenav will change its mode from 'push' to 'over'.
+$screen-width-breakpoint-sidenav-mode: 1600px;
+
+// When the screen width is smaller or equals to this value, the player will enable the view mode buttons in which the user must choose between editor or diagram view.
+$screen-width-breakpoint-player-mode: 1100px;
+
+// When the screen width is greater or equals to this value, the editor will define a min-height value.
+$screen-width-breakpoint-editor-min-width: 800px;
+
+// When the screen height is smaller or equals to this value, the height of the navbar will be reduced.
+$screen-height-breakpoint-small-navbar: 600px;
+
+// When the screen height is smaller or equals to this value, some texts will user less spacing (like h1 or card paddings).
+$screen-height-breakpoint-compact-text: 600px;

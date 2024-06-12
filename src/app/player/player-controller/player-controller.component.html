@@ -1,19 +1,31 @@
-<button matRipple (click)="engine.replay()" matTooltip="Replay (Ctrl + Enter)" aria-label="Replay">
+<div class="view-selector">
+  <button matRipple matTooltip="Show Editor" aria-label="Show Editor" [class.active]="viewMode === 'editor'"
+          (click)="changeViewMode('editor')">
+    Editor
+  </button>
+  <button matRipple matTooltip="Show Diagram" aria-label="Show Diagram" [class.active]="viewMode === 'diagram'"
+          (click)="changeViewMode('diagram')">
+    Diagram
+  </button>
+</div>
+
+<button matRipple (click)="replay.emit()" matTooltip="Replay (Ctrl + Enter)" aria-label="Replay">
   <mat-icon>refresh</mat-icon>
 </button>
-<button *ngIf="engine.playing$ | async" (click)="engine.pause()" matTooltip="Pause (Ctrl + Shift + Space)" aria-label="Pause">
+<button *ngIf="engine.playing$ | async" (click)="pause.emit()" matTooltip="Pause (Ctrl + Shift + Space)"
+        aria-label="Pause">
   <mat-icon>pause</mat-icon>
 </button>
-<button matRipple *ngIf="!(engine.playing$ | async)" (click)="engine.play()" matTooltip="Play (Ctrl + Shift + Space)"
+<button matRipple *ngIf="!(engine.playing$ | async)" (click)="play.emit()" matTooltip="Play (Ctrl + Shift + Space)"
         aria-label="Play">
   <mat-icon>play_arrow</mat-icon>
 </button>
-<button matRipple (click)="engine.stop()" matTooltip="Stop (Ctrl + K)" [disabled]="engine.stopped$ | async"
+<button matRipple (click)="stop.emit()" matTooltip="Stop (Ctrl + K)" [disabled]="engine.stopped$ | async"
         aria-label="Stop">
   <mat-icon>stop</mat-icon>
 </button>
 <div class="grow-1"></div>
-<button matRipple (click)="switchEngine.next()" [matTooltip]="switchEngineTooltip" aria-label="Toggle Scheduler">
+<button matRipple (click)="switchEngine.emit()" [matTooltip]="switchEngineTooltip" aria-label="Toggle Scheduler">
   <mat-icon>{{ isVirtualTimeEngine ? 'schedule' : 'history_toggle_off' }}</mat-icon>
 </button>
 <div class="slider">

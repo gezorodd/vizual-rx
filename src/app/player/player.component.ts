@@ -3,13 +3,15 @@ import {AlertMessageComponent} from "../ui/alert-message/alert-message.component
 import {MatAnchor} from "@angular/material/button";
 import {MatIcon} from "@angular/material/icon";
 import {MatTooltip} from "@angular/material/tooltip";
-import {NgComponentOutlet, NgIf} from "@angular/common";
+import {NgComponentOutlet, NgIf, NgTemplateOutlet} from "@angular/common";
 import {PlayerControllerComponent} from "./player-controller/player-controller.component";
 import {PlayerEditorComponent} from "./player-editor/player-editor.component";
 import {PlayerViewerComponent} from "./player-viewer/player-viewer.component";
 import {VizualRxEngine} from "../core/vizual-rx-engine";
 import {VizualRxVirtualTimeEngine} from "../core/vizual-rx-virtual-time-engine";
 import {VizualRxScaledTimeEngine} from "../core/vizual-rx-scaled-time-engine";
+import {PlayerViewMode} from "./player.model";
+import {SCREEN_WIDTH_BREAKPOINT_PLAYER_MODE} from "../ui/responsive/responsive";
 
 @Component({
   selector: 'app-player',
@@ -35,10 +37,14 @@ export class PlayerComponent implements OnDestroy {
   @Input() updateLayoutLightMode?: boolean;
 
   @Output() codeChange = new EventEmitter<string>();
+
+  viewMode: PlayerViewMode;
+
   private wasPausedOnBlur: boolean;
 
   constructor() {
     this.wasPausedOnBlur = false;
+    this.viewMode = this.computeViewMode();
   }
 
   ngOnDestroy(): void {
@@ -61,6 +67,36 @@ export class PlayerComponent implements OnDestroy {
     }
   }
 
+  @HostListener('window:resize')
+  handleWindowResize(): void {
+    this.viewMode = this.computeViewMode();
+  }
+
+  replay(): void {
+    if (this.viewMode === 'editor') {
+      this.viewMode = 'diagram';
+    }
+    this.engine.replay();
+  }
+
+  play(): void {
+    if (this.viewMode === 'editor') {
+      this.viewMode = 'diagram';
+    }
+    this.engine.play();
+  }
+
+  pause(): void {
+    this.engine.pause();
+  }
+
+  stop(): void {
+    if (this.viewMode === 'diagram') {
+      this.viewMode = 'editor';
+    }
+    this.engine.stop();
+  }
+
   switchEngine(): void {
     let newEngine: VizualRxEngine;
     if (this.engine instanceof VizualRxVirtualTimeEngine) {
@@ -72,5 +108,16 @@ export class PlayerComponent implements OnDestroy {
     newEngine.timeFactor = this.engine.timeFactor;
     this.engine.destroy();
     this.engine = newEngine;
+  }
+
+  private computeViewMode(): PlayerViewMode {
+    const screenWith = window.innerWidth;
+    if (screenWith > SCREEN_WIDTH_BREAKPOINT_PLAYER_MODE) {
+      return 'both';
+    } else if (!this.viewMode || this.viewMode === 'both') {
+      return 'editor';
+    } else {
+      return this.viewMode;
+    }
   }
 }

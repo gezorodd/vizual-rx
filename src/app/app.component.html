@@ -13,8 +13,9 @@
 <mat-progress-bar class="loading-bar" mode="indeterminate"
                   [style.visibility]="(loading$ | async) ? 'visible' : 'hidden'"></mat-progress-bar>
 <mat-drawer-container #drawerContainer class="main">
-  <mat-drawer class="sidenav" mode="side" [opened]="sidenavOpenedState$ | async" (opened)="sidenavOpenedChanged()"
-              (closed)="sidenavOpenedChanged()">
+  <mat-drawer class="sidenav" [mode]="getSidenavMode()" [opened]="sidenavOpenedState$ | async"
+              (opened)="changeSidenavOpened(true)"
+              (closed)="changeSidenavOpened(false)">
     <app-sidenav (layoutChanged)="drawerContainer.updateContentMargins()"></app-sidenav>
   </mat-drawer>
   <div class="outer-page-container">
