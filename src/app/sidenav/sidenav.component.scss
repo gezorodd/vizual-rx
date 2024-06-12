@@ -50,26 +50,30 @@
   overflow: auto;
   padding: 1em;
 
-  .section-label {
+  button.section-label {
     display: flex;
     gap: 0.4em;
     justify-content: start;
     align-items: center;
+    width: 100%;
+    border-radius: 5px;
+    letter-spacing: inherit;
+    font-size: inherit;
+    font-weight: inherit;
 
-    button {
-      min-width: inherit;
-      padding: 0;
-      width: 32px;
-      height: 32px;
-      border-radius: 16px;
-
-      .mat-icon {
-        transition: all 0.2s ease-out;
-        font-size: 24px;
-        margin: 0;
-        height: 1em;
-        width: 1em;
+    ::ng-deep {
+      .mdc-button__label {
+        width: 100%;
+        display: flex;
       }
+    }
+
+    .mat-icon {
+      transition: all 0.2s ease-out;
+      font-size: 24px;
+      margin: 0;
+      height: 1em;
+      width: 1em;
     }
 
     .version {
@@ -80,19 +84,18 @@
       border-radius: 5px;
       padding: 0 0.2em;
       margin-left: auto;
-      margin-right: 1em;
     }
   }
 
   .section {
-    margin-top: 0.4em;
-    margin-bottom: 0.4em;
+    margin-top: 0.2em;
+    margin-bottom: 0.2em;
 
     &.collapsing, &.collapsed {
       .section-children-container {
         opacity: 0;
       }
-      & > .section-label > button > .mat-icon {
+      & > button.section-label > .mat-icon {
         transform: rotate(-90deg);
       }
 
@@ -100,7 +103,7 @@
         .section-children-container {
           opacity: 1;
         }
-        & > .section-label > button > .mat-icon {
+        & > button.section-label > .mat-icon {
           transform: inherit;
         }
       }

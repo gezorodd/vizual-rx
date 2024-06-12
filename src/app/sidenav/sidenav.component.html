@@ -42,13 +42,11 @@
     <ng-template #sectionTemplate let-section>
       <div [hidden]="section.filtered" [class]="'section section-' + section.level"
            [ngClass]="{'collapsing': section.collapsing, 'expanding': section.expanding, 'collapsed': section.collapsed}">
-        <div class="section-label">
-          <button mat-button (click)="toggleSectionCollapsed(section)" aria-label="Toggle expansion">
-            <mat-icon [fontSet]="'material-symbols-rounded'">keyboard_arrow_down</mat-icon>
-          </button>
+        <button class="section-label" mat-button (click)="toggleSectionCollapsed(section)" aria-label="Toggle expansion">
+          <mat-icon [fontSet]="'material-symbols-rounded'">keyboard_arrow_down</mat-icon>
           <span>{{ section.label }}</span>
           <span *ngIf="section.version as version" class="version">{{ version }}</span>
-        </div>
+        </button>
         <div class="section-children-container" #sectionChildrenContainer [id]="'section-' + section.id + '-children-container'">
           <div class="section-children">
             <ng-container *ngFor="let child of section.children">
